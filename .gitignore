@@ -39,3 +39,6 @@
 # Make
 build
 install
+
+# Other
+wpml_codec/include/wpml_codec/version.h
