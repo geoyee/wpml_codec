@@ -2,20 +2,9 @@
 #include <iostream>
 #include <string>
 
-namespace wcv = wpml_codec::version;
-namespace wcu = wpml_codec::utils;
-
 int main()
 {
-    std::cout << "BRANCH_NAME: " << wcv::BRANCH_NAME << "\n"
-              << "COMMIT_HASH: " << wcv::COMMIT_HASH << "\n"
-              << "COMMIT_TIME: " << wcv::COMMIT_TIME << "\n"
-              << "BUILD_CXX_COMPILER: " << wcv::BUILD_CXX_COMPILER << "\n"
-              << "BUILD_C_COMPILER: " << wcv::BUILD_C_COMPILER << "\n"
-              << "BUILD_ENV: " << wcv::BUILD_ENV << "\n"
-              << "BUILD_TIME: " << wcv::BUILD_TIME << "\n"
-              << "RELEASE_VERSION: " << wcv::RELEASE_VERSION << "\n"
-              << std::endl;
+    WPML_CODEC_VERSION();
 
     std::string kmzPath = "./data/¶þÎ¬Ãæ×´º½Ïß.kmz";
     std::string outputDir = "./data/output";
@@ -28,6 +17,16 @@ int main()
         return -1;
     }
     std::cout << "isExtract is true\n";
+
+    std::vector<std::string> files = wcu::findFiles(outputDir);
+    for (const auto& f : files)
+    {
+        if (wcu::endWith(f, "kml"))
+        {
+            auto res = wcc::parseKML(f);
+            std::cout << res.value().author.value() << "\n";
+        }
+    }
 
     bool isPackage = wcu::packageKMZ(outputDir, saveKmzPath);
     if (!isPackage)
