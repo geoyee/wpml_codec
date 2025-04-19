@@ -315,6 +315,18 @@ std::optional<int> toInt(const std::string& str)
     return value;
 }
 
+std::optional<long long> toLongLong(const std::string& str)
+{
+    std::istringstream iss(str);
+    long long value;
+    iss >> value;
+    if (iss.fail() || !iss.eof())
+    {
+        return std::nullopt;
+    }
+    return value;
+}
+
 std::optional<double> toDouble(const std::string& str, size_t decimal)
 {
     std::istringstream iss(str);
@@ -348,6 +360,11 @@ std::string toString(bool number)
 }
 
 std::string toString(int number)
+{
+    return std::to_string(number);
+}
+
+std::string toString(long long number)
 {
     return std::to_string(number);
 }

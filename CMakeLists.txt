@@ -95,6 +95,12 @@ set_property(TARGET minizip PROPERTY FOLDER "ExtraTargets")
 set_property(TARGET miniunzip PROPERTY FOLDER "ExtraTargets")
 update_cached_list(DEP_LIBS zlib libminizip)
 
+set(MAGIC_ENUM_OPT_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(MAGIC_ENUM_OPT_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory("${PROJECT_DEPENDS_DIR}/magic_enum")
+set_property(TARGET magic_enum PROPERTY FOLDER "ExtraTargets")
+update_cached_list(DEP_LIBS magic_enum)
+
 if (WIN32)
   update_cached_list(SYS_LIBS WS2_32 Iphlpapi shlwapi)
 else (NOT ANDROID OR IOS)

@@ -31,10 +31,12 @@ inline std::vector<std::string> LIB_API split(const std::string& str, const std:
 inline std::string LIB_API replace(const std::string& str, const std::string& oldSuffix, const std::string& newSuffix);
 inline std::optional<bool> LIB_API toBool(const std::string& str);
 inline std::optional<int> LIB_API toInt(const std::string& str);
+inline std::optional<long long> LIB_API toLongLong(const std::string& str);
 inline std::optional<double> LIB_API toDouble(const std::string& str, size_t decimal = 8);
 inline std::vector<double> LIB_API toDoubles(const std::string& str, size_t decimal = 8);
 inline std::string LIB_API toString(bool number);
 inline std::string LIB_API toString(int number);
+inline std::string LIB_API toString(long long number);
 inline std::string LIB_API toString(double number, size_t decimal = 8, bool clipZero = true);
 inline std::string LIB_API toString(std::vector<double> numbers, size_t decimal = 8, bool clipZero = true);
 inline std::string LIB_API escape(const std::string& str);

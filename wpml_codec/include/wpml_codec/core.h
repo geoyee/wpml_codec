@@ -4,36 +4,12 @@
 #define WPML_CODEC_CORE_H
 
 #include <wpml_codec/common.h>
+#include <wpml_codec/enums.h>
 #include <optional>
 
 namespace wpml_codec::core
 {
-enum class FlyToWaylineMode
-{
-    safely,       ///< 安全模式
-    pointToPoint, ///< 倾斜飞行模式
-};
-
-enum class FinishAction
-{
-    goHome,            ///< 退出航线模式并返航
-    noAction,          ///< 退出航线模式
-    autoLand,          ///< 退出航线模式并原地降落
-    gotoFirstWaypoint, ///< 立即飞向航线起始点，到达后退出航线模式
-};
-
-enum class ExitOnRCLost
-{
-    goContinue,        ///< 继续执行航线
-    executeLostAction, ///< 退出航线，执行失控动作
-};
-
-enum class ExecuteRCLostAction
-{
-    goBack,  ///< 返航
-    landing, ///< 降落
-    hover,   ///< 悬停
-};
+using namespace wpml_codec::enums;
 
 struct LIB_API Point
 {
@@ -78,9 +54,10 @@ struct LIB_API MissionConfig
 
 struct LIB_API Document
 {
-    std::optional<std::string> author; ///< 文件创建作者
-    std::optional<int> createTime;     ///< 文件创建时间（Unix Timestamp）
-    std::optional<int> updateTime;     ///< 文件更新时间（Unix Timestamp）
+    std::optional<std::string> author;   ///< 文件创建作者
+    std::optional<long long> createTime; ///< 文件创建时间（Unix Timestamp）
+    std::optional<long long> updateTime; ///< 文件更新时间（Unix Timestamp）
+    MissionConfig missionConfig;         ///< 任务信息
 };
 
 inline std::optional<Document> LIB_API parseKML(const std::string& kmlPath);
