@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef WPML_CODEC_MACRO_H
-#define WPML_CODEC_MACRO_H
+#ifndef WPML_CODEC_MACROS_H
+#define WPML_CODEC_MACROS_H
 
 #define SET_OPT_WPML_ARG_B(doc, xml, name)                                                                             \
     do                                                                                                                 \
@@ -41,6 +41,31 @@
             if (enumVal.has_value())                                                                                   \
             {                                                                                                          \
                 doc.name = enumVal.value();                                                                            \
+            }                                                                                                          \
+        }                                                                                                              \
+    } while (0)
+
+#define SET_OPT_WPML_ARG_ES(doc, xml, name, enumType)                                                                  \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
+        if (pEle != nullptr)                                                                                           \
+        {                                                                                                              \
+            auto enumsStr = pEle->GetText();                                                                           \
+            if (enumsStr != nullptr)                                                                                   \
+            {                                                                                                          \
+                auto enumStrVec = utils::split(enumsStr, ",");                                                         \
+                std::vector<enumType> enumVec(enumStrVec.size());                                                      \
+                size_t i = 0;                                                                                          \
+                for (const auto& enumStr : enumStrVec)                                                                 \
+                {                                                                                                      \
+                    auto enumVal = magic_enum::enum_cast<enumType>(enumStr);                                           \
+                    if (enumVal.has_value())                                                                           \
+                    {                                                                                                  \
+                        enumVec[i++] = enumVal.value();                                                                \
+                    }                                                                                                  \
+                }                                                                                                      \
+                doc.name = enumVec;                                                                                    \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -102,4 +127,4 @@
         }                                                                                                              \
     } while (0)
 
-#endif // WPML_CODEC_MACRO_H
+#endif // WPML_CODEC_MACROS_H

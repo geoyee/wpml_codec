@@ -1,6 +1,6 @@
 #include <wpml_codec/core.h>
 #include <wpml_codec/utils.h>
-#include <wpml_codec/macro.h>
+#include <wpml_codec/macros.h>
 #include <tinyxml2.h>
 
 namespace xml = tinyxml2;
@@ -50,21 +50,53 @@ std::optional<Document> parseKML(const std::string& kmlPath)
         SET_OPT_WPML_ARG_I(res.missionConfig.droneInfo, pDroneInfo, droneEnumValue);
         SET_OPT_WPML_ARG_I(res.missionConfig.droneInfo, pDroneInfo, droneSubEnumValue);
     }
-
     xml::XMLElement *pPayloadInfo = pMissionConfig->FirstChildElement("wpml:payloadInfo");
     if (pPayloadInfo != nullptr)
     {
         SET_OPT_WPML_ARG_I(res.missionConfig.payloadInfo, pPayloadInfo, payloadEnumValue);
         SET_OPT_WPML_ARG_I(res.missionConfig.payloadInfo, pPayloadInfo, payloadPositionIndex);
     }
-
     xml::XMLElement *pAutoRerouteInfo = pMissionConfig->FirstChildElement("wpml:autoRerouteInfo");
     if (pAutoRerouteInfo != nullptr)
     {
         SET_OPT_WPML_ARG_I(res.missionConfig.autoRerouteInfo, pAutoRerouteInfo, missionAutoRerouteMode);
         SET_OPT_WPML_ARG_I(res.missionConfig.autoRerouteInfo, pAutoRerouteInfo, transitionalAutoRerouteMode);
     }
-
+    // Step 3: Setup A Folder for Waypoint Template
+    xml::XMLElement *pFolder = pDocument->FirstChildElement("Folder");
+    if (pFolder == nullptr)
+    {
+        std::cerr << "No Folder element found" << std::endl;
+        return std::nullopt;
+    }
+    SET_OPT_WPML_ARG_E(res.folder, pFolder, templateType, TemplateType);
+    SET_OPT_WPML_ARG_I(res.folder, pFolder, templateId);
+    SET_OPT_WPML_ARG_D(res.folder, pFolder, autoFlightSpeed);
+    xml::XMLElement *pWaylineCoordinateSysParam = pFolder->FirstChildElement("wpml:waylineCoordinateSysParam");
+    if (pWaylineCoordinateSysParam != nullptr)
+    {
+        SET_OPT_WPML_ARG_E(
+            res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, coordinateMode, CoordinateMode);
+        SET_OPT_WPML_ARG_E(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, heightMode, HeightMode);
+        SET_OPT_WPML_ARG_E(
+            res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, positioningType, PositioningType);
+        SET_OPT_WPML_ARG_D(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, globalShootHeight);
+        SET_OPT_WPML_ARG_I(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceFollowModeEnable);
+        SET_OPT_WPML_ARG_D(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceRelativeHeight);
+    }
+    xml::XMLElement *pPayloadParam = pFolder->FirstChildElement("wpml:payloadParam");
+    if (pPayloadParam != nullptr)
+    {
+        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, payloadPositionIndex);
+        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, focusMode, FocusMode);
+        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, meteringMode, MeteringMode);
+        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, dewarpingEnable);
+        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, returnMode, ReturnMode);
+        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, samplingRate);
+        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, scanningMode, ScanningMode);
+        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, modelColoringEnable);
+        SET_OPT_WPML_ARG_ES(res.folder.payloadParam, pPayloadParam, imageFormat, ImageFormat);
+    }
     // TODO: Implement
     return res;
 }
