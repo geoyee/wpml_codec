@@ -8,9 +8,9 @@
 
 namespace wpml_codec::core
 {
-using namespace wpml_codec::structs;
+inline std::optional<wcs::Document> LIB_API parseKML(const std::string& kmlPath);
+}; // namespace wpml_codec::core
 
-inline std::optional<Document> LIB_API parseKML(const std::string& kmlPath);
-} // namespace wpml_codec::core
+namespace wcc = wpml_codec::core;
 
 #endif // WPML_CODEC_CORE_H

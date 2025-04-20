@@ -6,9 +6,9 @@ int main()
 {
     WPML_CODEC_VERSION();
 
-    std::string kmzPath = "./data/浜岀淮闈㈢姸鑸嚎.kmz";
+    std::string kmzPath = "./data/二维面状航线.kmz";
     std::string outputDir = "./data/output";
-    std::string saveKmzPath = "./data/浜岀淮闈㈢姸鑸嚎_2.kmz";
+    std::string saveKmzPath = "./data/二维面状航线_2.kmz";
 
     bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
     if (!isExtract)

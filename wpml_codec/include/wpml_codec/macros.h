@@ -9,7 +9,7 @@
         auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
-            auto boolVal = utils::toBool(pEle->GetText());                                                             \
+            auto boolVal = wcu::toBool(pEle->GetText());                                                               \
             if (boolVal.has_value())                                                                                   \
             {                                                                                                          \
                 doc.name = boolVal.value();                                                                            \
@@ -23,7 +23,7 @@
         auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
-            auto doubleVal = utils::toDouble(pEle->GetText());                                                         \
+            auto doubleVal = wcu::toDouble(pEle->GetText());                                                           \
             if (doubleVal.has_value())                                                                                 \
             {                                                                                                          \
                 doc.name = doubleVal.value();                                                                          \
@@ -37,7 +37,7 @@
         auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
-            auto enumVal = magic_enum::enum_cast<enumType>(pEle->GetText());                                           \
+            auto enumVal = magic_enum::enum_cast<wce::enumType>(pEle->GetText());                                      \
             if (enumVal.has_value())                                                                                   \
             {                                                                                                          \
                 doc.name = enumVal.value();                                                                            \
@@ -54,12 +54,12 @@
             auto enumsStr = pEle->GetText();                                                                           \
             if (enumsStr != nullptr)                                                                                   \
             {                                                                                                          \
-                auto enumStrVec = utils::split(enumsStr, ",");                                                         \
-                std::vector<enumType> enumVec(enumStrVec.size());                                                      \
+                auto enumStrVec = wcu::split(enumsStr, ",");                                                           \
+                std::vector<wce::enumType> enumVec(enumStrVec.size());                                                 \
                 size_t i = 0;                                                                                          \
                 for (const auto& enumStr : enumStrVec)                                                                 \
                 {                                                                                                      \
-                    auto enumVal = magic_enum::enum_cast<enumType>(enumStr);                                           \
+                    auto enumVal = magic_enum::enum_cast<wce::enumType>(enumStr);                                      \
                     if (enumVal.has_value())                                                                           \
                     {                                                                                                  \
                         enumVec[i++] = enumVal.value();                                                                \
@@ -76,7 +76,7 @@
         auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
-            auto intVal = utils::toInt(pEle->GetText());                                                               \
+            auto intVal = wcu::toInt(pEle->GetText());                                                                 \
             if (intVal.has_value())                                                                                    \
             {                                                                                                          \
                 doc.name = intVal.value();                                                                             \
@@ -90,7 +90,7 @@
         auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
-            auto longVal = utils::toLongLong(pEle->GetText());                                                         \
+            auto longVal = wcu::toLongLong(pEle->GetText());                                                           \
             if (longVal.has_value())                                                                                   \
             {                                                                                                          \
                 doc.name = longVal.value();                                                                            \
@@ -104,10 +104,10 @@
         auto pEle = xml->FirstChildElement("wpml:" #name);                                                             \
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
-            auto reals = utils::toDoubles(pEle->GetText());                                                            \
+            auto reals = wcu::toDoubles(pEle->GetText());                                                              \
             if (reals.size() == 3)                                                                                     \
             {                                                                                                          \
-                Point p{reals[0], reals[1], reals[2]};                                                                 \
+                wcs::Point p{reals[0], reals[1], reals[2]};                                                            \
                 doc.name = p;                                                                                          \
             }                                                                                                          \
         }                                                                                                              \

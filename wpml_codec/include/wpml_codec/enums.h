@@ -9,123 +9,125 @@ namespace wpml_codec::enums
 {
 enum class FlyToWaylineMode
 {
-    safely,       ///< å®‰å…¨æ¨¡å¼
-    pointToPoint, ///< å€¾æ–œé£žè¡Œæ¨¡å¼
+    safely,       ///< °²È«Ä£Ê½
+    pointToPoint, ///< ÇãÐ±·ÉÐÐÄ£Ê½
 };
 
 enum class FinishAction
 {
-    goHome,            ///< é€€å‡ºèˆªçº¿æ¨¡å¼å¹¶è¿”èˆª
-    noAction,          ///< é€€å‡ºèˆªçº¿æ¨¡å¼
-    autoLand,          ///< é€€å‡ºèˆªçº¿æ¨¡å¼å¹¶åŽŸåœ°é™è½
-    gotoFirstWaypoint, ///< ç«‹å³é£žå‘èˆªçº¿èµ·å§‹ç‚¹ï¼Œåˆ°è¾¾åŽé€€å‡ºèˆªçº¿æ¨¡å¼
+    goHome,            ///< ÍË³öº½ÏßÄ£Ê½²¢·µº½
+    noAction,          ///< ÍË³öº½ÏßÄ£Ê½
+    autoLand,          ///< ÍË³öº½ÏßÄ£Ê½²¢Ô­µØ½µÂä
+    gotoFirstWaypoint, ///< Á¢¼´·ÉÏòº½ÏßÆðÊ¼µã£¬µ½´ïºóÍË³öº½ÏßÄ£Ê½
 };
 
 enum class ExitOnRCLost
 {
-    goContinue,        ///< ç»§ç»­æ‰§è¡Œèˆªçº¿
-    executeLostAction, ///< é€€å‡ºèˆªçº¿ï¼Œæ‰§è¡Œå¤±æŽ§åŠ¨ä½œ
+    goContinue,        ///< ¼ÌÐøÖ´ÐÐº½Ïß
+    executeLostAction, ///< ÍË³öº½Ïß£¬Ö´ÐÐÊ§¿Ø¶¯×÷
 };
 
 enum class ExecuteRCLostAction
 {
-    goBack,  ///< è¿”èˆª
-    landing, ///< é™è½
-    hover,   ///< æ‚¬åœ
+    goBack,  ///< ·µº½
+    landing, ///< ½µÂä
+    hover,   ///< ÐüÍ£
 };
 
 enum class TemplateType
 {
-    waypoint,     ///< èˆªç‚¹é£žè¡Œ
-    mapping2d,    ///< å»ºå›¾èˆªæ‹
-    mapping3d,    ///< å€¾æ–œæ‘„å½±
-    mappingStrip, ///< èˆªå¸¦é£žè¡Œ
+    waypoint,     ///< º½µã·ÉÐÐ
+    mapping2d,    ///< ½¨Í¼º½ÅÄ
+    mapping3d,    ///< ÇãÐ±ÉãÓ°
+    mappingStrip, ///< º½´ø·ÉÐÐ
 };
 
 enum class CoordinateMode
 {
-    WGS84, ///< WGS84åæ ‡ç³»ï¼Œå½“å‰å›ºå®šä½¿ç”¨
+    WGS84, ///< WGS84×ø±êÏµ£¬µ±Ç°¹Ì¶¨Ê¹ÓÃ
 };
 
 enum class HeightMode
 {
-    GM96,                  ///< ä½¿ç”¨æµ·æ‹”é«˜ç¼–è¾‘
-    relativeToStartPoint,  ///< ä½¿ç”¨ç›¸å¯¹ç‚¹çš„é«˜åº¦è¿›è¡Œç¼–è¾‘
-    aboveGroundLevel,      ///< ä½¿ç”¨åœ°å½¢æ•°æ®ï¼ŒAGLä¸‹ç¼–è¾‘
-    realTimeFollowSurface, ///< ä½¿ç”¨å®žæ—¶ä»¿åœ°æ¨¡å¼
+    GM96,                  ///< Ê¹ÓÃº£°Î¸ß±à¼­
+    relativeToStartPoint,  ///< Ê¹ÓÃÏà¶ÔµãµÄ¸ß¶È½øÐÐ±à¼­
+    aboveGroundLevel,      ///< Ê¹ÓÃµØÐÎÊý¾Ý£¬AGLÏÂ±à¼­
+    realTimeFollowSurface, ///< Ê¹ÓÃÊµÊ±·ÂµØÄ£Ê½
 };
 
 enum class PositioningType
 {
-    GPS,            ///< ä½ç½®æ•°æ®é‡‡é›†æ¥æºä¸ºGPS/BDS/GLONASS/GALILEOç­‰
-    RTKBaseStation, ///< é‡‡é›†ä½ç½®æ•°æ®æ—¶ï¼Œä½¿ç”¨RTKåŸºç«™è¿›è¡Œå·®åˆ†å®šä½
-    QianXun,        ///< é‡‡é›†ä½ç½®æ•°æ®æ—¶ï¼Œä½¿ç”¨åƒå¯»ç½‘ç»œRTKè¿›è¡Œå·®åˆ†å®šä½
-    Custom,         ///< é‡‡é›†ä½ç½®æ•°æ®æ—¶ï¼Œä½¿ç”¨è‡ªå®šä¹‰ç½‘ç»œRTKè¿›è¡Œå·®åˆ†å®šä½
+    GPS,            ///< Î»ÖÃÊý¾Ý²É¼¯À´Ô´ÎªGPS/BDS/GLONASS/GALILEOµÈ
+    RTKBaseStation, ///< ²É¼¯Î»ÖÃÊý¾ÝÊ±£¬Ê¹ÓÃRTK»ùÕ¾½øÐÐ²î·Ö¶¨Î»
+    QianXun,        ///< ²É¼¯Î»ÖÃÊý¾ÝÊ±£¬Ê¹ÓÃÇ§Ñ°ÍøÂçRTK½øÐÐ²î·Ö¶¨Î»
+    Custom,         ///< ²É¼¯Î»ÖÃÊý¾ÝÊ±£¬Ê¹ÓÃ×Ô¶¨ÒåÍøÂçRTK½øÐÐ²î·Ö¶¨Î»
 };
 
 enum class FocusMode
 {
-    firstPoint, ///< é¦–ä¸ªèˆªç‚¹è‡ªåŠ¨å¯¹ç„¦
-    custom,     ///< æ ‡å®šå¯¹ç„¦å€¼å¯¹ç„¦
+    firstPoint, ///< Ê×¸öº½µã×Ô¶¯¶Ô½¹
+    custom,     ///< ±ê¶¨¶Ô½¹Öµ¶Ô½¹
 };
 
 enum class MeteringMode
 {
-    average, ///< å…¨å±€æµ‹å…‰
-    spot,    ///< ç‚¹æµ‹å…‰
+    average, ///< È«¾Ö²â¹â
+    spot,    ///< µã²â¹â
 };
 
 enum class ReturnMode
 {
-    singleReturnStrongest, ///< å•å›žæ³¢
-    dualReturn,            ///< åŒå›žæ³¢
-    tripleReturn,          ///< ä¸‰å›žæ³¢
+    singleReturnStrongest, ///< µ¥»Ø²¨
+    dualReturn,            ///< Ë«»Ø²¨
+    tripleReturn,          ///< Èý»Ø²¨
 };
 
 enum class ScanningMode
 {
-    repetitive,    ///< é‡å¤æ‰«æ
-    nonRepetitive, ///< éžé‡å¤æ‰«æ
+    repetitive,    ///< ÖØ¸´É¨Ãè
+    nonRepetitive, ///< ·ÇÖØ¸´É¨Ãè
 };
 
 enum class ImageFormat
 {
-    wide,        ///< å­˜å‚¨å¹¿è§’é•œå¤´ç…§ç‰‡
-    zoom,        ///< å­˜å‚¨å˜ç„¦é•œå¤´ç…§ç‰‡
-    ir,          ///< å­˜å‚¨çº¢å¤–é•œå¤´ç…§ç‰‡
-    narrow_band, ///< å­˜å‚¨çª„å¸¦é•œå¤´æ‹æ‘„ç…§ç‰‡
-    visable,     ///< å¯è§å…‰ç…§ç‰‡
+    wide,        ///< ´æ´¢¹ã½Ç¾µÍ·ÕÕÆ¬
+    zoom,        ///< ´æ´¢±ä½¹¾µÍ·ÕÕÆ¬
+    ir,          ///< ´æ´¢ºìÍâ¾µÍ·ÕÕÆ¬
+    narrow_band, ///< ´æ´¢Õ­´ø¾µÍ·ÅÄÉãÕÕÆ¬
+    visable,     ///< ¿É¼û¹âÕÕÆ¬
 };
 
 enum class GlobalWaypointTurnMode
 {
-    coordinateTurn,                           ///< åè°ƒè½¬å¼¯ï¼Œä¸è¿‡ç‚¹ï¼Œæå‰è½¬å¼¯
-    toPointAndStopWithDiscontinuityCurvature, ///< ç›´çº¿é£žè¡Œï¼Œé£žè¡Œå™¨åˆ°ç‚¹åœ
-    toPointAndStopWithContinuityCurvature,    ///< æ›²çº¿é£žè¡Œï¼Œé£žè¡Œå™¨åˆ°ç‚¹åœ
-    toPointAndPassWithContinuityCurvature,    ///< æ›²çº¿é£žè¡Œï¼Œé£žè¡Œå™¨è¿‡ç‚¹ä¸åœ
+    coordinateTurn,                           ///< Ð­µ÷×ªÍä£¬²»¹ýµã£¬ÌáÇ°×ªÍä
+    toPointAndStopWithDiscontinuityCurvature, ///< Ö±Ïß·ÉÐÐ£¬·ÉÐÐÆ÷µ½µãÍ£
+    toPointAndStopWithContinuityCurvature,    ///< ÇúÏß·ÉÐÐ£¬·ÉÐÐÆ÷µ½µãÍ£
+    toPointAndPassWithContinuityCurvature,    ///< ÇúÏß·ÉÐÐ£¬·ÉÐÐÆ÷¹ýµã²»Í£
 };
 
 enum class GimbalPitchMode
 {
-    manual,          ///< æ‰‹åŠ¨æŽ§åˆ¶
-    usePointSetting, ///< ä¾ç…§æ¯ä¸ªèˆªç‚¹è®¾ç½®
+    manual,          ///< ÊÖ¶¯¿ØÖÆ
+    usePointSetting, ///< ÒÀÕÕÃ¿¸öº½µãÉèÖÃ
 };
 
 enum class WaypointHeadingMode
 {
-    followWayline,    ///< æ²¿èˆªçº¿æ–¹å‘
-    manually,         ///< æ‰‹åŠ¨æŽ§åˆ¶
-    fixed,            ///< é”å®šå½“å‰åèˆªè§’
-    smoothTransition, ///< è‡ªå®šä¹‰
-    towardPOI,        ///< æœå‘å…´è¶£ç‚¹
+    followWayline,    ///< ÑØº½Ïß·½Ïò
+    manually,         ///< ÊÖ¶¯¿ØÖÆ
+    fixed,            ///< Ëø¶¨µ±Ç°Æ«º½½Ç
+    smoothTransition, ///< ×Ô¶¨Òå
+    towardPOI,        ///< ³¯ÏòÐËÈ¤µã
 };
 
 enum class WaypointHeadingPathMode
 {
-    clockwise,        ///< é¡ºæ—¶é’ˆæ—‹è½¬é£žè¡Œå™¨åèˆªè§’
-    counterClockwise, ///< é€†æ—¶é’ˆæ—‹è½¬é£žè¡Œå™¨åèˆªè§’
-    followBadArc,     ///< æ²¿æœ€çŸ­è·¯å¾„æ—‹è½¬é£žè¡Œå™¨åèˆªè§’
+    clockwise,        ///< Ë³Ê±ÕëÐý×ª·ÉÐÐÆ÷Æ«º½½Ç
+    counterClockwise, ///< ÄæÊ±ÕëÐý×ª·ÉÐÐÆ÷Æ«º½½Ç
+    followBadArc,     ///< ÑØ×î¶ÌÂ·¾¶Ðý×ª·ÉÐÐÆ÷Æ«º½½Ç
 };
-} // namespace wpml_codec::enums
+}; // namespace wpml_codec::enums
+
+namespace wce = wpml_codec::enums;
 
 #endif // WPML_CODEC_ENUMS_H

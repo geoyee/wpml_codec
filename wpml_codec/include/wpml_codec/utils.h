@@ -41,7 +41,8 @@ inline std::string LIB_API toString(double number, size_t decimal = 8, bool clip
 inline std::string LIB_API toString(std::vector<double> numbers, size_t decimal = 8, bool clipZero = true);
 inline std::string LIB_API escape(const std::string& str);
 inline std::string LIB_API removeEscape(const std::string& str);
-// TODO: Implement
-} // namespace wpml_codec::utils
+}; // namespace wpml_codec::utils
+
+namespace wcu = wpml_codec::utils;
 
 #endif // WPML_CODEC_UTILS_H

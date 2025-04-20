@@ -9,110 +9,110 @@
 
 namespace wpml_codec::structs
 {
-using namespace wpml_codec::enums;
-
 struct LIB_API Point
 {
-    double lat; ///< çº¬åº¦
-    double lon; ///< ç»åº¦
-    double alt; ///< é«˜åº¦
+    double lat; ///< Î³¶È
+    double lon; ///< ¾­¶È
+    double alt; ///< ¸ß¶È
 };
 
 struct LIB_API DroneInfo
 {
-    int droneEnumValue;    ///< é£žè¡Œå™¨æœºåž‹ä¸»ç±»åž‹
-    int droneSubEnumValue; ///< é£žè¡Œå™¨æœºåž‹å­ç±»åž‹
+    int droneEnumValue;    ///< ·ÉÐÐÆ÷»úÐÍÖ÷ÀàÐÍ
+    int droneSubEnumValue; ///< ·ÉÐÐÆ÷»úÐÍ×ÓÀàÐÍ
 };
 
 struct LIB_API PayloadInfo
 {
-    int payloadEnumValue;     ///< è´Ÿè½½æœºåž‹ä¸»ç±»åž‹
-    int payloadPositionIndex; ///< è´Ÿè½½æŒ‚è½½ä½ç½®
+    int payloadEnumValue;     ///< ¸ºÔØ»úÐÍÖ÷ÀàÐÍ
+    int payloadPositionIndex; ///< ¸ºÔØ¹ÒÔØÎ»ÖÃ
 };
 
 struct LIB_API AutoRerouteInfo
 {
-    int missionAutoRerouteMode;      ///< ä»»åŠ¡èˆªçº¿ç»•è¡Œæ¨¡å¼
-    int transitionalAutoRerouteMode; ///< è¿‡æ¸¡èˆªçº¿ç»•è¡Œæ¨¡å¼
+    int missionAutoRerouteMode;      ///< ÈÎÎñº½ÏßÈÆÐÐÄ£Ê½
+    int transitionalAutoRerouteMode; ///< ¹ý¶Éº½ÏßÈÆÐÐÄ£Ê½
 };
 
 struct LIB_API MissionConfig
 {
-    FlyToWaylineMode flyToWaylineMode;                      ///< é£žå‘é¦–èˆªç‚¹æ¨¡å¼
-    FinishAction finishAction;                              ///< èˆªçº¿ç»“æŸåŠ¨ä½œ
-    ExitOnRCLost exitOnRCLost;                              ///< å¤±æŽ§æ˜¯å¦ç»§ç»­æ‰§è¡Œèˆªçº¿
-    std::optional<ExecuteRCLostAction> executeRCLostAction; ///< å¤±æŽ§åŠ¨ä½œç±»åž‹
-    double takeOffSecurityHeight;                           ///< å®‰å…¨èµ·é£žé«˜åº¦
-    double globalTransitionalSpeed;                         ///< å…¨å±€èˆªçº¿è¿‡æ¸¡é€Ÿåº¦
-    double globalRTHHeight;                                 ///< å…¨å±€è¿”èˆªé«˜åº¦
-    std::optional<Point> takeOffRefPoint;                   ///< å‚è€ƒèµ·é£žç‚¹
-    std::optional<double> takeOffRefPointAGLHeight;         ///< å‚è€ƒèµ·é£žç‚¹æµ·æ‹”é«˜åº¦
-    DroneInfo droneInfo;                                    ///< é£žè¡Œå™¨æœºåž‹ä¿¡æ¯
-    PayloadInfo payloadInfo;                                ///< è´Ÿè½½æœºåž‹ä¿¡æ¯
-    AutoRerouteInfo autoRerouteInfo;                        ///< èˆªçº¿ç»•è¡Œ
+    wce::FlyToWaylineMode flyToWaylineMode;                      ///< ·ÉÏòÊ×º½µãÄ£Ê½
+    wce::FinishAction finishAction;                              ///< º½Ïß½áÊø¶¯×÷
+    wce::ExitOnRCLost exitOnRCLost;                              ///< Ê§¿ØÊÇ·ñ¼ÌÐøÖ´ÐÐº½Ïß
+    std::optional<wce::ExecuteRCLostAction> executeRCLostAction; ///< Ê§¿Ø¶¯×÷ÀàÐÍ
+    double takeOffSecurityHeight;                                ///< °²È«Æð·É¸ß¶È
+    double globalTransitionalSpeed;                              ///< È«¾Öº½Ïß¹ý¶ÉËÙ¶È
+    double globalRTHHeight;                                      ///< È«¾Ö·µº½¸ß¶È
+    std::optional<Point> takeOffRefPoint;                        ///< ²Î¿¼Æð·Éµã
+    std::optional<double> takeOffRefPointAGLHeight;              ///< ²Î¿¼Æð·Éµãº£°Î¸ß¶È
+    DroneInfo droneInfo;                                         ///< ·ÉÐÐÆ÷»úÐÍÐÅÏ¢
+    PayloadInfo payloadInfo;                                     ///< ¸ºÔØ»úÐÍÐÅÏ¢
+    AutoRerouteInfo autoRerouteInfo;                             ///< º½ÏßÈÆÐÐ
 };
 
 struct LIB_API WaylineCoordinateSysParam
 {
-    CoordinateMode coordinateMode;                  ///< ç»çº¬åº¦åæ ‡ç³»
-    HeightMode heightMode;                          ///< èˆªç‚¹é«˜ç¨‹å‚è€ƒå¹³é¢
-    std::optional<PositioningType> positioningType; ///< ç»çº¬åº¦ä¸Žé«˜åº¦æ•°æ®æº
-    double globalShootHeight;                       ///< é£žè¡Œå™¨ç¦»è¢«æ‘„é¢é«˜åº¦ï¼ˆç›¸å¯¹åœ°é¢é«˜ï¼‰
-    int surfaceFollowModeEnable;                    ///< æ˜¯å¦å¼€å¯ä»¿åœ°é£žè¡Œ
-    double surfaceRelativeHeight;                   ///< ä»¿åœ°é£žè¡Œç¦»åœ°é«˜åº¦ï¼ˆç›¸å¯¹åœ°é¢é«˜ï¼‰
+    wce::CoordinateMode coordinateMode;                  ///< ¾­Î³¶È×ø±êÏµ
+    wce::HeightMode heightMode;                          ///< º½µã¸ß³Ì²Î¿¼Æ½Ãæ
+    std::optional<wce::PositioningType> positioningType; ///< ¾­Î³¶ÈÓë¸ß¶ÈÊý¾ÝÔ´
+    double globalShootHeight;                            ///< ·ÉÐÐÆ÷Àë±»ÉãÃæ¸ß¶È£¨Ïà¶ÔµØÃæ¸ß£©
+    int surfaceFollowModeEnable;                         ///< ÊÇ·ñ¿ªÆô·ÂµØ·ÉÐÐ
+    double surfaceRelativeHeight;                        ///< ·ÂµØ·ÉÐÐÀëµØ¸ß¶È£¨Ïà¶ÔµØÃæ¸ß£©
 };
 
 struct LIB_API PayloadParam
 {
-    int payloadPositionIndex;                 ///< è´Ÿè½½æŒ‚è½½ä½ç½®
-    std::optional<FocusMode> focusMode;       ///< è´Ÿè½½å¯¹ç„¦æ¨¡å¼
-    std::optional<MeteringMode> meteringMode; ///< è´Ÿè½½æµ‹å…‰æ¨¡å¼
-    std::optional<int> dewarpingEnable;       ///< æ˜¯å¦å¼€å¯ç•¸å˜çŸ«æ­£
-    std::optional<ReturnMode> returnMode;     ///< æ¿€å…‰é›·è¾¾å›žæ³¢æ¨¡å¼
-    std::optional<int> samplingRate;          ///< è´Ÿè½½é‡‡æ ·çŽ‡
-    std::optional<ScanningMode> scanningMode; ///< è´Ÿè½½æ‰«ææ¨¡å¼
-    std::optional<int> modelColoringEnable;   ///< çœŸå½©ä¸Šè‰²
-    std::vector<ImageFormat> imageFormat;     ///< å›¾ç‰‡æ ¼å¼åˆ—è¡¨
+    int payloadPositionIndex;                      ///< ¸ºÔØ¹ÒÔØÎ»ÖÃ
+    std::optional<wce::FocusMode> focusMode;       ///< ¸ºÔØ¶Ô½¹Ä£Ê½
+    std::optional<wce::MeteringMode> meteringMode; ///< ¸ºÔØ²â¹âÄ£Ê½
+    std::optional<int> dewarpingEnable;            ///< ÊÇ·ñ¿ªÆô»û±ä½ÃÕý
+    std::optional<wce::ReturnMode> returnMode;     ///< ¼¤¹âÀ×´ï»Ø²¨Ä£Ê½
+    std::optional<int> samplingRate;               ///< ¸ºÔØ²ÉÑùÂÊ
+    std::optional<wce::ScanningMode> scanningMode; ///< ¸ºÔØÉ¨ÃèÄ£Ê½
+    std::optional<int> modelColoringEnable;        ///< Õæ²ÊÉÏÉ«
+    std::vector<wce::ImageFormat> imageFormat;     ///< Í¼Æ¬¸ñÊ½ÁÐ±í
 };
 
 struct LIB_API GlobalWaypointHeadingParam
 {
-    WaypointHeadingMode waypointHeadingMode;         ///< é£žè¡Œå™¨åèˆªè§’æ¨¡å¼
-    double waypointHeadingAngle;                     ///< é£žè¡Œå™¨åèˆªè§’åº¦
-    Point waypointPoiPoint;                          ///< å…´è¶£ç‚¹
-    WaypointHeadingPathMode waypointHeadingPathMode; ///< é£žè¡Œå™¨åèˆªè§’è½¬åŠ¨æ–¹å‘
+    wce::WaypointHeadingMode waypointHeadingMode;         ///< ·ÉÐÐÆ÷Æ«º½½ÇÄ£Ê½
+    double waypointHeadingAngle;                          ///< ·ÉÐÐÆ÷Æ«º½½Ç¶È
+    Point waypointPoiPoint;                               ///< ÐËÈ¤µã
+    wce::WaypointHeadingPathMode waypointHeadingPathMode; ///< ·ÉÐÐÆ÷Æ«º½½Ç×ª¶¯·½Ïò
 };
 
-struct Placemark
+struct LIB_API Placemark
 {
     // TODO: Implement
 };
 
 struct LIB_API Folder
 {
-    /* é€šç”¨æ¨¡æ¿ */
-    TemplateType templateType;                           ///< é¢„å®šä¹‰æ¨¡æ¿ç±»åž‹
-    int templateId;                                      ///< æ¨¡æ¿ID
-    double autoFlightSpeed;                              ///< å…¨å±€èˆªçº¿é£žè¡Œé€Ÿåº¦
-    WaylineCoordinateSysParam waylineCoordinateSysParam; ///< åæ ‡ç³»å‚æ•°
-    PayloadParam payloadParam;                           ///< è´Ÿè½½è®¾ç½®
-    /* èˆªç‚¹é£žè¡Œæ¨¡æ¿å…ƒç´  */
-    GlobalWaypointTurnMode globalWaypointTurnMode;         ///< å…¨å±€èˆªç‚¹ç±»åž‹ï¼ˆå…¨å±€èˆªç‚¹è½¬å¼¯æ¨¡å¼ï¼‰
-    int globalUseStraightLine;                             ///< å…¨å±€èˆªæ®µè½¨è¿¹æ˜¯å¦å°½é‡è´´åˆç›´çº¿
-    GimbalPitchMode gimbalPitchMode;                       ///< äº‘å°ä¿¯ä»°è§’æŽ§åˆ¶æ¨¡å¼
-    double globalHeight;                                   ///< å…¨å±€èˆªçº¿é«˜åº¦ï¼ˆç›¸å¯¹èµ·é£žç‚¹é«˜åº¦ï¼‰
-    GlobalWaypointHeadingParam globalWaypointHeadingParam; ///< å…¨å±€åèˆªè§’æ¨¡å¼å‚æ•°
-    Placemark placemark;                                   ///< èˆªç‚¹ä¿¡æ¯
+    /* Í¨ÓÃÄ£°å */
+    wce::TemplateType templateType;                      ///< Ô¤¶¨ÒåÄ£°åÀàÐÍ
+    int templateId;                                      ///< Ä£°åID
+    double autoFlightSpeed;                              ///< È«¾Öº½Ïß·ÉÐÐËÙ¶È
+    WaylineCoordinateSysParam waylineCoordinateSysParam; ///< ×ø±êÏµ²ÎÊý
+    PayloadParam payloadParam;                           ///< ¸ºÔØÉèÖÃ
+    /* º½µã·ÉÐÐÄ£°åÔªËØ */
+    wce::GlobalWaypointTurnMode globalWaypointTurnMode;    ///< È«¾Öº½µãÀàÐÍ£¨È«¾Öº½µã×ªÍäÄ£Ê½£©
+    int globalUseStraightLine;                             ///< È«¾Öº½¶Î¹ì¼£ÊÇ·ñ¾¡Á¿ÌùºÏÖ±Ïß
+    wce::GimbalPitchMode gimbalPitchMode;                  ///< ÔÆÌ¨¸©Ñö½Ç¿ØÖÆÄ£Ê½
+    double globalHeight;                                   ///< È«¾Öº½Ïß¸ß¶È£¨Ïà¶ÔÆð·Éµã¸ß¶È£©
+    GlobalWaypointHeadingParam globalWaypointHeadingParam; ///< È«¾ÖÆ«º½½ÇÄ£Ê½²ÎÊý
+    Placemark placemark;                                   ///< º½µãÐÅÏ¢
 };
 
 struct LIB_API Document
 {
-    std::optional<std::string> author;   ///< æ–‡ä»¶åˆ›å»ºä½œè€…
-    std::optional<long long> createTime; ///< æ–‡ä»¶åˆ›å»ºæ—¶é—´ï¼ˆUnix Timestampï¼‰
-    std::optional<long long> updateTime; ///< æ–‡ä»¶æ›´æ–°æ—¶é—´ï¼ˆUnix Timestampï¼‰
-    MissionConfig missionConfig;         ///< ä»»åŠ¡ä¿¡æ¯
-    Folder folder;                       ///< æ¨¡æ¿ä¿¡æ¯
+    std::optional<std::string> author;   ///< ÎÄ¼þ´´½¨×÷Õß
+    std::optional<long long> createTime; ///< ÎÄ¼þ´´½¨Ê±¼ä£¨Unix Timestamp£©
+    std::optional<long long> updateTime; ///< ÎÄ¼þ¸üÐÂÊ±¼ä£¨Unix Timestamp£©
+    MissionConfig missionConfig;         ///< ÈÎÎñÐÅÏ¢
+    Folder folder;                       ///< Ä£°åÐÅÏ¢
 };
-} // namespace wpml_codec::structs
+}; // namespace wpml_codec::structs
+
+namespace wcs = wpml_codec::structs;
 
 #endif // WPML_CODEC_STRUCTS_H

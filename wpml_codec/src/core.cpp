@@ -7,9 +7,9 @@ namespace xml = tinyxml2;
 
 namespace wpml_codec::core
 {
-std::optional<Document> parseKML(const std::string& kmlPath)
+std::optional<wcs::Document> parseKML(const std::string& kmlPath)
 {
-    Document res;
+    wcs::Document res;
     xml::XMLDocument doc;
     xml::XMLError eResult = doc.LoadFile(kmlPath.c_str());
     if (eResult != xml::XML_SUCCESS)
