@@ -97,6 +97,34 @@ std::optional<wcs::Document> parseKML(const std::string& kmlPath)
         SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, modelColoringEnable);
         SET_OPT_WPML_ARG_ES(res.folder.payloadParam, pPayloadParam, imageFormat, ImageFormat);
     }
+    // Step 4: Setup Placemark
+    xml::XMLElement *pPlacemark = pFolder->FirstChildElement("Placemark");
+    if (pPlacemark == nullptr)
+    {
+        std::cerr << "No Placemark element found" << std::endl;
+        return std::nullopt;
+    }
+    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, caliFlightEnable);
+    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, inclinedGimbalPitch);
+    SET_OPT_WPML_ARG_D(res.folder.placemark, pPlacemark, inclinedFlightSpeed);
+    SET_OPT_WPML_ARG_E(res.folder.placemark, pPlacemark, shootType, ShootType);
+    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, direction);
+    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, margin);
+    xml::XMLElement *pOverlap = pPlacemark->FirstChildElement("wpml:overlap");
+    if (pOverlap != nullptr)
+    {
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoLidarOverlapH);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoLidarOverlapW);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoCameraOverlapH);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoCameraOverlapW);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedLidarOverlapH);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedLidarOverlapW);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedCameraOverlapH);
+        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedCameraOverlapW);
+    }
+    SET_OPT_WPML_ARG_D(res.folder.placemark, pPlacemark, ellipsoidHeight);
+    SET_OPT_WPML_ARG_D(res.folder.placemark, pPlacemark, height);
+    SET_OPT_WPML_ARG_KPN(res.folder.placemark, pPlacemark, polygon);
     // TODO: Implement
     return res;
 }

@@ -98,6 +98,92 @@
         }                                                                                                              \
     } while (0)
 
+#define SET_OPT_WPML_ARG_KLS(doc, xml, name)                                                                           \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        auto pEle = xml->FirstChildElement("LineString");                                                              \
+        if (pEle != nullptr)                                                                                           \
+        {                                                                                                              \
+            auto lineStr = pEle->FirstChildElement("coordinates")->GetText();                                          \
+            auto poisStr = wcu::split(wcu::trim(lineStr), "\n");                                                       \
+            std::vector<wcs::KPoint> points(poisStr.size());                                                           \
+            size_t i = 0;                                                                                              \
+            for (const auto& poiStr : poisStr)                                                                         \
+            {                                                                                                          \
+                auto point = wcu::toDoubles(poiStr);                                                                   \
+                wcs::KPoint p{point[0], point[1]};                                                                     \
+                if (point.size() > 2)                                                                                  \
+                {                                                                                                      \
+                    p.alt = point[2];                                                                                  \
+                }                                                                                                      \
+                points.emplace_back(p);                                                                                \
+            }                                                                                                          \
+            doc.name.points = p;                                                                                       \
+        }                                                                                                              \
+    } while (0)
+
+#define SET_OPT_WPML_ARG_KPN(doc, xml, name)                                                                           \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        auto pEle = xml->FirstChildElement("Polygon");                                                                 \
+        if (pEle != nullptr)                                                                                           \
+        {                                                                                                              \
+            auto pOuter = pEle->FirstChildElement("outerBoundaryIs");                                                  \
+            if (pOuter != nullptr)                                                                                     \
+            {                                                                                                          \
+                auto coorStr = pOuter->FirstChildElement("LinearRing")->FirstChildElement("coordinates");              \
+                auto poisStr = wcu::split(wcu::trim(coorStr->GetText()), "\n");                                        \
+                wcs::KLineString outer;                                                                                \
+                for (const auto& poiStr : poisStr)                                                                     \
+                {                                                                                                      \
+                    auto point = wcu::toDoubles(poiStr);                                                               \
+                    wcs::KPoint p{point[0], point[1]};                                                                 \
+                    if (point.size() > 2)                                                                              \
+                    {                                                                                                  \
+                        p.alt = point[2];                                                                              \
+                    }                                                                                                  \
+                    outer.points.emplace_back(p);                                                                      \
+                }                                                                                                      \
+                doc.name.outerLine = outer;                                                                            \
+            }                                                                                                          \
+            auto pInner = pEle->FirstChildElement("innerBoundaryIs");                                                  \
+            if (pInner != nullptr)                                                                                     \
+            {                                                                                                          \
+                auto coorStr = pInner->FirstChildElement("LinearRing")->FirstChildElement("coordinates");              \
+                auto poisStr = wcu::split(wcu::trim(coorStr->GetText()), "\n");                                        \
+                wcs::KLineString inner;                                                                                \
+                for (const auto& poiStr : poisStr)                                                                     \
+                {                                                                                                      \
+                    auto point = wcu::toDoubles(poiStr);                                                               \
+                    wcs::KPoint p{point[0], point[1]};                                                                 \
+                    if (point.size() > 2)                                                                              \
+                    {                                                                                                  \
+                        p.alt = point[2];                                                                              \
+                    }                                                                                                  \
+                    inner.points.emplace_back(p);                                                                      \
+                }                                                                                                      \
+                doc.name.innerLine = inner;                                                                            \
+            }                                                                                                          \
+        }                                                                                                              \
+    } while (0)
+
+#define SET_OPT_WPML_ARG_KPT(doc, xml, name)                                                                           \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        auto pEle = xml->FirstChildElement("Point");                                                                   \
+        if (pEle != nullptr)                                                                                           \
+        {                                                                                                              \
+            auto pointStr = wcu::trim(pEle->FirstChildElement("coordinates")->GetText());                              \
+            auto point = wcu::toDoubles(pointStr);                                                                     \
+            wcs::KPoint p{point[0], point[1]};                                                                         \
+            if (point.size() > 2)                                                                                      \
+            {                                                                                                          \
+                p.alt = point[2];                                                                                      \
+            }                                                                                                          \
+            doc.name = p;                                                                                              \
+        }                                                                                                              \
+    } while (0)
+
 #define SET_OPT_WPML_ARG_P(doc, xml, name)                                                                             \
     do                                                                                                                 \
     {                                                                                                                  \

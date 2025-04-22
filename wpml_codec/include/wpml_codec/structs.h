@@ -11,9 +11,24 @@ namespace wpml_codec::structs
 {
 struct LIB_API Point
 {
-    double lat; ///< 纬度
-    double lon; ///< 经度
-    double alt; ///< 高度
+    double lat;                ///< 纬度
+    double lon;                ///< 经度
+    std::optional<double> alt; ///< 高度
+};
+
+struct LIB_API KPoint : public Point
+{
+};
+
+struct LIB_API KLineString
+{
+    std::vector<KPoint> points; ///< 点集
+};
+
+struct LIB_API KPolygon
+{
+    KLineString outerLine;                ///< 外环
+    std::optional<KLineString> innerLine; ///< 内环
 };
 
 struct LIB_API DroneInfo
@@ -81,26 +96,126 @@ struct LIB_API GlobalWaypointHeadingParam
     wce::WaypointHeadingPathMode waypointHeadingPathMode; ///< 飞行器偏航角转动方向
 };
 
+struct LIB_API Overlap
+{
+    std::optional<int> orthoLidarOverlapH;     ///< 激光航向重叠率（正射）
+    std::optional<int> orthoLidarOverlapW;     ///< 激光旁向重叠率（正射）
+    std::optional<int> orthoCameraOverlapH;    ///< 可见光航向重叠率（正射）
+    std::optional<int> orthoCameraOverlapW;    ///< 可见光旁向重叠率（正射）
+    std::optional<int> inclinedLidarOverlapH;  ///< 激光航向重叠率（倾斜）
+    std::optional<int> inclinedLidarOverlapW;  ///< 激光旁向重叠率（倾斜）
+    std::optional<int> inclinedCameraOverlapH; ///< 可见光航向重叠率（倾斜）
+    std::optional<int> inclinedCameraOverlapW; ///< 可见光旁向重叠率（倾斜）
+};
+
+struct LIB_API MappingHeadingParam
+{
+    std::optional<wce::MappingHeadingMode> mappingHeadingMode; ///< 飞行器偏航角模式
+    std::optional<int> mappingHeadingAngle;                    ///< 飞行器偏航角
+};
+
+struct LIB_API WaypointHeadingParam
+{
+    wce::WaypointHeadingMode waypointHeadingMode;         ///< 飞行器偏航角模式
+    std::optional<double> waypointHeadingAngle;           ///< 飞行器偏航角度
+    std::optional<Point> waypointPoiPoint;                ///< 兴趣点
+    wce::WaypointHeadingPathMode waypointHeadingPathMode; ///< 飞行器偏航角转动方向
+};
+
+struct LIB_API WaypointTurnParam
+{
+    wce::WaypointTurnMode waypointTurnMode;        ///< 航点类型（航点转弯模式）
+    std::optional<double> waypointTurnDampingDist; ///< 航点转弯截距
+};
+
 struct LIB_API Placemark
 {
-    // TODO: Implement
+#if 0
+    /* 建图航拍模板元素 */
+    std::optional<int> caliFlightEnable;                 ///< 是否开启标定飞行
+    int elevationOptimizeEnable;                         ///< 是否开启高程优化
+    std::optional<int> smartObliqueEnable;               ///< 是否开启智能摆拍
+    std::optional<int> smartObliqueGimbalPitch;          ///< 智能摆拍拍摄俯仰角
+    wce::ShootType shootType;                            ///< 拍照模式（定时或定距）
+    int direction;                                       ///< 航线方向
+    int margin;                                          ///< 测区外扩距离
+    Overlap overlap;                                     ///< 重叠率参数
+    double ellipsoidHeight;                              ///< 全局航线高度（椭球高）
+    double height;                                       ///< 全局航线高度
+    std::optional<int> facadeWaylineEnable;              ///< 是否开启斜立面
+    KPolygon polygon;                                    ///< 测区多边形
+    MappingHeadingParam mappingHeadingParam;             ///< 建图航拍飞行器朝向参数
+    std::optional<wce::GimbalPitchMode> gimbalPitchMode; ///< 云台俯仰角模式
+    std::optional<int> gimbalPitchAngle;                 ///< 云台俯仰角度
+    std::optional<int> quickOrthoMappingEnable;          ///< 正射智能摆拍开关
+    std::optional<int> quickOrthoMappingPitch;           ///< 正射智能摆拍角度
+#endif
+
+    /* 倾斜摄影模板元素 */
+    std::optional<int> caliFlightEnable; ///< 是否开启标定飞行
+    int inclinedGimbalPitch;             ///< 云台俯仰角度（倾斜）
+    double inclinedFlightSpeed;          ///< 航线飞行速度（倾斜）
+    wce::ShootType shootType;            ///< 拍照模式（定时或定距）
+    int direction;                       ///< 航线方向
+    int margin;                          ///< 测区外扩距离
+    Overlap overlap;                     ///< 重叠率参数
+    double ellipsoidHeight;              ///< 全局航线高度（椭球高）
+    double height;                       ///< 全局航线高度
+    KPolygon polygon;                    ///< 测区多边形
+
+#if 0
+    /* 航带飞行模板元素 */
+    int caliFlightEnable;         ///< 是否开启标定飞行
+    wce::ShootType shootType;     ///< 拍照模式（定时或定距）
+    int direction;                ///< 航线方向
+    int margin;                   ///< 测区外扩距离
+    int singleLineEnable;         ///< 是否开启单航线飞行
+    double cuttingDistance;       ///< 每个子航带航线长度
+    int boundaryOptimEnable;      ///< 是否开启边缘优化
+    int leftExtend;               ///< 航带左侧外扩距离
+    int rightExtend;              ///< 航带右侧外扩距离
+    int includeCenterEnable;      ///< 是否包含中心线
+    double ellipsoidHeight;       ///< 全局航线高度（椭球高）
+    double height;                ///< 全局航线高度
+    int stripUseTemplateAltitude; ///< 是否开启变高航带
+    KLineString lineString;       ///< 航点信息
+    /* 航点飞行模板元素 */
+    std::optional<int> isRisky;                ///< 是否危险点
+    KPoint point;                              ///< 航点经纬度
+    int index;                                 ///< 航点序号
+    int useGlobalHeight;                       ///< 是否使用全局高度
+    double ellipsoidHeight;                    ///< 航点高度（椭球高）
+    double height;                             ///< 航点高度
+    int useGlobalSpeed;                        ///< 是否使用全局飞行速度
+    double waypointSpeed;                      ///< 航点飞行速度
+    int useGlobalHeadingParam;                 ///< 是否使用全局偏航角模式参数
+    WaypointHeadingParam waypointHeadingParam; ///< 偏航角模式参数
+    int useGlobalTurnParam;                    ///< 是否使用全局航点类型（全局航点转弯模式）
+    WaypointTurnParam waypointTurnParam;       ///< 航点类型（航点转弯模式）
+    int useStraightLine;                       ///< 该航段是否贴合直线
+    double gimbalPitchAngle;                   ///< 航点云台俯仰角
+#endif
 };
 
 struct LIB_API Folder
 {
-    /* 通用模板 */
+    /* 模板共用元素 */
     wce::TemplateType templateType;                      ///< 预定义模板类型
     int templateId;                                      ///< 模板ID
     double autoFlightSpeed;                              ///< 全局航线飞行速度
     WaylineCoordinateSysParam waylineCoordinateSysParam; ///< 坐标系参数
     PayloadParam payloadParam;                           ///< 负载设置
+
+#if 0
     /* 航点飞行模板元素 */
-    wce::GlobalWaypointTurnMode globalWaypointTurnMode;    ///< 全局航点类型（全局航点转弯模式）
-    int globalUseStraightLine;                             ///< 全局航段轨迹是否尽量贴合直线
+    wce::WaypointTurnMode globalWaypointTurnMode;          ///< 全局航点类型（全局航点转弯模式）
+    std::optional<int> globalUseStraightLine;              ///< 全局航段轨迹是否尽量贴合直线
     wce::GimbalPitchMode gimbalPitchMode;                  ///< 云台俯仰角控制模式
     double globalHeight;                                   ///< 全局航线高度（相对起飞点高度）
     GlobalWaypointHeadingParam globalWaypointHeadingParam; ///< 全局偏航角模式参数
-    Placemark placemark;                                   ///< 航点信息
+#endif
+
+    Placemark placemark; ///< 航点信息
 };
 
 struct LIB_API Document

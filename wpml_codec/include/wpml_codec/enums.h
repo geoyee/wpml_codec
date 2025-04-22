@@ -97,7 +97,7 @@ enum class ImageFormat
     visable,     ///< 可见光照片
 };
 
-enum class GlobalWaypointTurnMode
+enum class WaypointTurnMode
 {
     coordinateTurn,                           ///< 协调转弯，不过点，提前转弯
     toPointAndStopWithDiscontinuityCurvature, ///< 直线飞行，飞行器到点停
@@ -107,8 +107,12 @@ enum class GlobalWaypointTurnMode
 
 enum class GimbalPitchMode
 {
+    /* 航点飞行 */
     manual,          ///< 手动控制
     usePointSetting, ///< 依照每个航点设置
+    /* 建图航拍 */
+    // manual, ///< 手动控制云台俯仰角
+    fixed, ///< 固定为用户设置的俯仰角
 };
 
 enum class WaypointHeadingMode
@@ -125,6 +129,18 @@ enum class WaypointHeadingPathMode
     clockwise,        ///< 顺时针旋转飞行器偏航角
     counterClockwise, ///< 逆时针旋转飞行器偏航角
     followBadArc,     ///< 沿最短路径旋转飞行器偏航角
+};
+
+enum class ShootType
+{
+    time,     ///< 等时间拍照
+    distance, ///< 等间隔拍照
+};
+
+enum class MappingHeadingMode
+{
+    fixed,         ///< 固定为用户设置的偏航角
+    followWayline, ///< 偏航角跟随航线
 };
 }; // namespace wpml_codec::enums
 
