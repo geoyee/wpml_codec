@@ -13,10 +13,9 @@ int main()
     bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
     if (!isExtract)
     {
-        std::cerr << "isExtract is false\n";
         return -1;
     }
-    std::cout << "isExtract is true\n";
+    std::cout << "isExtract is ok\n";
 
     std::vector<std::string> files = wcu::findFiles(outputDir);
     for (const auto& f : files)
@@ -24,17 +23,23 @@ int main()
         if (wcu::endWith(f, "kml"))
         {
             auto res = wcc::parseKML(f);
-            std::cout << res.value().author.value() << "\n";
+            if (res.has_value())
+            {
+                std::cout << "parseKML is ok\n";
+                if (wcc::creatKML(res.value(), outputDir + "/tmp.kml"))
+                {
+                    std::cout << "creatKML is ok\n";
+                }
+            }
         }
     }
 
-    bool isPackage = wcu::packageKMZ(outputDir, saveKmzPath);
+    bool isPackage = wcu::packageKMZ(outputDir + "/wpmz", saveKmzPath);
     if (!isPackage)
     {
-        std::cerr << "isPackage is false\n";
         return -1;
     }
-    std::cout << "isPackage is true\n";
+    std::cout << "isPackage is ok\n";
 
     return 0;
 }

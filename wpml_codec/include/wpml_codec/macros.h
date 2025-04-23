@@ -213,4 +213,26 @@
         }                                                                                                              \
     } while (0)
 
+#define GET_OPT_WPML_ARG_S(doc, ele, name)                                                                             \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (data.name.has_value())                                                                                     \
+        {                                                                                                              \
+            xml::XMLElement *tmpElement = doc.NewElement("wpml:" #name);                                               \
+            tmpElement->SetText(data.name.value().c_str());                                                            \
+            ele->InsertEndChild(tmpElement);                                                                           \
+        }                                                                                                              \
+    } while (0)
+
+#define GET_OPT_WPML_ARG_N(doc, ele, name)                                                                             \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (data.name.has_value())                                                                                     \
+        {                                                                                                              \
+            xml::XMLElement *tmpElement = doc.NewElement("wpml:" #name);                                               \
+            tmpElement->SetText(wcu::toString(data.name.value()).c_str());                                             \
+            ele->InsertEndChild(tmpElement);                                                                           \
+        }                                                                                                              \
+    } while (0)
+
 #endif // WPML_CODEC_MACROS_H

@@ -128,4 +128,34 @@ std::optional<wcs::Document> parseKML(const std::string& kmlPath)
     // TODO: Implement
     return res;
 }
+
+bool creatKML(const wcs::Document& data, const std::string& kmlPath)
+{
+    try
+    {
+        xml::XMLDocument doc;
+        // 1. Create xml
+        xml::XMLDeclaration *decl = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+        doc.InsertFirstChild(decl);
+        // 2. Create kml Element
+        xml::XMLElement *kmlElement = doc.NewElement("kml");
+        kmlElement->SetAttribute("xmlns", "http://www.opengis.net/kml/2.2");
+        kmlElement->SetAttribute("xmlns:wpml", "http://www.dji.com/wpmz/1.0.6");
+        doc.InsertEndChild(kmlElement);
+        // 3. Create Document Element
+        xml::XMLElement *documentElement = doc.NewElement("Document");
+        kmlElement->InsertEndChild(documentElement);
+        GET_OPT_WPML_ARG_S(doc, documentElement, author);
+        GET_OPT_WPML_ARG_N(doc, documentElement, createTime);
+        GET_OPT_WPML_ARG_N(doc, documentElement, updateTime);
+        // TODO: Implement
+        // End
+        doc.SaveFile(kmlPath.c_str());
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
 } // namespace wpml_codec::core

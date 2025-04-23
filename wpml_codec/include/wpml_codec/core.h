@@ -9,6 +9,7 @@
 namespace wpml_codec::core
 {
 inline std::optional<wcs::Document> LIB_API parseKML(const std::string& kmlPath);
+inline bool LIB_API creatKML(const wcs::Document& data, const std::string& kmlPath);
 }; // namespace wpml_codec::core
 
 namespace wcc = wpml_codec::core;
