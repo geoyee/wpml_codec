@@ -278,6 +278,18 @@ std::vector<std::string> split(const std::string& str, const std::string& separa
     return res;
 }
 
+std::string merge(const std::vector<std::string>& strVec, const std::string& separator)
+{
+    std::string res = "";
+    size_t strLen = strVec.size();
+    for (int i = 0; i < strLen - 1; ++i)
+    {
+        res += (strVec[i] + separator);
+    }
+    res += strVec[strLen - 1];
+    return res;
+}
+
 std::string replace(const std::string& str, const std::string& oldSuffix, const std::string& newSuffix)
 {
     std::vector<std::string> saved = split(str, oldSuffix);

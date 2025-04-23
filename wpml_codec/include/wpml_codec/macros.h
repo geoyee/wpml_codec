@@ -191,11 +191,12 @@
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
             auto reals = wcu::toDoubles(pEle->GetText());                                                              \
+            wcs::Point p{reals[0], reals[1]};                                                                          \
             if (reals.size() == 3)                                                                                     \
             {                                                                                                          \
-                wcs::Point p{reals[0], reals[1], reals[2]};                                                            \
-                doc.name = p;                                                                                          \
+                p.alt = reals[2];                                                                                      \
             }                                                                                                          \
+            doc.name = p;                                                                                              \
         }                                                                                                              \
     } while (0)
 
@@ -213,26 +214,125 @@
         }                                                                                                              \
     } while (0)
 
-#define GET_OPT_WPML_ARG_S(doc, ele, name)                                                                             \
+#define GET_OPT_WPML_ARG_E(doc, ele, data, name)                                                                       \
     do                                                                                                                 \
     {                                                                                                                  \
         if (data.name.has_value())                                                                                     \
         {                                                                                                              \
-            xml::XMLElement *tmpElement = doc.NewElement("wpml:" #name);                                               \
+            xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
+            tmpElement->SetText(magic_enum::enum_name(data.name.value()).data());                                      \
+            ele->InsertEndChild(tmpElement);                                                                           \
+        }                                                                                                              \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_E(doc, ele, data, name)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
+        tmpElement->SetText(magic_enum::enum_name(data.name).data());                                                  \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_OPT_WPML_ARG_ES(doc, ele, data, name)                                                                      \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (data.name.has_value())                                                                                     \
+        {                                                                                                              \
+            xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
+            auto enumVec = data.name.value();                                                                          \
+            std::string res = "";                                                                                      \
+            for (const auto& enumVal : enumVec)                                                                        \
+            {                                                                                                          \
+                res += (std::string(magic_enum::enum_name(enumVal)) + ",");                                            \
+            }                                                                                                          \
+            res.pop_back();                                                                                            \
+            tmpElement->SetText(res.c_str());                                                                          \
+            ele->InsertEndChild(tmpElement);                                                                           \
+        }                                                                                                              \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_ES(doc, ele, data, name)                                                                      \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
+        auto enumVec = data.name;                                                                                      \
+        std::string res = "";                                                                                          \
+        for (const auto& enumVal : enumVec)                                                                            \
+        {                                                                                                              \
+            res += (std::string(magic_enum::enum_name(enumVal)) + ",");                                                \
+        }                                                                                                              \
+        res.pop_back();                                                                                                \
+        tmpElement->SetText(res.c_str());                                                                              \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_OPT_WPML_ARG_N(doc, ele, data, name)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (data.name.has_value())                                                                                     \
+        {                                                                                                              \
+            xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
+            tmpElement->SetText(wcu::toString(data.name.value()).c_str());                                             \
+            ele->InsertEndChild(tmpElement);                                                                           \
+        }                                                                                                              \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_N(doc, ele, data, name)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
+        tmpElement->SetText(wcu::toString(data.name).c_str());                                                         \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_OPT_WPML_ARG_P(doc, ele, data, name)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (data.name.has_value())                                                                                     \
+        {                                                                                                              \
+            xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
+            auto point = data.name.value();                                                                            \
+            std::vector<double> loc{point.lat, point.lon};                                                             \
+            if (point.alt.has_value())                                                                                 \
+            {                                                                                                          \
+                loc.push_back(point.alt.value());                                                                      \
+            }                                                                                                          \
+            tmpElement->SetText(wcu::toString(loc).c_str());                                                           \
+            ele->InsertEndChild(tmpElement);                                                                           \
+        }                                                                                                              \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_P(doc, ele, data, name)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
+        auto point = data.name;                                                                                        \
+        std::vector<double> loc{point.lat, point.lon};                                                                 \
+        if (point.alt.has_value())                                                                                     \
+        {                                                                                                              \
+            loc.push_back(point.alt.value());                                                                          \
+        }                                                                                                              \
+        tmpElement->SetText(wcu::toString(loc).c_str());                                                               \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_OPT_WPML_ARG_S(doc, ele, data, name)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        if (data.name.has_value())                                                                                     \
+        {                                                                                                              \
+            xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
             tmpElement->SetText(data.name.value().c_str());                                                            \
             ele->InsertEndChild(tmpElement);                                                                           \
         }                                                                                                              \
     } while (0)
 
-#define GET_OPT_WPML_ARG_N(doc, ele, name)                                                                             \
+#define GET_NEC_WPML_ARG_S(doc, ele, data, name)                                                                       \
     do                                                                                                                 \
     {                                                                                                                  \
-        if (data.name.has_value())                                                                                     \
-        {                                                                                                              \
-            xml::XMLElement *tmpElement = doc.NewElement("wpml:" #name);                                               \
-            tmpElement->SetText(wcu::toString(data.name.value()).c_str());                                             \
-            ele->InsertEndChild(tmpElement);                                                                           \
-        }                                                                                                              \
+        xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
+        tmpElement->SetText(data.name.c_str());                                                                        \
+        ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 
 #endif // WPML_CODEC_MACROS_H

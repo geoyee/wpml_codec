@@ -20,7 +20,7 @@ int main()
     std::vector<std::string> files = wcu::findFiles(outputDir);
     for (const auto& f : files)
     {
-        if (wcu::endWith(f, "kml"))
+        if (wcu::endWith(f, "kml") && !wcu::endWith(f, "tmp.kml"))
         {
             auto res = wcc::parseKML(f);
             if (res.has_value())

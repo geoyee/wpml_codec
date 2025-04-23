@@ -134,22 +134,78 @@ bool creatKML(const wcs::Document& data, const std::string& kmlPath)
     try
     {
         xml::XMLDocument doc;
-        // 1. Create xml
+        // Step 1: Create xml
         xml::XMLDeclaration *decl = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
         doc.InsertFirstChild(decl);
-        // 2. Create kml Element
+        // Step 2: Create kml Element
         xml::XMLElement *kmlElement = doc.NewElement("kml");
         kmlElement->SetAttribute("xmlns", "http://www.opengis.net/kml/2.2");
         kmlElement->SetAttribute("xmlns:wpml", "http://www.dji.com/wpmz/1.0.6");
         doc.InsertEndChild(kmlElement);
-        // 3. Create Document Element
+        // Step 3: Create Document Element
         xml::XMLElement *documentElement = doc.NewElement("Document");
         kmlElement->InsertEndChild(documentElement);
-        GET_OPT_WPML_ARG_S(doc, documentElement, author);
-        GET_OPT_WPML_ARG_N(doc, documentElement, createTime);
-        GET_OPT_WPML_ARG_N(doc, documentElement, updateTime);
+        GET_OPT_WPML_ARG_S(doc, documentElement, data, author);
+        GET_OPT_WPML_ARG_N(doc, documentElement, data, createTime);
+        GET_OPT_WPML_ARG_N(doc, documentElement, data, updateTime);
+        // Step 4: Create missionConfig Element
+        xml::XMLElement *missionElement = doc.NewElement("wpml::missionConfig");
+        documentElement->InsertEndChild(missionElement);
+        GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.flyToWaylineMode);
+        GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.finishAction);
+        GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.exitOnRCLost);
+        GET_OPT_WPML_ARG_E(doc, missionElement, data, missionConfig.executeRCLostAction);
+        GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.takeOffSecurityHeight);
+        GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalTransitionalSpeed);
+        GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalRTHHeight);
+        GET_OPT_WPML_ARG_P(doc, missionElement, data, missionConfig.takeOffRefPoint);
+        GET_OPT_WPML_ARG_N(doc, missionElement, data, missionConfig.takeOffRefPointAGLHeight);
+        xml::XMLElement *droneInfoElement = doc.NewElement("wpml::droneInfo");
+        missionElement->InsertEndChild(droneInfoElement);
+        GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneEnumValue);
+        GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneSubEnumValue);
+        xml::XMLElement *payloadInfoElement = doc.NewElement("wpml::payloadInfo");
+        missionElement->InsertEndChild(payloadInfoElement);
+        GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadEnumValue);
+        GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadPositionIndex);
+        xml::XMLElement *autoRerouteInfoElement = doc.NewElement("wpml::autoRerouteInfo");
+        missionElement->InsertEndChild(autoRerouteInfoElement);
+        GET_NEC_WPML_ARG_N(doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.missionAutoRerouteMode);
+        GET_NEC_WPML_ARG_N(
+            doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.transitionalAutoRerouteMode);
+        // Step 5: Create Folder Element
+        xml::XMLElement *folderElement = doc.NewElement("Folder");
+        documentElement->InsertEndChild(folderElement);
+        GET_NEC_WPML_ARG_E(doc, folderElement, data, folder.templateType);
+        GET_NEC_WPML_ARG_N(doc, folderElement, data, folder.templateId);
+        GET_NEC_WPML_ARG_N(doc, folderElement, data, folder.autoFlightSpeed);
+        xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml::waylineCoordinateSysParam");
+        folderElement->InsertEndChild(waylineCoordinateSysParamElement);
+        GET_NEC_WPML_ARG_E(
+            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.coordinateMode);
+        GET_NEC_WPML_ARG_E(doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.heightMode);
+        GET_OPT_WPML_ARG_E(
+            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.positioningType);
+        GET_NEC_WPML_ARG_N(
+            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.globalShootHeight);
+        GET_NEC_WPML_ARG_N(
+            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.surfaceFollowModeEnable);
+        GET_NEC_WPML_ARG_N(
+            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.surfaceRelativeHeight);
+        xml::XMLElement *payloadParamElement = doc.NewElement("wpml::payloadParam");
+        folderElement->InsertEndChild(payloadParamElement);
+        GET_NEC_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.payloadPositionIndex);
+        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.focusMode);
+        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.meteringMode);
+        GET_OPT_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.dewarpingEnable);
+        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.returnMode);
+        GET_OPT_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.samplingRate);
+        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.scanningMode);
+        GET_OPT_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.modelColoringEnable);
+        GET_NEC_WPML_ARG_ES(doc, payloadParamElement, data, folder.payloadParam.imageFormat);
+        // Step 6: Create Placemark Element
         // TODO: Implement
-        // End
+        // Save file
         doc.SaveFile(kmlPath.c_str());
         return true;
     }

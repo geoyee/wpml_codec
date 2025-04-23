@@ -49,7 +49,7 @@ enum class CoordinateMode
 
 enum class HeightMode
 {
-    GM96,                  ///< 使用海拔高编辑
+    EGM96,                 ///< 使用海拔高编辑
     relativeToStartPoint,  ///< 使用相对点的高度进行编辑
     aboveGroundLevel,      ///< 使用地形数据，AGL下编辑
     realTimeFollowSurface, ///< 使用实时仿地模式
@@ -107,12 +107,9 @@ enum class WaypointTurnMode
 
 enum class GimbalPitchMode
 {
-    /* 航点飞行 */
     manual,          ///< 手动控制
-    usePointSetting, ///< 依照每个航点设置
-    /* 建图航拍 */
-    // manual, ///< 手动控制云台俯仰角
-    fixed, ///< 固定为用户设置的俯仰角
+    usePointSetting, ///< 依照每个航点设置（仅航点飞行）
+    fixed,           ///< 固定为用户设置的俯仰角（仅建图航拍）
 };
 
 enum class WaypointHeadingMode

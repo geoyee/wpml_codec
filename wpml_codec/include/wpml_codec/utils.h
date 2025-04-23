@@ -28,6 +28,7 @@ inline bool LIB_API equal(const std::string& str, const std::string& suffix, boo
 inline bool LIB_API startWith(const std::string& str, const std::string& suffix, bool ignoreCase = false);
 inline bool LIB_API endWith(const std::string& str, const std::string& suffix, bool ignoreCase = false);
 inline std::vector<std::string> LIB_API split(const std::string& str, const std::string& separator);
+inline std::string LIB_API merge(const std::vector<std::string>& strVec, const std::string& separator = "");
 inline std::string LIB_API replace(const std::string& str, const std::string& oldSuffix, const std::string& newSuffix);
 inline std::optional<bool> LIB_API toBool(const std::string& str);
 inline std::optional<int> LIB_API toInt(const std::string& str);
