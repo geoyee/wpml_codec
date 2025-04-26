@@ -12,7 +12,7 @@
             auto boolVal = wcu::toBool(pEle->GetText());                                                               \
             if (boolVal.has_value())                                                                                   \
             {                                                                                                          \
-                doc.name = boolVal.value();                                                                            \
+                (doc).name = boolVal.value();                                                                          \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -26,7 +26,7 @@
             auto doubleVal = wcu::toDouble(pEle->GetText());                                                           \
             if (doubleVal.has_value())                                                                                 \
             {                                                                                                          \
-                doc.name = doubleVal.value();                                                                          \
+                (doc).name = doubleVal.value();                                                                        \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -40,7 +40,7 @@
             auto enumVal = magic_enum::enum_cast<wce::enumType>(pEle->GetText());                                      \
             if (enumVal.has_value())                                                                                   \
             {                                                                                                          \
-                doc.name = enumVal.value();                                                                            \
+                (doc).name = enumVal.value();                                                                          \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -65,7 +65,7 @@
                         enumVec[i++] = enumVal.value();                                                                \
                     }                                                                                                  \
                 }                                                                                                      \
-                doc.name = enumVec;                                                                                    \
+                (doc).name = enumVec;                                                                                  \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -79,7 +79,7 @@
             auto intVal = wcu::toInt(pEle->GetText());                                                                 \
             if (intVal.has_value())                                                                                    \
             {                                                                                                          \
-                doc.name = intVal.value();                                                                             \
+                (doc).name = intVal.value();                                                                           \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -93,7 +93,7 @@
             auto longVal = wcu::toLongLong(pEle->GetText());                                                           \
             if (longVal.has_value())                                                                                   \
             {                                                                                                          \
-                doc.name = longVal.value();                                                                            \
+                (doc).name = longVal.value();                                                                          \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -118,7 +118,7 @@
                 }                                                                                                      \
                 points.emplace_back(p);                                                                                \
             }                                                                                                          \
-            doc.name.points = p;                                                                                       \
+            (doc).name.points = p;                                                                                     \
         }                                                                                                              \
     } while (0)
 
@@ -144,7 +144,7 @@
                     }                                                                                                  \
                     outer.points.emplace_back(p);                                                                      \
                 }                                                                                                      \
-                doc.name.outerLine = outer;                                                                            \
+                (doc).name.outerLine = outer;                                                                          \
             }                                                                                                          \
             auto pInner = pEle->FirstChildElement("innerBoundaryIs");                                                  \
             if (pInner != nullptr)                                                                                     \
@@ -162,7 +162,7 @@
                     }                                                                                                  \
                     inner.points.emplace_back(p);                                                                      \
                 }                                                                                                      \
-                doc.name.innerLine = inner;                                                                            \
+                (doc).name.innerLine = inner;                                                                          \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -180,7 +180,7 @@
             {                                                                                                          \
                 p.alt = point[2];                                                                                      \
             }                                                                                                          \
-            doc.name = p;                                                                                              \
+            (doc).name = p;                                                                                            \
         }                                                                                                              \
     } while (0)
 
@@ -196,7 +196,7 @@
             {                                                                                                          \
                 p.alt = reals[2];                                                                                      \
             }                                                                                                          \
-            doc.name = p;                                                                                              \
+            (doc).name = p;                                                                                            \
         }                                                                                                              \
     } while (0)
 
@@ -209,37 +209,37 @@
             auto strVal = pEle->GetText();                                                                             \
             if (strVal != nullptr)                                                                                     \
             {                                                                                                          \
-                doc.name = strVal;                                                                                     \
+                (doc).name = strVal;                                                                                   \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
 
-#define GET_OPT_WPML_ARG_E(doc, ele, data, name)                                                                       \
+#define GET_OPT_WPML_ARG_E(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
-        if (data.name.has_value())                                                                                     \
+        if ((iptData).name.has_value())                                                                                \
         {                                                                                                              \
             xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
-            tmpElement->SetText(magic_enum::enum_name(data.name.value()).data());                                      \
+            tmpElement->SetText(magic_enum::enum_name((iptData).name.value()).data());                                 \
             ele->InsertEndChild(tmpElement);                                                                           \
         }                                                                                                              \
     } while (0)
 
-#define GET_NEC_WPML_ARG_E(doc, ele, data, name)                                                                       \
+#define GET_NEC_WPML_ARG_E(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
         xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
-        tmpElement->SetText(magic_enum::enum_name(data.name).data());                                                  \
+        tmpElement->SetText(magic_enum::enum_name((iptData).name).data());                                             \
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 
-#define GET_OPT_WPML_ARG_ES(doc, ele, data, name)                                                                      \
+#define GET_OPT_WPML_ARG_ES(doc, ele, iptData, name)                                                                   \
     do                                                                                                                 \
     {                                                                                                                  \
-        if (data.name.has_value())                                                                                     \
+        if ((iptData).name.has_value())                                                                                \
         {                                                                                                              \
             xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
-            auto enumVec = data.name.value();                                                                          \
+            auto enumVec = (iptData).name.value();                                                                     \
             std::string res = "";                                                                                      \
             for (const auto& enumVal : enumVec)                                                                        \
             {                                                                                                          \
@@ -251,11 +251,11 @@
         }                                                                                                              \
     } while (0)
 
-#define GET_NEC_WPML_ARG_ES(doc, ele, data, name)                                                                      \
+#define GET_NEC_WPML_ARG_ES(doc, ele, iptData, name)                                                                   \
     do                                                                                                                 \
     {                                                                                                                  \
         xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
-        auto enumVec = data.name;                                                                                      \
+        auto enumVec = (iptData).name;                                                                                 \
         std::string res = "";                                                                                          \
         for (const auto& enumVal : enumVec)                                                                            \
         {                                                                                                              \
@@ -266,32 +266,32 @@
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 
-#define GET_OPT_WPML_ARG_N(doc, ele, data, name)                                                                       \
+#define GET_OPT_WPML_ARG_N(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
-        if (data.name.has_value())                                                                                     \
+        if ((iptData).name.has_value())                                                                                \
         {                                                                                                              \
             xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
-            tmpElement->SetText(wcu::toString(data.name.value()).c_str());                                             \
+            tmpElement->SetText(wcu::toString((iptData).name.value()).c_str());                                        \
             ele->InsertEndChild(tmpElement);                                                                           \
         }                                                                                                              \
     } while (0)
 
-#define GET_NEC_WPML_ARG_N(doc, ele, data, name)                                                                       \
+#define GET_NEC_WPML_ARG_N(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
         xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
-        tmpElement->SetText(wcu::toString(data.name).c_str());                                                         \
+        tmpElement->SetText(wcu::toString((iptData).name).c_str());                                                    \
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 
-#define GET_OPT_WPML_ARG_P(doc, ele, data, name)                                                                       \
+#define GET_OPT_WPML_ARG_P(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
-        if (data.name.has_value())                                                                                     \
+        if ((iptData).name.has_value())                                                                                \
         {                                                                                                              \
             xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
-            auto point = data.name.value();                                                                            \
+            auto point = (iptData).name.value();                                                                       \
             std::vector<double> loc{point.lat, point.lon};                                                             \
             if (point.alt.has_value())                                                                                 \
             {                                                                                                          \
@@ -302,11 +302,11 @@
         }                                                                                                              \
     } while (0)
 
-#define GET_NEC_WPML_ARG_P(doc, ele, data, name)                                                                       \
+#define GET_NEC_WPML_ARG_P(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
         xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
-        auto point = data.name;                                                                                        \
+        auto point = (iptData).name;                                                                                   \
         std::vector<double> loc{point.lat, point.lon};                                                                 \
         if (point.alt.has_value())                                                                                     \
         {                                                                                                              \
@@ -316,22 +316,22 @@
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 
-#define GET_OPT_WPML_ARG_S(doc, ele, data, name)                                                                       \
+#define GET_OPT_WPML_ARG_S(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
-        if (data.name.has_value())                                                                                     \
+        if ((iptData).name.has_value())                                                                                \
         {                                                                                                              \
             xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());           \
-            tmpElement->SetText(data.name.value().c_str());                                                            \
+            tmpElement->SetText((iptData).name.value().c_str());                                                       \
             ele->InsertEndChild(tmpElement);                                                                           \
         }                                                                                                              \
     } while (0)
 
-#define GET_NEC_WPML_ARG_S(doc, ele, data, name)                                                                       \
+#define GET_NEC_WPML_ARG_S(doc, ele, iptData, name)                                                                    \
     do                                                                                                                 \
     {                                                                                                                  \
         xml::XMLElement *tmpElement = doc.NewElement(("wpml:" + wcu::split(#name, ".").back()).c_str());               \
-        tmpElement->SetText(data.name.c_str());                                                                        \
+        tmpElement->SetText((iptData).name.c_str());                                                                   \
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 

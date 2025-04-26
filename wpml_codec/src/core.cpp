@@ -7,9 +7,9 @@ namespace xml = tinyxml2;
 
 namespace wpml_codec::core
 {
-std::optional<wcs::Document> parseKML(const std::string& kmlPath)
+std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
 {
-    wcs::Document res;
+    wcs::KMLDocument res;
     xml::XMLDocument doc;
     xml::XMLError eResult = doc.LoadFile(kmlPath.c_str());
     if (eResult != xml::XML_SUCCESS)
@@ -69,67 +69,158 @@ std::optional<wcs::Document> parseKML(const std::string& kmlPath)
         std::cerr << "No Folder element found" << std::endl;
         return std::nullopt;
     }
-    SET_OPT_WPML_ARG_E(res.folder, pFolder, templateType, TemplateType);
-    SET_OPT_WPML_ARG_I(res.folder, pFolder, templateId);
-    SET_OPT_WPML_ARG_D(res.folder, pFolder, autoFlightSpeed);
-    xml::XMLElement *pWaylineCoordinateSysParam = pFolder->FirstChildElement("wpml:waylineCoordinateSysParam");
-    if (pWaylineCoordinateSysParam != nullptr)
+    std::string templateType = pFolder->FirstChildElement("wpml:templateType")->GetText();
+    if (wcu::equal(templateType, "waypoint"))
     {
-        SET_OPT_WPML_ARG_E(
-            res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, coordinateMode, CoordinateMode);
-        SET_OPT_WPML_ARG_E(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, heightMode, HeightMode);
-        SET_OPT_WPML_ARG_E(
-            res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, positioningType, PositioningType);
-        SET_OPT_WPML_ARG_D(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, globalShootHeight);
-        SET_OPT_WPML_ARG_I(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceFollowModeEnable);
-        SET_OPT_WPML_ARG_D(res.folder.waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceRelativeHeight);
+        res.folder = std::make_shared<wcs::WaypointFlightKMLFolder>();
+        auto curFolder = std::dynamic_pointer_cast<wcs::WaypointFlightKMLFolder>(res.folder);
+        SET_OPT_WPML_ARG_E(*curFolder, pFolder, templateType, TemplateType);
+        SET_OPT_WPML_ARG_I(*curFolder, pFolder, templateId);
+        SET_OPT_WPML_ARG_D(*curFolder, pFolder, autoFlightSpeed);
+        SET_OPT_WPML_ARG_E(*curFolder, pFolder, globalWaypointTurnMode, GlobalWaypointTurnMode);
+        SET_OPT_WPML_ARG_I(*curFolder, pFolder, globalUseStraightLine);
+        SET_OPT_WPML_ARG_E(*curFolder, pFolder, gimbalPitchMode, GimbalPitchMode);
+        SET_OPT_WPML_ARG_D(*curFolder, pFolder, globalHeight);
+        xml::XMLElement *pWaylineCoordinateSysParam = pFolder->FirstChildElement("wpml:waylineCoordinateSysParam");
+        if (pWaylineCoordinateSysParam != nullptr)
+        {
+            SET_OPT_WPML_ARG_E(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, coordinateMode, CoordinateMode);
+            SET_OPT_WPML_ARG_E(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, heightMode, HeightMode);
+            SET_OPT_WPML_ARG_E(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, positioningType, PositioningType);
+            SET_OPT_WPML_ARG_D(curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, globalShootHeight);
+            SET_OPT_WPML_ARG_I(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceFollowModeEnable);
+            SET_OPT_WPML_ARG_D(curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceRelativeHeight);
+        }
+        xml::XMLElement *pPayloadParam = pFolder->FirstChildElement("wpml:payloadParam");
+        if (pPayloadParam != nullptr)
+        {
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, payloadPositionIndex);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, focusMode, FocusMode);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, meteringMode, MeteringMode);
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, dewarpingEnable);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, returnMode, ReturnMode);
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, samplingRate);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, scanningMode, ScanningMode);
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, modelColoringEnable);
+            SET_OPT_WPML_ARG_ES(curFolder->payloadParam, pPayloadParam, imageFormat, ImageFormat);
+        }
+        xml::XMLElement *pGlobalWaypointHeadingParam = pFolder->FirstChildElement("wpml:globalWaypointHeadingParam");
+        if (pGlobalWaypointHeadingParam != nullptr)
+        {
+            SET_OPT_WPML_ARG_E(curFolder->globalWaypointHeadingParam,
+                               pGlobalWaypointHeadingParam,
+                               waypointHeadingMode,
+                               WaypointHeadingMode);
+            SET_OPT_WPML_ARG_D(
+                curFolder->globalWaypointHeadingParam, pGlobalWaypointHeadingParam, waypointHeadingAngle);
+            SET_OPT_WPML_ARG_P(curFolder->globalWaypointHeadingParam, pGlobalWaypointHeadingParam, waypointPoiPoint);
+            SET_OPT_WPML_ARG_E(curFolder->globalWaypointHeadingParam,
+                               pGlobalWaypointHeadingParam,
+                               waypointHeadingPathMode,
+                               WaypointHeadingPathMode);
+        }
+        // Step 4: Setup Waypoint Placemark
+        // TODO: Implement
     }
-    xml::XMLElement *pPayloadParam = pFolder->FirstChildElement("wpml:payloadParam");
-    if (pPayloadParam != nullptr)
+    else
     {
-        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, payloadPositionIndex);
-        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, focusMode, FocusMode);
-        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, meteringMode, MeteringMode);
-        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, dewarpingEnable);
-        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, returnMode, ReturnMode);
-        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, samplingRate);
-        SET_OPT_WPML_ARG_E(res.folder.payloadParam, pPayloadParam, scanningMode, ScanningMode);
-        SET_OPT_WPML_ARG_I(res.folder.payloadParam, pPayloadParam, modelColoringEnable);
-        SET_OPT_WPML_ARG_ES(res.folder.payloadParam, pPayloadParam, imageFormat, ImageFormat);
+        res.folder = std::make_shared<wcs::KMLFolder>();
+        auto curFolder = std::dynamic_pointer_cast<wcs::KMLFolder>(res.folder);
+        SET_OPT_WPML_ARG_E(*curFolder, pFolder, templateType, TemplateType);
+        SET_OPT_WPML_ARG_I(*curFolder, pFolder, templateId);
+        SET_OPT_WPML_ARG_D(*curFolder, pFolder, autoFlightSpeed);
+        xml::XMLElement *pWaylineCoordinateSysParam = pFolder->FirstChildElement("wpml:waylineCoordinateSysParam");
+        if (pWaylineCoordinateSysParam != nullptr)
+        {
+            SET_OPT_WPML_ARG_E(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, coordinateMode, CoordinateMode);
+            SET_OPT_WPML_ARG_E(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, heightMode, HeightMode);
+            SET_OPT_WPML_ARG_E(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, positioningType, PositioningType);
+            SET_OPT_WPML_ARG_D(curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, globalShootHeight);
+            SET_OPT_WPML_ARG_I(
+                curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceFollowModeEnable);
+            SET_OPT_WPML_ARG_D(curFolder->waylineCoordinateSysParam, pWaylineCoordinateSysParam, surfaceRelativeHeight);
+        }
+        xml::XMLElement *pPayloadParam = pFolder->FirstChildElement("wpml:payloadParam");
+        if (pPayloadParam != nullptr)
+        {
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, payloadPositionIndex);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, focusMode, FocusMode);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, meteringMode, MeteringMode);
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, dewarpingEnable);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, returnMode, ReturnMode);
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, samplingRate);
+            SET_OPT_WPML_ARG_E(curFolder->payloadParam, pPayloadParam, scanningMode, ScanningMode);
+            SET_OPT_WPML_ARG_I(curFolder->payloadParam, pPayloadParam, modelColoringEnable);
+            SET_OPT_WPML_ARG_ES(curFolder->payloadParam, pPayloadParam, imageFormat, ImageFormat);
+        }
+        // Step 4: Setup Placemark
+        xml::XMLElement *pPlacemark = pFolder->FirstChildElement("Placemark");
+        if (pPlacemark == nullptr)
+        {
+            std::cerr << "No Placemark element found" << std::endl;
+            return std::nullopt;
+        }
+        switch (curFolder->templateType)
+        {
+            case wce::TemplateType::mapping2d :
+            {
+                curFolder->placemark = std::make_shared<wcs::MappingAerialKMLPlacemark>();
+                auto curPlacemark = std::dynamic_pointer_cast<wcs::MappingAerialKMLPlacemark>(curFolder->placemark);
+                // TODO: Implement
+                break;
+            }
+            case wce::TemplateType::mapping3d :
+            {
+                curFolder->placemark = std::make_shared<wcs::ObliquePhotographyKMLPlacemark>();
+                auto curPlacemark =
+                    std::dynamic_pointer_cast<wcs::ObliquePhotographyKMLPlacemark>(curFolder->placemark);
+                SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, caliFlightEnable);
+                SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, inclinedGimbalPitch);
+                SET_OPT_WPML_ARG_D(*curPlacemark, pPlacemark, inclinedFlightSpeed);
+                SET_OPT_WPML_ARG_E(*curPlacemark, pPlacemark, shootType, ShootType);
+                SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, direction);
+                SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, margin);
+                xml::XMLElement *pOverlap = pPlacemark->FirstChildElement("wpml:overlap");
+                if (pOverlap != nullptr)
+                {
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoLidarOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoLidarOverlapW);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoCameraOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoCameraOverlapW);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedLidarOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedLidarOverlapW);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedCameraOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedCameraOverlapW);
+                }
+                SET_OPT_WPML_ARG_D(*curPlacemark, pPlacemark, ellipsoidHeight);
+                SET_OPT_WPML_ARG_D(*curPlacemark, pPlacemark, height);
+                SET_OPT_WPML_ARG_KPN(*curPlacemark, pPlacemark, polygon);
+                break;
+            }
+            case wce::TemplateType::mappingStrip :
+            {
+                curFolder->placemark = std::make_shared<wcs::WaypointSegmentFlightKMLPlacemark>();
+                auto curPlacemark =
+                    std::dynamic_pointer_cast<wcs::WaypointSegmentFlightKMLPlacemark>(curFolder->placemark);
+                // TODO: Implement
+                break;
+            }
+            default :
+                curFolder->placemark = nullptr;
+                break;
+        }
     }
-    // Step 4: Setup Placemark
-    xml::XMLElement *pPlacemark = pFolder->FirstChildElement("Placemark");
-    if (pPlacemark == nullptr)
-    {
-        std::cerr << "No Placemark element found" << std::endl;
-        return std::nullopt;
-    }
-    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, caliFlightEnable);
-    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, inclinedGimbalPitch);
-    SET_OPT_WPML_ARG_D(res.folder.placemark, pPlacemark, inclinedFlightSpeed);
-    SET_OPT_WPML_ARG_E(res.folder.placemark, pPlacemark, shootType, ShootType);
-    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, direction);
-    SET_OPT_WPML_ARG_I(res.folder.placemark, pPlacemark, margin);
-    xml::XMLElement *pOverlap = pPlacemark->FirstChildElement("wpml:overlap");
-    if (pOverlap != nullptr)
-    {
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoLidarOverlapH);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoLidarOverlapW);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoCameraOverlapH);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, orthoCameraOverlapW);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedLidarOverlapH);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedLidarOverlapW);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedCameraOverlapH);
-        SET_OPT_WPML_ARG_I(res.folder.placemark.overlap, pOverlap, inclinedCameraOverlapW);
-    }
-    SET_OPT_WPML_ARG_D(res.folder.placemark, pPlacemark, ellipsoidHeight);
-    SET_OPT_WPML_ARG_D(res.folder.placemark, pPlacemark, height);
-    SET_OPT_WPML_ARG_KPN(res.folder.placemark, pPlacemark, polygon);
-    // TODO: Implement
     return res;
 }
 
-bool creatKML(const wcs::Document& data, const std::string& kmlPath)
+bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
 {
     try
     {
@@ -163,7 +254,7 @@ bool creatKML(const wcs::Document& data, const std::string& kmlPath)
         xml::XMLElement *droneInfoElement = doc.NewElement("wpml::droneInfo");
         missionElement->InsertEndChild(droneInfoElement);
         GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneEnumValue);
-        GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneSubEnumValue);
+        GET_OPT_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneSubEnumValue);
         xml::XMLElement *payloadInfoElement = doc.NewElement("wpml::payloadInfo");
         missionElement->InsertEndChild(payloadInfoElement);
         GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadEnumValue);
@@ -176,35 +267,86 @@ bool creatKML(const wcs::Document& data, const std::string& kmlPath)
         // Step 5: Create Folder Element
         xml::XMLElement *folderElement = doc.NewElement("Folder");
         documentElement->InsertEndChild(folderElement);
-        GET_NEC_WPML_ARG_E(doc, folderElement, data, folder.templateType);
-        GET_NEC_WPML_ARG_N(doc, folderElement, data, folder.templateId);
-        GET_NEC_WPML_ARG_N(doc, folderElement, data, folder.autoFlightSpeed);
-        xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml::waylineCoordinateSysParam");
-        folderElement->InsertEndChild(waylineCoordinateSysParamElement);
-        GET_NEC_WPML_ARG_E(
-            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.coordinateMode);
-        GET_NEC_WPML_ARG_E(doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.heightMode);
-        GET_OPT_WPML_ARG_E(
-            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.positioningType);
-        GET_NEC_WPML_ARG_N(
-            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.globalShootHeight);
-        GET_NEC_WPML_ARG_N(
-            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.surfaceFollowModeEnable);
-        GET_NEC_WPML_ARG_N(
-            doc, waylineCoordinateSysParamElement, data, folder.waylineCoordinateSysParam.surfaceRelativeHeight);
-        xml::XMLElement *payloadParamElement = doc.NewElement("wpml::payloadParam");
-        folderElement->InsertEndChild(payloadParamElement);
-        GET_NEC_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.payloadPositionIndex);
-        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.focusMode);
-        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.meteringMode);
-        GET_OPT_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.dewarpingEnable);
-        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.returnMode);
-        GET_OPT_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.samplingRate);
-        GET_OPT_WPML_ARG_E(doc, payloadParamElement, data, folder.payloadParam.scanningMode);
-        GET_OPT_WPML_ARG_N(doc, payloadParamElement, data, folder.payloadParam.modelColoringEnable);
-        GET_NEC_WPML_ARG_ES(doc, payloadParamElement, data, folder.payloadParam.imageFormat);
-        // Step 6: Create Placemark Element
-        // TODO: Implement
+        if (data.folder->templateType == wce::TemplateType::waypoint)
+        {
+            auto curFolder = std::dynamic_pointer_cast<wcs::WaypointFlightKMLFolder>(data.folder);
+            GET_NEC_WPML_ARG_E(doc, folderElement, *curFolder, templateType);
+            GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, templateId);
+            GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, autoFlightSpeed);
+            GET_NEC_WPML_ARG_E(doc, folderElement, *curFolder, globalWaypointTurnMode);
+            GET_OPT_WPML_ARG_N(doc, folderElement, *curFolder, globalUseStraightLine);
+            GET_NEC_WPML_ARG_E(doc, folderElement, *curFolder, gimbalPitchMode);
+            GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, globalHeight);
+            xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml::waylineCoordinateSysParam");
+            folderElement->InsertEndChild(waylineCoordinateSysParamElement);
+            GET_NEC_WPML_ARG_E(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, coordinateMode);
+            GET_NEC_WPML_ARG_E(doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, heightMode);
+            GET_OPT_WPML_ARG_E(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, positioningType);
+            GET_NEC_WPML_ARG_N(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, globalShootHeight);
+            GET_NEC_WPML_ARG_N(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceFollowModeEnable);
+            GET_OPT_WPML_ARG_N(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceRelativeHeight);
+            xml::XMLElement *payloadParamElement = doc.NewElement("wpml::payloadParam");
+            folderElement->InsertEndChild(payloadParamElement);
+            GET_NEC_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, payloadPositionIndex);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, focusMode);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, meteringMode);
+            GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, dewarpingEnable);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, returnMode);
+            GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, samplingRate);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, scanningMode);
+            GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, modelColoringEnable);
+            GET_NEC_WPML_ARG_ES(doc, payloadParamElement, curFolder->payloadParam, imageFormat);
+            xml::XMLElement *globalWaypointHeadingParamElement = doc.NewElement("wpml::globalWaypointHeadingParam");
+            folderElement->InsertEndChild(globalWaypointHeadingParamElement);
+            GET_NEC_WPML_ARG_E(
+                doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointHeadingMode);
+            GET_OPT_WPML_ARG_N(
+                doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointHeadingAngle);
+            GET_OPT_WPML_ARG_P(
+                doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointPoiPoint);
+            GET_NEC_WPML_ARG_E(
+                doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointHeadingPathMode);
+            // Step 6: Create Placemark Element
+            // TODO: Implement
+        }
+        else
+        {
+            auto curFolder = std::dynamic_pointer_cast<wcs::KMLFolder>(data.folder);
+            GET_NEC_WPML_ARG_E(doc, folderElement, *curFolder, templateType);
+            GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, templateId);
+            GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, autoFlightSpeed);
+            xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml::waylineCoordinateSysParam");
+            folderElement->InsertEndChild(waylineCoordinateSysParamElement);
+            GET_NEC_WPML_ARG_E(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, coordinateMode);
+            GET_NEC_WPML_ARG_E(doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, heightMode);
+            GET_OPT_WPML_ARG_E(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, positioningType);
+            GET_NEC_WPML_ARG_N(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, globalShootHeight);
+            GET_NEC_WPML_ARG_N(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceFollowModeEnable);
+            GET_OPT_WPML_ARG_N(
+                doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceRelativeHeight);
+            xml::XMLElement *payloadParamElement = doc.NewElement("wpml::payloadParam");
+            folderElement->InsertEndChild(payloadParamElement);
+            GET_NEC_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, payloadPositionIndex);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, focusMode);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, meteringMode);
+            GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, dewarpingEnable);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, returnMode);
+            GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, samplingRate);
+            GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, scanningMode);
+            GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, modelColoringEnable);
+            GET_NEC_WPML_ARG_ES(doc, payloadParamElement, curFolder->payloadParam, imageFormat);
+            // Step 6: Create Placemark Element
+            // TODO: Implement
+        }
         // Save file
         doc.SaveFile(kmlPath.c_str());
         return true;
