@@ -2,6 +2,7 @@
 #include <wpml_codec/utils.h>
 #include <wpml_codec/macros.h>
 #include <tinyxml2.h>
+#include <iostream>
 
 namespace xml = tinyxml2;
 
@@ -311,7 +312,7 @@ bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointPoiPoint);
             GET_NEC_WPML_ARG_E(
                 doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointHeadingPathMode);
-            // Step 6: Create Placemark Element
+            // Step 6: Create Waypoint Placemark Element
             // TODO: Implement
         }
         else
@@ -345,7 +346,52 @@ bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
             GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, modelColoringEnable);
             GET_NEC_WPML_ARG_ES(doc, payloadParamElement, curFolder->payloadParam, imageFormat);
             // Step 6: Create Placemark Element
-            // TODO: Implement
+            xml::XMLElement *placemarkElement = doc.NewElement("Placemark");
+            folderElement->InsertEndChild(placemarkElement);
+            switch (data.folder->templateType)
+            {
+                case wce::TemplateType::mapping2d :
+                {
+                    auto curPlacemark = std::dynamic_pointer_cast<wcs::MappingAerialKMLPlacemark>(curFolder->placemark);
+                    // TODO: Implement
+                    break;
+                }
+                case wce::TemplateType::mapping3d :
+                {
+                    auto curPlacemark =
+                        std::dynamic_pointer_cast<wcs::ObliquePhotographyKMLPlacemark>(curFolder->placemark);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, caliFlightEnable);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, inclinedGimbalPitch);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, inclinedFlightSpeed);
+                    GET_NEC_WPML_ARG_E(doc, placemarkElement, *curPlacemark, shootType);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, direction);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, margin);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, ellipsoidHeight);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, height);
+                    GET_NEC_WPML_ARG_KPN(doc, placemarkElement, *curPlacemark, polygon);
+                    xml::XMLElement *overlapElement = doc.NewElement("wpml::overlap");
+                    placemarkElement->InsertEndChild(overlapElement);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoCameraOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoCameraOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapW);
+                    break;
+                }
+                case wce::TemplateType::mappingStrip :
+                {
+                    auto curPlacemark =
+                        std::dynamic_pointer_cast<wcs::WaypointSegmentFlightKMLPlacemark>(curFolder->placemark);
+                    // TODO: Implement
+                    break;
+                }
+                default :
+                    curFolder->placemark = nullptr;
+                    break;
+            }
         }
         // Save file
         doc.SaveFile(kmlPath.c_str());

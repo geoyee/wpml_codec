@@ -5,6 +5,8 @@
 
 #include <wpml_codec/common.h>
 #include <wpml_codec/enums.h>
+#include <wpml_codec/utils.h>
+#include <string>
 #include <optional>
 #include <memory>
 
@@ -23,10 +25,31 @@ struct LIB_API Point
 
 using KPoint = Point;
 
+inline std::string kPointToStr(const KPoint& kPoint)
+{
+    std::string str = wcu::toString(kPoint.lat) + "," + wcu::toString(kPoint.lon);
+    if (kPoint.alt.has_value())
+    {
+        str += ("," + wcu::toString(kPoint.alt.value()));
+    }
+    return str;
+}
+
 struct LIB_API KLineString
 {
     std::vector<KPoint> points; ///< µã¼¯
 };
+
+inline std::string kLineStringToStr(const KLineString& kLine)
+{
+    std::string str = "";
+    for (const auto& kPoint : kLine.points)
+    {
+        str += (kPointToStr(kPoint) + NEW_LINE);
+    }
+    str.pop_back();
+    return str;
+}
 
 struct LIB_API KPolygon
 {

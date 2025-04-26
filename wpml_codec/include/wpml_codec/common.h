@@ -19,7 +19,12 @@
 #endif // __GNUC__ >= 4
 #endif // _MSC_VER || __CYGWIN__ || __MINGW32__ || __BCPLUSPLUS__ || __MWERKS__
 
-#include <iostream>
-#include <string>
+#if _WIN32
+#define NEW_LINE "\n"
+#else
+#define NEW_LINE "\r\n"
+#endif // _WIN32
+
+#define DBL_DECIMAL 13
 
 #endif // WPML_CODEC_COMMON_H

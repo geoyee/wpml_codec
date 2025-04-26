@@ -3,6 +3,8 @@
 #ifndef WPML_CODEC_MACROS_H
 #define WPML_CODEC_MACROS_H
 
+#include <wpml_codec/common.h>
+
 #define SET_OPT_WPML_ARG_B(doc, xml, name)                                                                             \
     do                                                                                                                 \
     {                                                                                                                  \
@@ -105,7 +107,7 @@
         if (pEle != nullptr)                                                                                           \
         {                                                                                                              \
             auto lineStr = pEle->FirstChildElement("coordinates")->GetText();                                          \
-            auto poisStr = wcu::split(wcu::trim(lineStr), "\n");                                                       \
+            auto poisStr = wcu::split(wcu::trim(lineStr), NEW_LINE);                                                   \
             std::vector<wcs::KPoint> points(poisStr.size());                                                           \
             size_t i = 0;                                                                                              \
             for (const auto& poiStr : poisStr)                                                                         \
@@ -132,7 +134,7 @@
             if (pOuter != nullptr)                                                                                     \
             {                                                                                                          \
                 auto coorStr = pOuter->FirstChildElement("LinearRing")->FirstChildElement("coordinates");              \
-                auto poisStr = wcu::split(wcu::trim(coorStr->GetText()), "\n");                                        \
+                auto poisStr = wcu::split(wcu::trim(coorStr->GetText()), NEW_LINE);                                    \
                 wcs::KLineString outer;                                                                                \
                 for (const auto& poiStr : poisStr)                                                                     \
                 {                                                                                                      \
@@ -150,7 +152,7 @@
             if (pInner != nullptr)                                                                                     \
             {                                                                                                          \
                 auto coorStr = pInner->FirstChildElement("LinearRing")->FirstChildElement("coordinates");              \
-                auto poisStr = wcu::split(wcu::trim(coorStr->GetText()), "\n");                                        \
+                auto poisStr = wcu::split(wcu::trim(coorStr->GetText()), NEW_LINE);                                    \
                 wcs::KLineString inner;                                                                                \
                 for (const auto& poiStr : poisStr)                                                                     \
                 {                                                                                                      \
@@ -263,6 +265,57 @@
         }                                                                                                              \
         res.pop_back();                                                                                                \
         tmpElement->SetText(res.c_str());                                                                              \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_KLS(doc, ele, iptData, name)                                                                  \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement("LineString");                                                    \
+        xml::XMLElement *tmpLineCorsElement = doc.NewElement("coordinates");                                           \
+        auto line = (iptData).name;                                                                                    \
+        std::string res = wcs::kLineStringToStr(line);                                                                 \
+        tmpLineCorsElement->SetText(res.c_str());                                                                      \
+        tmpElement->InsertEndChild(tmpLineCorsElement);                                                                \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_KPN(doc, ele, iptData, name)                                                                  \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement("Polygon");                                                       \
+        xml::XMLElement *tmpOuterElement = doc.NewElement("outerBoundaryIs");                                          \
+        xml::XMLElement *tmpOuterLineElement = doc.NewElement("LinearRing");                                           \
+        xml::XMLElement *tmpOuterCorsElement = doc.NewElement("coordinates");                                          \
+        auto poly = (iptData).name;                                                                                    \
+        std::string res = wcs::kLineStringToStr(poly.outerLine);                                                       \
+        tmpOuterCorsElement->SetText(res.c_str());                                                                     \
+        tmpOuterLineElement->InsertEndChild(tmpOuterCorsElement);                                                      \
+        tmpOuterElement->InsertEndChild(tmpOuterLineElement);                                                          \
+        tmpElement->InsertEndChild(tmpOuterElement);                                                                   \
+        if (poly.innerLine.has_value())                                                                                \
+        {                                                                                                              \
+            xml::XMLElement *tmpInnerElement = doc.NewElement("innerBoundaryIs");                                      \
+            xml::XMLElement *tmpInnerLineElement = doc.NewElement("LinearRing");                                       \
+            xml::XMLElement *tmpInnerCorsElement = doc.NewElement("coordinates");                                      \
+            std::string res2 = wcs::kLineStringToStr(poly.innerLine.value());                                          \
+            tmpInnerCorsElement->SetText(res2.c_str());                                                                \
+            tmpInnerLineElement->InsertEndChild(tmpInnerCorsElement);                                                  \
+            tmpInnerElement->InsertEndChild(tmpInnerLineElement);                                                      \
+            tmpElement->InsertEndChild(tmpInnerElement);                                                               \
+        }                                                                                                              \
+        ele->InsertEndChild(tmpElement);                                                                               \
+    } while (0)
+
+#define GET_NEC_WPML_ARG_KPT(doc, ele, iptData, name)                                                                  \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xml::XMLElement *tmpElement = doc.NewElement("Point");                                                         \
+        xml::XMLElement *tmpPointCorsElement = doc.NewElement("coordinates");                                          \
+        auto point = (iptData).name;                                                                                   \
+        std::string res = wcs::kPointToStr(point);                                                                     \
+        tmpPointCorsElement->SetText(res.c_str());                                                                     \
+        tmpElement->InsertEndChild(tmpPointCorsElement);                                                               \
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
 
