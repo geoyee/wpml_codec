@@ -120,7 +120,7 @@
                 }                                                                                                      \
                 points.emplace_back(p);                                                                                \
             }                                                                                                          \
-            (doc).name.points = p;                                                                                     \
+            (doc).name.points = points;                                                                                \
         }                                                                                                              \
     } while (0)
 
