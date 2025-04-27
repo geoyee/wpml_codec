@@ -109,7 +109,6 @@
             auto lineStr = pEle->FirstChildElement("coordinates")->GetText();                                          \
             auto poisStr = wcu::split(wcu::trim(lineStr), NEW_LINE);                                                   \
             std::vector<wcs::KPoint> points(poisStr.size());                                                           \
-            size_t i = 0;                                                                                              \
             for (const auto& poiStr : poisStr)                                                                         \
             {                                                                                                          \
                 auto point = wcu::toDoubles(poiStr);                                                                   \

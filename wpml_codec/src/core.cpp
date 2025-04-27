@@ -401,7 +401,37 @@ bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 case wce::TemplateType::mapping2d :
                 {
                     auto curPlacemark = std::dynamic_pointer_cast<wcs::MappingAerialKMLPlacemark>(curFolder->placemark);
-                    // TODO: Implement
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, caliFlightEnable);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, elevationOptimizeEnable);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, smartObliqueEnable);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, smartObliqueGimbalPitch);
+                    GET_NEC_WPML_ARG_E(doc, placemarkElement, *curPlacemark, shootType);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, direction);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, margin);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, ellipsoidHeight);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, height);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, facadeWaylineEnable);
+                    GET_NEC_WPML_ARG_KPN(doc, placemarkElement, *curPlacemark, polygon);
+                    GET_OPT_WPML_ARG_E(doc, placemarkElement, *curPlacemark, gimbalPitchMode);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, gimbalPitchAngle);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, quickOrthoMappingEnable);
+                    GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, quickOrthoMappingPitch);
+                    xml::XMLElement *overlapElement = doc.NewElement("wpml::overlap");
+                    placemarkElement->InsertEndChild(overlapElement);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoCameraOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoCameraOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapW);
+                    xml::XMLElement *mappingHeadingParamElement = doc.NewElement("wpml::mappingHeadingParam");
+                    placemarkElement->InsertEndChild(mappingHeadingParamElement);
+                    GET_OPT_WPML_ARG_E(
+                        doc, mappingHeadingParamElement, curPlacemark->mappingHeadingParam, mappingHeadingMode);
+                    GET_OPT_WPML_ARG_N(
+                        doc, mappingHeadingParamElement, curPlacemark->mappingHeadingParam, mappingHeadingAngle);
                     break;
                 }
                 case wce::TemplateType::mapping3d :
@@ -433,7 +463,20 @@ bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 {
                     auto curPlacemark =
                         std::dynamic_pointer_cast<wcs::WaypointSegmentFlightKMLPlacemark>(curFolder->placemark);
-                    // TODO: Implement
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, caliFlightEnable);
+                    GET_NEC_WPML_ARG_E(doc, placemarkElement, *curPlacemark, shootType);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, direction);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, margin);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, singleLineEnable);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, cuttingDistance);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, boundaryOptimEnable);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, leftExtend);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, rightExtend);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, includeCenterEnable);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, ellipsoidHeight);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, height);
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, stripUseTemplateAltitude);
+                    GET_NEC_WPML_ARG_KLS(doc, placemarkElement, *curPlacemark, lineString);
                     break;
                 }
                 default :
