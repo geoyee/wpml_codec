@@ -307,7 +307,7 @@ std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
     return res;
 }
 
-bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
+bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
 {
     try
     {
@@ -560,5 +560,73 @@ bool creatKML(const wcs::KMLDocument& data, const std::string& kmlPath)
     {
         return false;
     }
+}
+
+std::optional<wcs::WPMLDocument> LIB_API parseWPML(const std::string& wpmlPath)
+{
+    wcs::WPMLDocument res;
+    xml::XMLDocument doc;
+    xml::XMLError eResult = doc.LoadFile(wpmlPath.c_str());
+    if (eResult != xml::XML_SUCCESS)
+    {
+        std::cerr << "Failed to load wpml file: " << wpmlPath << std::endl;
+        return std::nullopt;
+    }
+    // Parse KML
+    // TODO: Implement
+    return std::nullopt;
+}
+
+bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
+{
+    // TODO: Implement
+    return false;
+}
+
+std::optional<WPMLData> parseKMZOfDJI(const std::string& kmzPath)
+{
+    std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
+    bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
+    if (!isExtract)
+    {
+        return std::nullopt;
+    }
+    std::optional<wcs::KMLDocument> resKml = std::nullopt;
+    std::optional<wcs::WPMLDocument> resWpml = std::nullopt;
+    std::vector<std::string> files = wcu::findFiles(outputDir);
+    for (const auto& f : files)
+    {
+        if (wcu::endWith(f, "kml"))
+        {
+            resKml = wcc::parseKML(f);
+        }
+        else if (wcu::endWith(f, "wpml"))
+        {
+            resWpml = wcc::parseWPML(f);
+        }
+    }
+    wcu::removeFileOrDir(outputDir);
+    if (resKml.has_value() && resWpml.has_value())
+    {
+        return std::make_pair(resKml.value(), resWpml.value());
+    }
+    else
+    {
+        return std::nullopt;
+    }
+}
+
+bool createKMZOfDJI(const WPMLData& data, const std::string& kmzPath)
+{
+    std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
+    bool succ = wcc::createKML(data.first, outputDir + "/template.kml") &&
+                wcc::createWPML(data.second, outputDir + "/waylines.wpml");
+    if (!succ)
+    {
+        return false;
+    }
+    succ = wcu::packageKMZ(outputDir, kmzPath);
+    wcu::removeFileOrDir(outputDir);
+    return succ;
 }
 } // namespace wpml_codec::core

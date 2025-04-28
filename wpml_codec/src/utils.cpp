@@ -177,6 +177,25 @@ std::vector<std::string> findFiles(const std::string& directory)
     return files;
 }
 
+void removeFileOrDir(const std::string& path)
+{
+    if (fs::exists(path))
+    {
+        fs::remove_all(path);
+    }
+}
+
+std::string getTempDir()
+{
+    return fs::temp_directory_path().string();
+}
+
+std::string getFileName(const std::string& filePath)
+{
+    fs::path path(filePath);
+    return path.has_filename() ? path.filename().string() : "";
+}
+
 /**********************************************************************/
 /*                               String                               */
 /**********************************************************************/
