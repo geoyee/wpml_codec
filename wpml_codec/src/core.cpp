@@ -125,7 +125,45 @@ std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
                                WaypointHeadingPathMode);
         }
         // Step 4: Setup Waypoint Placemark
-        // TODO: Implement
+        std::vector<wcs::WaypointInfoKMLPlacemark> waypointPlacemarks{};
+        xml::XMLElement *pPlacemark = pFolder->FirstChildElement("Placemark");
+        while (pPlacemark)
+        {
+            wcs::WaypointInfoKMLPlacemark tmpPlacemark;
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, isRisky);
+            SET_OPT_WPML_ARG_KPT(tmpPlacemark, pPlacemark, point);
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, index);
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useGlobalHeight);
+            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, ellipsoidHeight);
+            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, height);
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useGlobalSpeed);
+            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, waypointSpeed);
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useGlobalTurnParam);
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useStraightLine);
+            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, gimbalPitchAngle);
+            xml::XMLElement *pWaypointHeadingParam = pPlacemark->FirstChildElement("wpml:waypointHeadingParam");
+            if (pWaypointHeadingParam != nullptr)
+            {
+                SET_OPT_WPML_ARG_E(
+                    tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointHeadingMode, WaypointHeadingMode);
+                SET_OPT_WPML_ARG_D(tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointHeadingAngle);
+                SET_OPT_WPML_ARG_P(tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointPoiPoint);
+                SET_OPT_WPML_ARG_E(tmpPlacemark.waypointHeadingParam,
+                                   pWaypointHeadingParam,
+                                   waypointHeadingPathMode,
+                                   WaypointHeadingPathMode);
+            }
+            xml::XMLElement *pWaypointTurnParam = pPlacemark->FirstChildElement("wpml:waypointTurnParam");
+            if (pWaypointTurnParam != nullptr)
+            {
+                SET_OPT_WPML_ARG_E(
+                    tmpPlacemark.waypointTurnParam, pWaypointTurnParam, waypointTurnMode, WaypointTurnMode);
+                SET_OPT_WPML_ARG_D(tmpPlacemark.waypointTurnParam, pWaypointTurnParam, waypointTurnDampingDist);
+            }
+            waypointPlacemarks.emplace_back(tmpPlacemark);
+            pPlacemark = pPlacemark->NextSiblingElement("Placemark");
+        }
+        curFolder->placemark = waypointPlacemarks;
     }
     else
     {
