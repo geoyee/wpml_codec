@@ -513,7 +513,7 @@ struct LIB_API WPMLDocument
 /*                                End                                 */
 /**********************************************************************/
 
-struct LIB_API WPMLData
+struct LIB_API WPMZData
 {
     KMLDocument templateKML;           ///< 模板文件信息
     WPMLDocument waylinesWPML;         ///< 执行文件信息

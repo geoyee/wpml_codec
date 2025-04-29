@@ -7,39 +7,20 @@ int main()
     WPML_CODEC_VERSION();
 
     std::string kmzPath = "./data/二维面状航线.kmz";
-    std::string outputDir = "./data/output";
     std::string saveKmzPath = "./data/二维面状航线_2.kmz";
 
-    bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
-    if (!isExtract)
+    auto wpmzData = wcc::parseWPMZ(kmzPath);
+    if (!wpmzData.has_value())
     {
+        std::cerr << "Can not open " << kmzPath << " to parsed\n";
         return -1;
     }
-    std::cout << "isExtract is ok\n";
-
-    std::vector<std::string> files = wcu::findFiles(outputDir);
-    for (const auto& f : files)
+    bool saveSucc = wcc::createWPMZ(wpmzData.value(), saveKmzPath);
+    if (!saveSucc)
     {
-        if (wcu::endWith(f, "kml") && !wcu::endWith(f, "tmp.kml"))
-        {
-            auto res = wcc::parseKML(f);
-            if (res.has_value())
-            {
-                std::cout << "parseKML is ok\n";
-                /*if (wcc::createKML(res.value(), outputDir + "/tmp.kml"))
-                {
-                    std::cout << "creatKML is ok\n";
-                }*/
-            }
-        }
-    }
-
-    bool isPackage = wcu::packageKMZ(outputDir, saveKmzPath);
-    if (!isPackage)
-    {
+        std::cerr << "Can not create " << saveKmzPath << " from wpmzData\n";
         return -1;
     }
-    std::cout << "isPackage is ok\n";
-
+    std::cout << "Finished\n";
     return 0;
 }

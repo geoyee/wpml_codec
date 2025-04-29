@@ -614,16 +614,62 @@ std::optional<wcs::WPMLDocument> LIB_API parseWPML(const std::string& wpmlPath)
     }
     // Step 3: Setup A Folder for Waypoint Template
     // TODO: Implement
-    return std::nullopt;
+    return res;
 }
 
 bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
 {
-    // TODO: Implement
+    try
+    {
+        xml::XMLDocument doc;
+        // Step 1: Create xml
+        xml::XMLDeclaration *decl = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+        doc.InsertFirstChild(decl);
+        // Step 2: Create kml Element
+        xml::XMLElement *kmlElement = doc.NewElement("kml");
+        kmlElement->SetAttribute("xmlns", "http://www.opengis.net/kml/2.2");
+        kmlElement->SetAttribute("xmlns:wpml", "http://www.dji.com/wpmz/1.0.6");
+        doc.InsertEndChild(kmlElement);
+        // Step 3: Create Document Element
+        xml::XMLElement *documentElement = doc.NewElement("Document");
+        kmlElement->InsertEndChild(documentElement);
+        // Step 4: Create missionConfig Element
+        xml::XMLElement *missionElement = doc.NewElement("wpml::missionConfig");
+        documentElement->InsertEndChild(missionElement);
+        GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.flyToWaylineMode);
+        GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.finishAction);
+        GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.exitOnRCLost);
+        GET_OPT_WPML_ARG_E(doc, missionElement, data, missionConfig.executeRCLostAction);
+        GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.takeOffSecurityHeight);
+        GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalTransitionalSpeed);
+        GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalRTHHeight);
+        xml::XMLElement *droneInfoElement = doc.NewElement("wpml::droneInfo");
+        missionElement->InsertEndChild(droneInfoElement);
+        GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneEnumValue);
+        GET_OPT_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneSubEnumValue);
+        xml::XMLElement *payloadInfoElement = doc.NewElement("wpml::payloadInfo");
+        missionElement->InsertEndChild(payloadInfoElement);
+        GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadEnumValue);
+        GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadPositionIndex);
+        xml::XMLElement *autoRerouteInfoElement = doc.NewElement("wpml::autoRerouteInfo");
+        missionElement->InsertEndChild(autoRerouteInfoElement);
+        GET_NEC_WPML_ARG_N(doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.missionAutoRerouteMode);
+        GET_NEC_WPML_ARG_N(
+            doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.transitionalAutoRerouteMode);
+        // Step 5: Create Folder Element
+        // TODO: Implement
+        // Save file
+        doc.SaveFile(wpmlPath.c_str());
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
     return false;
 }
 
-std::optional<wcs::WPMLData> parseKMZOfDJI(const std::string& kmzPath)
+std::optional<wcs::WPMZData> parseWPMZ(const std::string& kmzPath)
 {
     std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath) + wcu::getNowTimestamp();
     wcu::removeFileOrDir(outputDir);
@@ -634,9 +680,10 @@ std::optional<wcs::WPMLData> parseKMZOfDJI(const std::string& kmzPath)
     bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
     if (!isExtract)
     {
+        wcu::removeFileOrDir(outputDir);
         return std::nullopt;
     }
-    wcs::WPMLData res;
+    wcs::WPMZData res;
     std::vector<std::string> files = wcu::findFiles(outputDir);
     for (const auto& f : files)
     {
@@ -669,7 +716,7 @@ std::optional<wcs::WPMLData> parseKMZOfDJI(const std::string& kmzPath)
     return res;
 }
 
-bool createKMZOfDJI(const wcs::WPMLData& data, const std::string& kmzPath)
+bool createWPMZ(const wcs::WPMZData& data, const std::string& kmzPath)
 {
     std::string packageDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
     std::string outputDir = packageDir + "/wpmz";
