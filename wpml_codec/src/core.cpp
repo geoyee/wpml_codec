@@ -627,6 +627,10 @@ std::optional<wcs::WPMLData> parseKMZOfDJI(const std::string& kmzPath)
 {
     std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath) + wcu::getNowTimestamp();
     wcu::removeFileOrDir(outputDir);
+    if (!wcu::makeDir(outputDir))
+    {
+        return std::nullopt;
+    }
     bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
     if (!isExtract)
     {
@@ -667,8 +671,13 @@ std::optional<wcs::WPMLData> parseKMZOfDJI(const std::string& kmzPath)
 
 bool createKMZOfDJI(const wcs::WPMLData& data, const std::string& kmzPath)
 {
-    std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
-    wcu::removeFileOrDir(outputDir);
+    std::string packageDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
+    std::string outputDir = packageDir + "/wpmz";
+    wcu::removeFileOrDir(packageDir);
+    if (!wcu::makeDir(outputDir))
+    {
+        return false;
+    }
     bool succ = wcc::createKML(data.templateKML, outputDir + "/template.kml") &&
                 wcc::createWPML(data.waylinesWPML, outputDir + "/waylines.wpml");
     if (data.resDir.has_value())
@@ -679,8 +688,8 @@ bool createKMZOfDJI(const wcs::WPMLData& data, const std::string& kmzPath)
     {
         return false;
     }
-    succ = wcu::packageKMZ(outputDir, kmzPath);
-    wcu::removeFileOrDir(outputDir);
+    succ = wcu::packageKMZ(packageDir, kmzPath);
+    wcu::removeFileOrDir(packageDir);
     return succ;
 }
 } // namespace wpml_codec::core

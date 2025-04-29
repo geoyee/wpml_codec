@@ -161,47 +161,68 @@ bool packageKMZ(const std::string& inputDir, const std::string& kmzPath)
 
 std::vector<std::string> findFiles(const std::string& directory)
 {
-    std::vector<std::string> files;
+    std::vector<std::string> files{};
+    if (!fs::exists(directory) || !fs::is_directory(directory))
+    {
+        return files;
+    }
     for (const auto& fit : fs::recursive_directory_iterator(directory))
     {
         if (fit.is_regular_file())
         {
             files.emplace_back(fs::absolute(fit.path()).lexically_normal().string());
         }
-        /*else if (fit.is_directory())
-        {
-            std::cout << fit.path() << "\n";
-            std::vector<std::string> subFiles = findFiles(fit.path().string());
-            files.insert(
-                files.end(), std::make_move_iterator(subFiles.begin()), std::make_move_iterator(subFiles.end()));
-        }*/
     }
     return files;
 }
 
-void copyFileOrDir(const std::string& path, const std::string& newPath)
+bool copyFileOrDir(const std::string& path, const std::string& newPath)
 {
     if (!fs::exists(path))
     {
-        return;
+        return false;
     }
     const auto copyOptions = fs::copy_options::update_existing | fs::copy_options::recursive;
     if (fs::is_directory(path))
     {
-        fs::copy(path, newPath, copyOptions);
+        try
+        {
+            fs::copy(path, newPath, copyOptions);
+            return true;
+        }
+        catch (const fs::filesystem_error& e)
+        {
+            std::cerr << "[" << e.code().message() << "]: " << e.what() << "\n";
+            return false;
+        }
     }
     else if (fs::is_regular_file(path))
     {
-        fs::copy_file(path, newPath, copyOptions);
+        return fs::copy_file(path, newPath, copyOptions);
     }
+    return false;
 }
 
-void removeFileOrDir(const std::string& path)
+bool removeFileOrDir(const std::string& path)
 {
     if (fs::exists(path))
     {
-        fs::remove_all(path);
+        try
+        {
+            fs::remove_all(path);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
+    return false;
+}
+
+bool makeDir(const std::string& dir)
+{
+    return fs::create_directories(dir);
 }
 
 std::string getTempDir()

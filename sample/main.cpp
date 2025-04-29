@@ -26,15 +26,15 @@ int main()
             if (res.has_value())
             {
                 std::cout << "parseKML is ok\n";
-                if (wcc::createKML(res.value(), outputDir + "/tmp.kml"))
+                /*if (wcc::createKML(res.value(), outputDir + "/tmp.kml"))
                 {
                     std::cout << "creatKML is ok\n";
-                }
+                }*/
             }
         }
     }
 
-    bool isPackage = wcu::packageKMZ(outputDir + "/wpmz", saveKmzPath);
+    bool isPackage = wcu::packageKMZ(outputDir, saveKmzPath);
     if (!isPackage)
     {
         return -1;

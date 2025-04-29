@@ -17,8 +17,9 @@ namespace wpml_codec::utils
 inline bool LIB_API extractKMZ(const std::string& kmzPath, const std::string& outputDir);
 inline bool LIB_API packageKMZ(const std::string& inputDir, const std::string& kmzPath);
 inline std::vector<std::string> LIB_API findFiles(const std::string& directory);
-inline void LIB_API copyFileOrDir(const std::string& path, const std::string& newPath);
-inline void LIB_API removeFileOrDir(const std::string& path);
+inline bool LIB_API copyFileOrDir(const std::string& path, const std::string& newPath);
+inline bool LIB_API removeFileOrDir(const std::string& path);
+inline bool LIB_API makeDir(const std::string& dir);
 inline std::string LIB_API getTempDir();
 inline std::string LIB_API getFileName(const std::string& filePath);
 
