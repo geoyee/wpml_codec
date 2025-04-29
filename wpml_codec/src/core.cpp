@@ -78,7 +78,7 @@ std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
         SET_OPT_WPML_ARG_E(*curFolder, pFolder, templateType, TemplateType);
         SET_OPT_WPML_ARG_I(*curFolder, pFolder, templateId);
         SET_OPT_WPML_ARG_D(*curFolder, pFolder, autoFlightSpeed);
-        SET_OPT_WPML_ARG_E(*curFolder, pFolder, globalWaypointTurnMode, GlobalWaypointTurnMode);
+        SET_OPT_WPML_ARG_E(*curFolder, pFolder, globalWaypointTurnMode, WaypointTurnMode);
         SET_OPT_WPML_ARG_I(*curFolder, pFolder, globalUseStraightLine);
         SET_OPT_WPML_ARG_E(*curFolder, pFolder, gimbalPitchMode, GimbalPitchMode);
         SET_OPT_WPML_ARG_D(*curFolder, pFolder, globalHeight);
@@ -573,6 +573,46 @@ std::optional<wcs::WPMLDocument> LIB_API parseWPML(const std::string& wpmlPath)
         return std::nullopt;
     }
     // Parse KML
+    // Step 1: Implement File Creation Information
+    xml::XMLElement *pDocument = doc.FirstChildElement("kml")->FirstChildElement("Document");
+    if (pDocument == nullptr)
+    {
+        std::cerr << "No Document element found" << std::endl;
+        return std::nullopt;
+    }
+    // Step 2: Setup Mission Configuration
+    xml::XMLElement *pMissionConfig = pDocument->FirstChildElement("wpml:missionConfig");
+    if (pMissionConfig == nullptr)
+    {
+        std::cerr << "No wpml:missionConfig element found" << std::endl;
+        return std::nullopt;
+    }
+    SET_OPT_WPML_ARG_E(res.missionConfig, pMissionConfig, flyToWaylineMode, FlyToWaylineMode);
+    SET_OPT_WPML_ARG_E(res.missionConfig, pMissionConfig, finishAction, FinishAction);
+    SET_OPT_WPML_ARG_E(res.missionConfig, pMissionConfig, exitOnRCLost, ExitOnRCLost);
+    SET_OPT_WPML_ARG_E(res.missionConfig, pMissionConfig, executeRCLostAction, ExecuteRCLostAction);
+    SET_OPT_WPML_ARG_D(res.missionConfig, pMissionConfig, takeOffSecurityHeight);
+    SET_OPT_WPML_ARG_D(res.missionConfig, pMissionConfig, globalTransitionalSpeed);
+    SET_OPT_WPML_ARG_D(res.missionConfig, pMissionConfig, globalRTHHeight);
+    xml::XMLElement *pDroneInfo = pMissionConfig->FirstChildElement("wpml:droneInfo");
+    if (pDroneInfo != nullptr)
+    {
+        SET_OPT_WPML_ARG_I(res.missionConfig.droneInfo, pDroneInfo, droneEnumValue);
+        SET_OPT_WPML_ARG_I(res.missionConfig.droneInfo, pDroneInfo, droneSubEnumValue);
+    }
+    xml::XMLElement *pPayloadInfo = pMissionConfig->FirstChildElement("wpml:payloadInfo");
+    if (pPayloadInfo != nullptr)
+    {
+        SET_OPT_WPML_ARG_I(res.missionConfig.payloadInfo, pPayloadInfo, payloadEnumValue);
+        SET_OPT_WPML_ARG_I(res.missionConfig.payloadInfo, pPayloadInfo, payloadPositionIndex);
+    }
+    xml::XMLElement *pAutoRerouteInfo = pMissionConfig->FirstChildElement("wpml:autoRerouteInfo");
+    if (pAutoRerouteInfo != nullptr)
+    {
+        SET_OPT_WPML_ARG_I(res.missionConfig.autoRerouteInfo, pAutoRerouteInfo, missionAutoRerouteMode);
+        SET_OPT_WPML_ARG_I(res.missionConfig.autoRerouteInfo, pAutoRerouteInfo, transitionalAutoRerouteMode);
+    }
+    // Step 3: Setup A Folder for Waypoint Template
     // TODO: Implement
     return std::nullopt;
 }
@@ -583,44 +623,58 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
     return false;
 }
 
-std::optional<WPMLData> parseKMZOfDJI(const std::string& kmzPath)
+std::optional<wcs::WPMLData> parseKMZOfDJI(const std::string& kmzPath)
 {
-    std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
+    std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath) + wcu::getNowTimestamp();
+    wcu::removeFileOrDir(outputDir);
     bool isExtract = wcu::extractKMZ(kmzPath, outputDir);
     if (!isExtract)
     {
         return std::nullopt;
     }
-    std::optional<wcs::KMLDocument> resKml = std::nullopt;
-    std::optional<wcs::WPMLDocument> resWpml = std::nullopt;
+    wcs::WPMLData res;
     std::vector<std::string> files = wcu::findFiles(outputDir);
     for (const auto& f : files)
     {
-        if (wcu::endWith(f, "kml"))
+        if (wcu::endWith(f, ".kml"))
         {
-            resKml = wcc::parseKML(f);
+            auto resKml = wcc::parseKML(f);
+            if (!resKml.has_value())
+            {
+                wcu::removeFileOrDir(outputDir);
+                return std::nullopt;
+            }
+            res.templateKML = std::move(resKml.value());
         }
-        else if (wcu::endWith(f, "wpml"))
+        else if (wcu::endWith(f, ".wpml"))
         {
-            resWpml = wcc::parseWPML(f);
+            auto resWpml = wcc::parseWPML(f);
+            if (!resWpml.has_value())
+            {
+                wcu::removeFileOrDir(outputDir);
+                return std::nullopt;
+            }
+            res.waylinesWPML = std::move(resWpml.value());
+        }
+        else if (wcu::endWith(f, "res"))
+        {
+            res.resDir = f;
         }
     }
     wcu::removeFileOrDir(outputDir);
-    if (resKml.has_value() && resWpml.has_value())
-    {
-        return std::make_pair(resKml.value(), resWpml.value());
-    }
-    else
-    {
-        return std::nullopt;
-    }
+    return res;
 }
 
-bool createKMZOfDJI(const WPMLData& data, const std::string& kmzPath)
+bool createKMZOfDJI(const wcs::WPMLData& data, const std::string& kmzPath)
 {
     std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
-    bool succ = wcc::createKML(data.first, outputDir + "/template.kml") &&
-                wcc::createWPML(data.second, outputDir + "/waylines.wpml");
+    wcu::removeFileOrDir(outputDir);
+    bool succ = wcc::createKML(data.templateKML, outputDir + "/template.kml") &&
+                wcc::createWPML(data.waylinesWPML, outputDir + "/waylines.wpml");
+    if (data.resDir.has_value())
+    {
+        wcu::copyFileOrDir(data.resDir.value(), outputDir);
+    }
     if (!succ)
     {
         return false;

@@ -123,8 +123,6 @@ enum class ImageFormat
     visable,     ///< 可见光照片
 };
 
-using PayloadLensIndex = ImageFormat;
-
 enum class MappingHeadingMode
 {
     fixed,         ///< 固定为用户设置的偏航角
@@ -214,9 +212,6 @@ enum class WaypointTurnMode
     toPointAndStopWithContinuityCurvature,    ///< 曲线飞行，飞行器到点停
     toPointAndPassWithContinuityCurvature,    ///< 曲线飞行，飞行器过点不停
 };
-
-using GlobalWaypointTurnMode = WaypointTurnMode;
-
 }; // namespace wpml_codec::enums
 
 namespace wce = wpml_codec::enums;

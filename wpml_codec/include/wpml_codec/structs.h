@@ -123,18 +123,18 @@ struct LIB_API ActionActuatorFuncParam
 
 struct LIB_API TakePhotoParam : public ActionActuatorFuncParam
 {
-    int payloadPositionIndex;                            ///< 负载挂载位置
-    std::string fileSuffix;                              ///< 拍摄照片文件后缀
-    std::vector<wce::PayloadLensIndex> payloadLensIndex; ///< 拍摄照片存储类型
-    int useGlobalPayloadLensIndex;                       ///< 是否使用全局存储类型
+    int payloadPositionIndex;                       ///< 负载挂载位置
+    std::string fileSuffix;                         ///< 拍摄照片文件后缀
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
+    int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
 };
 
 using StartRecordParam = TakePhotoParam;
 
 struct LIB_API StopRecordParam : public ActionActuatorFuncParam
 {
-    int payloadPositionIndex;                            ///< 负载挂载位置
-    std::vector<wce::PayloadLensIndex> payloadLensIndex; ///< 拍摄照片存储类型
+    int payloadPositionIndex;                       ///< 负载挂载位置
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
 };
 
 struct LIB_API FocusParam : public ActionActuatorFuncParam
@@ -194,72 +194,72 @@ struct LIB_API HoverParam : public ActionActuatorFuncParam
 
 struct LIB_API AccurateShootParam : public ActionActuatorFuncParam
 {
-    double gimbalPitchRotateAngle;                       ///< 云台Pitch转动角度
-    double gimbalYawRotateAngle;                         ///< 云台Yaw转动角度
-    int focusX;                                          ///< 目标选中框中心水平坐标
-    int focusY;                                          ///< 目标选中框中心竖直坐标
-    int focusRegionWidth;                                ///< 目标选中框宽
-    int focusRegionHeight;                               ///< 目标选中框高
-    double focalLength;                                  ///< 变焦焦距
-    double aircraftHeading;                              ///< 飞行器目标偏航角
-    int accurateFrameValid;                              ///< 是否框选精准复拍目标
-    int payloadPositionIndex;                            ///< 负载挂载位置
-    std::vector<wce::PayloadLensIndex> payloadLensIndex; ///< 拍摄照片存储类型
-    int useGlobalPayloadLensIndex;                       ///< 是否使用全局存储类型
-    double targetAngle;                                  ///< 目标框角度
-    int imageWidth;                                      ///< 照片宽度
-    int imageHeight;                                     ///< 照片高度
-    int AFPos;                                           ///< AF电机位置
-    int gimbalPort;                                      ///< 云台端口号
-    int accurateCameraType;                              ///< 相机类型
-    std::string accurateFilePath;                        ///< 照片文件路径
-    std::string accurateFileMD5;                         ///< 照片文件MD5
-    int accurateFileSize;                                ///< 照片文件大小
-    std::string accurateFileSuffix;                      ///< 照片文件后缀
-    int accurateCameraApertue;                           ///< 光圈大小
-    int accurateCameraLuminance;                         ///< 环境亮度
-    double accurateCameraShutterTime;                    ///< 快门时间
-    int accurateCameraISO;                               ///< ISO
+    double gimbalPitchRotateAngle;                  ///< 云台Pitch转动角度
+    double gimbalYawRotateAngle;                    ///< 云台Yaw转动角度
+    int focusX;                                     ///< 目标选中框中心水平坐标
+    int focusY;                                     ///< 目标选中框中心竖直坐标
+    int focusRegionWidth;                           ///< 目标选中框宽
+    int focusRegionHeight;                          ///< 目标选中框高
+    double focalLength;                             ///< 变焦焦距
+    double aircraftHeading;                         ///< 飞行器目标偏航角
+    int accurateFrameValid;                         ///< 是否框选精准复拍目标
+    int payloadPositionIndex;                       ///< 负载挂载位置
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
+    int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
+    double targetAngle;                             ///< 目标框角度
+    int imageWidth;                                 ///< 照片宽度
+    int imageHeight;                                ///< 照片高度
+    int AFPos;                                      ///< AF电机位置
+    int gimbalPort;                                 ///< 云台端口号
+    int accurateCameraType;                         ///< 相机类型
+    std::string accurateFilePath;                   ///< 照片文件路径
+    std::string accurateFileMD5;                    ///< 照片文件MD5
+    int accurateFileSize;                           ///< 照片文件大小
+    std::string accurateFileSuffix;                 ///< 照片文件后缀
+    int accurateCameraApertue;                      ///< 光圈大小
+    int accurateCameraLuminance;                    ///< 环境亮度
+    double accurateCameraShutterTime;               ///< 快门时间
+    int accurateCameraISO;                          ///< ISO
 };
 
 struct LIB_API OrientedShootParams : public ActionActuatorFuncParam
 {
-    double gimbalPitchRotateAngle;                       ///< 云台Pitch转动角度
-    double gimbalYawRotateAngle;                         ///< 云台Yaw转动角度
-    int focusX;                                          ///< 目标选中框中心水平坐标
-    int focusY;                                          ///< 目标选中框中心竖直坐标
-    int focusRegionWidth;                                ///< 目标选中框宽
-    int focusRegionHeight;                               ///< 目标选中框高
-    double focalLength;                                  ///< 变焦焦距
-    double aircraftHeading;                              ///< 飞行器目标偏航角
-    int accurateFrameValid;                              ///< 是否框选精准复拍目标
-    int payloadPositionIndex;                            ///< 负载挂载位置
-    std::vector<wce::PayloadLensIndex> payloadLensIndex; ///< 拍摄照片存储类型
-    int useGlobalPayloadLensIndex;                       ///< 是否使用全局存储类型
-    double targetAngle;                                  ///< 目标框角度
-    std::string actionUUID;                              ///< 动作唯一标识
-    int imageWidth;                                      ///< 照片宽度
-    int imageHeight;                                     ///< 照片高度
-    int AFPos;                                           ///< AF电机位置
-    int gimbalPort;                                      ///< 云台端口号
-    int orientedCameraType;                              ///< 相机类型
-    std::string orientedFilePath;                        ///< 照片文件路径
-    std::string orientedFileMD5;                         ///< 照片文件MD5
-    int orientedFileSize;                                ///< 照片文件大小
-    std::string orientedFileSuffix;                      ///< 照片文件后缀
-    int orientedCameraApertue;                           ///< 光圈大小
-    int orientedCameraLuminance;                         ///< 环境亮度
-    double orientedCameraShutterTime;                    ///< 快门时间
-    int orientedCameraISO;                               ///< ISO
-    wce::OrientedPhotoMode orientedPhotoMode;            ///< 拍照模式
+    double gimbalPitchRotateAngle;                  ///< 云台Pitch转动角度
+    double gimbalYawRotateAngle;                    ///< 云台Yaw转动角度
+    int focusX;                                     ///< 目标选中框中心水平坐标
+    int focusY;                                     ///< 目标选中框中心竖直坐标
+    int focusRegionWidth;                           ///< 目标选中框宽
+    int focusRegionHeight;                          ///< 目标选中框高
+    double focalLength;                             ///< 变焦焦距
+    double aircraftHeading;                         ///< 飞行器目标偏航角
+    int accurateFrameValid;                         ///< 是否框选精准复拍目标
+    int payloadPositionIndex;                       ///< 负载挂载位置
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
+    int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
+    double targetAngle;                             ///< 目标框角度
+    std::string actionUUID;                         ///< 动作唯一标识
+    int imageWidth;                                 ///< 照片宽度
+    int imageHeight;                                ///< 照片高度
+    int AFPos;                                      ///< AF电机位置
+    int gimbalPort;                                 ///< 云台端口号
+    int orientedCameraType;                         ///< 相机类型
+    std::string orientedFilePath;                   ///< 照片文件路径
+    std::string orientedFileMD5;                    ///< 照片文件MD5
+    int orientedFileSize;                           ///< 照片文件大小
+    std::string orientedFileSuffix;                 ///< 照片文件后缀
+    int orientedCameraApertue;                      ///< 光圈大小
+    int orientedCameraLuminance;                    ///< 环境亮度
+    double orientedCameraShutterTime;               ///< 快门时间
+    int orientedCameraISO;                          ///< ISO
+    wce::OrientedPhotoMode orientedPhotoMode;       ///< 拍照模式
 };
 
 struct LIB_API PanoShotParams : public ActionActuatorFuncParam
 {
-    int payloadPositionIndex;                            ///< 负载挂载位置
-    std::vector<wce::PayloadLensIndex> payloadLensIndex; ///< 拍摄照片存储类型
-    int useGlobalPayloadLensIndex;                       ///< 是否使用全局存储类型
-    wce::PanoShotSubMode panoShotSubMode;                ///< 全景拍照模式
+    int payloadPositionIndex;                       ///< 负载挂载位置
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
+    int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
+    wce::PanoShotSubMode panoShotSubMode;           ///< 全景拍照模式
 };
 
 struct LIB_API RecordPointCloudParams : public ActionActuatorFuncParam
@@ -445,7 +445,7 @@ struct LIB_API KMLFolder
 
 struct LIB_API WaypointFlightKMLFolder : public KMLFolder
 {
-    wce::GlobalWaypointTurnMode globalWaypointTurnMode;    ///< 全局航点类型（全局航点转弯模式）
+    wce::WaypointTurnMode globalWaypointTurnMode;          ///< 全局航点类型（全局航点转弯模式）
     std::optional<int> globalUseStraightLine;              ///< 全局航段轨迹是否尽量贴合直线
     wce::GimbalPitchMode gimbalPitchMode;                  ///< 云台俯仰角控制模式
     double globalHeight;                                   ///< 全局航线高度（相对起飞点高度）
@@ -482,14 +482,15 @@ struct LIB_API WPMLMissionConfig
 
 struct LIB_API WPMLPlacemark
 {
-    std::optional<int> isRisky;                ///< 是否危险点
-    KPoint point;                              ///< 航点经纬度
-    int index;                                 ///< 航点序号
-    double executeHeight;                      ///< 航点执行高度
-    double waypointSpeed;                      ///< 航点飞行速度
-    WaypointHeadingParam waypointHeadingParam; ///< 偏航角模式参数
-    WaypointTurnParam waypointTurnParam;       ///< 航点类型（航点转弯模式）
-    int useStraightLine;                       ///< 该航段是否贴合直线
+    std::optional<int> isRisky;                  ///< 是否危险点
+    KPoint point;                                ///< 航点经纬度
+    int index;                                   ///< 航点序号
+    double executeHeight;                        ///< 航点执行高度
+    double waypointSpeed;                        ///< 航点飞行速度
+    WaypointHeadingParam waypointHeadingParam;   ///< 偏航角模式参数
+    WaypointTurnParam waypointTurnParam;         ///< 航点类型（航点转弯模式）
+    int useStraightLine;                         ///< 该航段是否贴合直线
+    std::optional<ActionGroup> startActionGroup; ///< 航线初始动作
 };
 
 struct LIB_API WPMLFolder
@@ -499,13 +500,24 @@ struct LIB_API WPMLFolder
     double autoFlightSpeed;                   ///< 全局航线飞行速度
     wce::ExecuteHeightMode executeHeightMode; ///< 执行高度模式
     std::vector<WPMLPlacemark> placemark;     ///< 航点信息
-    ActionGroup startActionGroup;             ///< 航线初始动作
+    // ActionGroup startActionGroup;          ///< 航线初始动作
 };
 
 struct LIB_API WPMLDocument
 {
     WPMLMissionConfig missionConfig; ///< 任务信息
-    WPMLFolder folder;               ///< 航线信息
+    std::vector<WPMLFolder> folder;  ///< 航线信息
+};
+
+/**********************************************************************/
+/*                                End                                 */
+/**********************************************************************/
+
+struct LIB_API WPMLData
+{
+    KMLDocument templateKML;           ///< 模板文件信息
+    WPMLDocument waylinesWPML;         ///< 执行文件信息
+    std::optional<std::string> resDir; ///< 资源文件路径
 };
 }; // namespace wpml_codec::structs
 

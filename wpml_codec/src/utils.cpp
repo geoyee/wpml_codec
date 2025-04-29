@@ -3,11 +3,13 @@
 #include <zip.h>
 #include <algorithm>
 #include <cctype>
+#include <chrono>
 #include <filesystem>
 #include <iostream>
 #include <sstream>
 
 namespace fs = std::filesystem;
+namespace chrono = std::chrono;
 
 namespace wpml_codec::utils
 {
@@ -175,6 +177,23 @@ std::vector<std::string> findFiles(const std::string& directory)
         }*/
     }
     return files;
+}
+
+void copyFileOrDir(const std::string& path, const std::string& newPath)
+{
+    if (!fs::exists(path))
+    {
+        return;
+    }
+    const auto copyOptions = fs::copy_options::update_existing | fs::copy_options::recursive;
+    if (fs::is_directory(path))
+    {
+        fs::copy(path, newPath, copyOptions);
+    }
+    else if (fs::is_regular_file(path))
+    {
+        fs::copy_file(path, newPath, copyOptions);
+    }
 }
 
 void removeFileOrDir(const std::string& path)
@@ -603,5 +622,11 @@ std::string removeEscape(const std::string& str)
         result += '\\'; // The unclosed backslash at the end
     }
     return result;
+}
+
+std::string getNowTimestamp()
+{
+    auto ms = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
+    return toString(ms.count());
 }
 } // namespace wpml_codec::utils
