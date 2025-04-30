@@ -2,7 +2,9 @@
 #include <wpml_codec/utils.h>
 #include <wpml_codec/macros.h>
 #include <tinyxml2.h>
+#include <future>
 #include <iostream>
+#include <thread>
 
 namespace xml = tinyxml2;
 
@@ -1201,34 +1203,33 @@ std::optional<wcs::WPMZData> parseWPMZ(const std::string& kmzPath)
         return std::nullopt;
     }
     wcs::WPMZData res;
+    std::future<std::optional<wcs::KMLDocument>> fKml;
+    std::future<std::optional<wcs::WPMLDocument>> fWpml;
     std::vector<std::string> files = wcu::findFiles(outputDir);
     for (const auto& f : files)
     {
         if (wcu::endWith(f, ".kml"))
         {
-            auto resKml = wcc::parseKML(f);
-            if (!resKml.has_value())
-            {
-                wcu::removeFileOrDir(outputDir);
-                return std::nullopt;
-            }
-            res.templateKML = std::move(resKml.value());
+            fKml = std::async(std::launch::async, wcc::parseKML, f);
         }
         else if (wcu::endWith(f, ".wpml"))
         {
-            auto resWpml = wcc::parseWPML(f);
-            if (!resWpml.has_value())
-            {
-                wcu::removeFileOrDir(outputDir);
-                return std::nullopt;
-            }
-            res.waylinesWPML = std::move(resWpml.value());
+            fWpml = std::async(std::launch::async, wcc::parseWPML, f);
         }
         else if (wcu::endWith(f, "res"))
         {
             res.resDir = f;
         }
     }
+    auto resKml = fKml.get();
+    auto resWpml = fWpml.get();
+    if (!resKml.has_value() || !resWpml.has_value())
+    {
+        wcu::removeFileOrDir(outputDir);
+        return std::nullopt;
+    }
+    res.templateKML = resKml.value();
+    res.waylinesWPML = resWpml.value();
     wcu::removeFileOrDir(outputDir);
     return res;
 }
@@ -1242,18 +1243,25 @@ bool createWPMZ(const wcs::WPMZData& data, const std::string& kmzPath)
     {
         return false;
     }
-    bool succ = wcc::createKML(data.templateKML, outputDir + "/template.kml") &&
-                wcc::createWPML(data.waylinesWPML, outputDir + "/waylines.wpml");
-    if (data.resDir.has_value())
-    {
-        wcu::copyFileOrDir(data.resDir.value(), outputDir);
-    }
-    if (!succ)
+    std::future<bool> succKml =
+                          std::async(std::launch::async, wcc::createKML, data.templateKML, outputDir + "/template.kml"),
+                      succWpml = std::async(
+                          std::launch::async, wcc::createWPML, data.waylinesWPML, outputDir + "/waylines.wpml"),
+                      succRes = std::async(
+                          std::launch::async,
+                          [&data](const std::string& outputDir)
+                          {
+                              if (data.resDir.has_value())
+                              {
+                                  return wcu::copyFileOrDir(data.resDir.value(), outputDir);
+                              }
+                              return true;
+                          },
+                          outputDir);
+    if (!(succKml.get() && succWpml.get() && succRes.get()))
     {
         return false;
     }
-    succ = wcu::packageKMZ(packageDir, kmzPath);
-    wcu::removeFileOrDir(packageDir);
-    return succ;
+    return wcu::packageKMZ(packageDir, kmzPath) && wcu::removeFileOrDir(packageDir);
 }
 } // namespace wpml_codec::core
