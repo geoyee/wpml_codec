@@ -681,7 +681,10 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::TakePhotoParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::TakePhotoParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, fileSuffix);
+                            SET_OPT_WPML_ARG_ES(*curAFP, pAction, payloadLensIndex, ImageFormat);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, useGlobalPayloadLensIndex);
                             break;
                         }
                         case wce::ActionActuatorFunc::startRecord :
@@ -689,7 +692,10 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::StartRecordParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::StartRecordParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, fileSuffix);
+                            SET_OPT_WPML_ARG_ES(*curAFP, pAction, payloadLensIndex, ImageFormat);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, useGlobalPayloadLensIndex);
                             break;
                         }
                         case wce::ActionActuatorFunc::stopRecord :
@@ -697,21 +703,29 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::StopRecordParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::StopRecordParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_ES(*curAFP, pAction, payloadLensIndex, ImageFormat);
                             break;
                         }
                         case wce::ActionActuatorFunc::focus :
                         {
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::FocusParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::FocusParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, isPointFocus);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focusX);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focusY);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focusRegionWidth);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focusRegionHeight);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, isInfiniteFocus);
                             break;
                         }
                         case wce::ActionActuatorFunc::zoom :
                         {
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::ZoomParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::ZoomParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focalLength);
                             break;
                         }
                         case wce::ActionActuatorFunc::customDirName :
@@ -719,7 +733,8 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::CustomDirNameParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::CustomDirNameParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, directoryName);
                             break;
                         }
                         case wce::ActionActuatorFunc::gimbalRotate :
@@ -727,7 +742,17 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::GimbalRotateParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::GimbalRotateParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_E(*curAFP, pAction, gimbalHeadingYawBase, GimbalHeadingYawBase);
+                            SET_OPT_WPML_ARG_E(*curAFP, pAction, gimbalRotateMode, GimbalRotateMode);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, gimbalPitchRotateEnable);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalPitchRotateAngle);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, gimbalRollRotateEnable);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalRollRotateAngle);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, gimbalYawRotateEnable);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalYawRotateAngle);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, gimbalRotateTimeEnable);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalRotateTime);
                             break;
                         }
                         case wce::ActionActuatorFunc::rotateYaw :
@@ -735,14 +760,15 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::RotateYawParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::RotateYawParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, aircraftHeading);
+                            SET_OPT_WPML_ARG_E(*curAFP, pAction, aircraftPathMode, AircraftPathMode);
                             break;
                         }
                         case wce::ActionActuatorFunc::hover :
                         {
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::HoverParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::HoverParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, hoverTime);
                             break;
                         }
                         case wce::ActionActuatorFunc::gimbalEvenlyRotate :
@@ -750,7 +776,8 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::GimbalEvenlyRotateParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::GimbalEvenlyRotateParam>(
                                 tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalPitchRotateAngle);
                             break;
                         }
                         case wce::ActionActuatorFunc::accurateShoot :
@@ -758,7 +785,32 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::AccurateShootParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::AccurateShootParam>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalPitchRotateAngle);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalYawRotateAngle);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusX);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusY);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusRegionWidth);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusRegionHeight);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focalLength);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, aircraftHeading);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateFrameValid);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_ES(*curAFP, pAction, payloadLensIndex, ImageFormat);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, useGlobalPayloadLensIndex);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, targetAngle);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, imageWidth);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, imageHeight);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, AFPos);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, gimbalPort);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateCameraType);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, accurateFilePath);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, accurateFileMD5);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateFileSize);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, accurateFileSuffix);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateCameraApertue);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateCameraLuminance);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, accurateCameraShutterTime);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateCameraISO);
                             break;
                         }
                         case wce::ActionActuatorFunc::orientedShoot :
@@ -766,7 +818,34 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::OrientedShootParams>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::OrientedShootParams>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalPitchRotateAngle);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, gimbalYawRotateAngle);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusX);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusY);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusRegionWidth);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, focusRegionHeight);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, focalLength);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, aircraftHeading);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, accurateFrameValid);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_ES(*curAFP, pAction, payloadLensIndex, ImageFormat);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, useGlobalPayloadLensIndex);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, targetAngle);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, actionUUID);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, imageWidth);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, imageHeight);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, AFPos);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, gimbalPort);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, orientedCameraType);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, orientedFilePath);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, orientedFileMD5);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, orientedFileSize);
+                            SET_OPT_WPML_ARG_S(*curAFP, pAction, orientedFileSuffix);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, orientedCameraApertue);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, orientedCameraLuminance);
+                            SET_OPT_WPML_ARG_D(*curAFP, pAction, orientedCameraShutterTime);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, orientedCameraISO);
+                            SET_OPT_WPML_ARG_E(*curAFP, pAction, orientedPhotoMode, OrientedPhotoMode);
                             break;
                         }
                         case wce::ActionActuatorFunc::panoShot :
@@ -774,7 +853,10 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::PanoShotParams>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::PanoShotParams>(tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_ES(*curAFP, pAction, payloadLensIndex, ImageFormat);
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, useGlobalPayloadLensIndex);
+                            SET_OPT_WPML_ARG_E(*curAFP, pAction, panoShotSubMode, PanoShotSubMode);
                             break;
                         }
                         case wce::ActionActuatorFunc::recordPointCloud :
@@ -782,7 +864,8 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                             tmpAction.actionActuatorFuncParam = std::make_shared<wcs::RecordPointCloudParams>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::RecordPointCloudParams>(
                                 tmpAction.actionActuatorFuncParam);
-                            // TODO: Implement
+                            SET_OPT_WPML_ARG_I(*curAFP, pAction, payloadPositionIndex);
+                            SET_OPT_WPML_ARG_E(*curAFP, pAction, recordPointCloudOperate, RecordPointCloudOperate);
                             break;
                         }
                         default :
@@ -896,7 +979,10 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::TakePhotoParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::TakePhotoParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, fileSuffix);
+                            GET_NEC_WPML_ARG_ES(doc, actionElement, *curAFP, payloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, useGlobalPayloadLensIndex);
                             break;
                         }
                         case wce::ActionActuatorFunc::startRecord :
@@ -904,7 +990,10 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::StartRecordParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::StartRecordParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, fileSuffix);
+                            GET_NEC_WPML_ARG_ES(doc, actionElement, *curAFP, payloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, useGlobalPayloadLensIndex);
                             break;
                         }
                         case wce::ActionActuatorFunc::stopRecord :
@@ -912,7 +1001,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::StopRecordParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::StopRecordParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_ES(doc, actionElement, *curAFP, payloadLensIndex);
                             break;
                         }
                         case wce::ActionActuatorFunc::focus :
@@ -920,7 +1010,13 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::FocusParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::FocusParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, isPointFocus);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusX);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusY);
+                            GET_OPT_WPML_ARG_N(doc, actionElement, *curAFP, focusRegionWidth);
+                            GET_OPT_WPML_ARG_N(doc, actionElement, *curAFP, focusRegionHeight);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, isInfiniteFocus);
                             break;
                         }
                         case wce::ActionActuatorFunc::zoom :
@@ -928,7 +1024,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::ZoomParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::ZoomParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focalLength);
                             break;
                         }
                         case wce::ActionActuatorFunc::customDirName :
@@ -936,7 +1033,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::CustomDirNameParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::CustomDirNameParam>(
                                 tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, directoryName);
                             break;
                         }
                         case wce::ActionActuatorFunc::gimbalRotate :
@@ -944,7 +1042,17 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::GimbalRotateParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::GimbalRotateParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_E(doc, actionElement, *curAFP, gimbalHeadingYawBase);
+                            GET_NEC_WPML_ARG_E(doc, actionElement, *curAFP, gimbalRotateMode);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPitchRotateEnable);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPitchRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalRollRotateEnable);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalRollRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalYawRotateEnable);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalYawRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalRotateTimeEnable);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalRotateTime);
                             break;
                         }
                         case wce::ActionActuatorFunc::rotateYaw :
@@ -952,7 +1060,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::RotateYawParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::RotateYawParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, aircraftHeading);
+                            GET_NEC_WPML_ARG_E(doc, actionElement, *curAFP, aircraftPathMode);
                             break;
                         }
                         case wce::ActionActuatorFunc::hover :
@@ -960,7 +1069,7 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::HoverParam>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::HoverParam>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, hoverTime);
                             break;
                         }
                         case wce::ActionActuatorFunc::gimbalEvenlyRotate :
@@ -968,7 +1077,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::GimbalEvenlyRotateParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::GimbalEvenlyRotateParam>(
                                 tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPitchRotateAngle);
                             break;
                         }
                         case wce::ActionActuatorFunc::accurateShoot :
@@ -976,7 +1086,32 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::AccurateShootParam>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::AccurateShootParam>(
                                 tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPitchRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalYawRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusX);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusY);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusRegionWidth);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusRegionHeight);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focalLength);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, aircraftHeading);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateFrameValid);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_ES(doc, actionElement, *curAFP, payloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, useGlobalPayloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, targetAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, imageWidth);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, imageHeight);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, AFPos);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPort);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateCameraType);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, accurateFilePath);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, accurateFileMD5);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateFileSize);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, accurateFileSuffix);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateCameraApertue);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateCameraLuminance);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateCameraShutterTime);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateCameraISO);
                             break;
                         }
                         case wce::ActionActuatorFunc::orientedShoot :
@@ -984,7 +1119,34 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::OrientedShootParams>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::OrientedShootParams>(
                                 tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPitchRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalYawRotateAngle);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusX);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusY);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusRegionWidth);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focusRegionHeight);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, focalLength);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, aircraftHeading);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, accurateFrameValid);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_ES(doc, actionElement, *curAFP, payloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, useGlobalPayloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, targetAngle);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, actionUUID);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, imageWidth);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, imageHeight);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, AFPos);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, gimbalPort);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, orientedCameraType);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, orientedFilePath);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, orientedFileMD5);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, orientedFileSize);
+                            GET_NEC_WPML_ARG_S(doc, actionElement, *curAFP, orientedFileSuffix);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, orientedCameraApertue);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, orientedCameraLuminance);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, orientedCameraShutterTime);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, orientedCameraISO);
+                            GET_NEC_WPML_ARG_E(doc, actionElement, *curAFP, orientedPhotoMode);
                             break;
                         }
                         case wce::ActionActuatorFunc::panoShot :
@@ -992,7 +1154,10 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::PanoShotParams>();
                             auto curAFP =
                                 std::dynamic_pointer_cast<wcs::PanoShotParams>(tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_ES(doc, actionElement, *curAFP, payloadLensIndex);
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, useGlobalPayloadLensIndex);
+                            GET_NEC_WPML_ARG_E(doc, actionElement, *curAFP, panoShotSubMode);
                             break;
                         }
                         case wce::ActionActuatorFunc::recordPointCloud :
@@ -1000,7 +1165,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                             tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::RecordPointCloudParams>();
                             auto curAFP = std::dynamic_pointer_cast<wcs::RecordPointCloudParams>(
                                 tmpAG.action.actionActuatorFuncParam);
-                            // TODO: Implement
+                            GET_NEC_WPML_ARG_N(doc, actionElement, *curAFP, payloadPositionIndex);
+                            GET_NEC_WPML_ARG_E(doc, actionElement, *curAFP, recordPointCloudOperate);
                             break;
                         }
                         default :
