@@ -327,7 +327,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
         GET_OPT_WPML_ARG_N(doc, documentElement, data, createTime);
         GET_OPT_WPML_ARG_N(doc, documentElement, data, updateTime);
         // Step 4: Create missionConfig Element
-        xml::XMLElement *missionElement = doc.NewElement("wpml::missionConfig");
+        xml::XMLElement *missionElement = doc.NewElement("wpml:missionConfig");
         documentElement->InsertEndChild(missionElement);
         GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.flyToWaylineMode);
         GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.finishAction);
@@ -338,15 +338,15 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
         GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalRTHHeight);
         GET_OPT_WPML_ARG_P(doc, missionElement, data, missionConfig.takeOffRefPoint);
         GET_OPT_WPML_ARG_N(doc, missionElement, data, missionConfig.takeOffRefPointAGLHeight);
-        xml::XMLElement *droneInfoElement = doc.NewElement("wpml::droneInfo");
+        xml::XMLElement *droneInfoElement = doc.NewElement("wpml:droneInfo");
         missionElement->InsertEndChild(droneInfoElement);
         GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneEnumValue);
         GET_OPT_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneSubEnumValue);
-        xml::XMLElement *payloadInfoElement = doc.NewElement("wpml::payloadInfo");
+        xml::XMLElement *payloadInfoElement = doc.NewElement("wpml:payloadInfo");
         missionElement->InsertEndChild(payloadInfoElement);
         GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadEnumValue);
         GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadPositionIndex);
-        xml::XMLElement *autoRerouteInfoElement = doc.NewElement("wpml::autoRerouteInfo");
+        xml::XMLElement *autoRerouteInfoElement = doc.NewElement("wpml:autoRerouteInfo");
         missionElement->InsertEndChild(autoRerouteInfoElement);
         GET_NEC_WPML_ARG_N(doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.missionAutoRerouteMode);
         GET_NEC_WPML_ARG_N(
@@ -364,7 +364,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
             GET_OPT_WPML_ARG_N(doc, folderElement, *curFolder, globalUseStraightLine);
             GET_NEC_WPML_ARG_E(doc, folderElement, *curFolder, gimbalPitchMode);
             GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, globalHeight);
-            xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml::waylineCoordinateSysParam");
+            xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml:waylineCoordinateSysParam");
             folderElement->InsertEndChild(waylineCoordinateSysParamElement);
             GET_NEC_WPML_ARG_E(
                 doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, coordinateMode);
@@ -377,7 +377,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceFollowModeEnable);
             GET_OPT_WPML_ARG_N(
                 doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceRelativeHeight);
-            xml::XMLElement *payloadParamElement = doc.NewElement("wpml::payloadParam");
+            xml::XMLElement *payloadParamElement = doc.NewElement("wpml:payloadParam");
             folderElement->InsertEndChild(payloadParamElement);
             GET_NEC_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, payloadPositionIndex);
             GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, focusMode);
@@ -388,7 +388,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
             GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, scanningMode);
             GET_OPT_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, modelColoringEnable);
             GET_NEC_WPML_ARG_ES(doc, payloadParamElement, curFolder->payloadParam, imageFormat);
-            xml::XMLElement *globalWaypointHeadingParamElement = doc.NewElement("wpml::globalWaypointHeadingParam");
+            xml::XMLElement *globalWaypointHeadingParamElement = doc.NewElement("wpml:globalWaypointHeadingParam");
             folderElement->InsertEndChild(globalWaypointHeadingParamElement);
             GET_NEC_WPML_ARG_E(
                 doc, globalWaypointHeadingParamElement, curFolder->globalWaypointHeadingParam, waypointHeadingMode);
@@ -415,7 +415,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, useGlobalTurnParam);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, useStraightLine);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, gimbalPitchAngle);
-                xml::XMLElement *waypointHeadingParamElement = doc.NewElement("wpml::waypointHeadingParam");
+                xml::XMLElement *waypointHeadingParamElement = doc.NewElement("wpml:waypointHeadingParam");
                 placemarkElement->InsertEndChild(waypointHeadingParamElement);
                 GET_NEC_WPML_ARG_E(
                     doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingMode);
@@ -424,7 +424,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 GET_OPT_WPML_ARG_P(doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointPoiPoint);
                 GET_NEC_WPML_ARG_E(
                     doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingPathMode);
-                xml::XMLElement *waypointTurnParamElement = doc.NewElement("wpml::waypointTurnParam");
+                xml::XMLElement *waypointTurnParamElement = doc.NewElement("wpml:waypointTurnParam");
                 placemarkElement->InsertEndChild(waypointTurnParamElement);
                 GET_NEC_WPML_ARG_E(doc, waypointTurnParamElement, pointPlace.waypointTurnParam, waypointTurnMode);
                 GET_OPT_WPML_ARG_N(
@@ -437,7 +437,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
             GET_NEC_WPML_ARG_E(doc, folderElement, *curFolder, templateType);
             GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, templateId);
             GET_NEC_WPML_ARG_N(doc, folderElement, *curFolder, autoFlightSpeed);
-            xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml::waylineCoordinateSysParam");
+            xml::XMLElement *waylineCoordinateSysParamElement = doc.NewElement("wpml:waylineCoordinateSysParam");
             folderElement->InsertEndChild(waylineCoordinateSysParamElement);
             GET_NEC_WPML_ARG_E(
                 doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, coordinateMode);
@@ -450,7 +450,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceFollowModeEnable);
             GET_OPT_WPML_ARG_N(
                 doc, waylineCoordinateSysParamElement, curFolder->waylineCoordinateSysParam, surfaceRelativeHeight);
-            xml::XMLElement *payloadParamElement = doc.NewElement("wpml::payloadParam");
+            xml::XMLElement *payloadParamElement = doc.NewElement("wpml:payloadParam");
             folderElement->InsertEndChild(payloadParamElement);
             GET_NEC_WPML_ARG_N(doc, payloadParamElement, curFolder->payloadParam, payloadPositionIndex);
             GET_OPT_WPML_ARG_E(doc, payloadParamElement, curFolder->payloadParam, focusMode);
@@ -484,7 +484,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                     GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, gimbalPitchAngle);
                     GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, quickOrthoMappingEnable);
                     GET_OPT_WPML_ARG_N(doc, placemarkElement, *curPlacemark, quickOrthoMappingPitch);
-                    xml::XMLElement *overlapElement = doc.NewElement("wpml::overlap");
+                    xml::XMLElement *overlapElement = doc.NewElement("wpml:overlap");
                     placemarkElement->InsertEndChild(overlapElement);
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapH);
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapW);
@@ -494,7 +494,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapW);
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapH);
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapW);
-                    xml::XMLElement *mappingHeadingParamElement = doc.NewElement("wpml::mappingHeadingParam");
+                    xml::XMLElement *mappingHeadingParamElement = doc.NewElement("wpml:mappingHeadingParam");
                     placemarkElement->InsertEndChild(mappingHeadingParamElement);
                     GET_OPT_WPML_ARG_E(
                         doc, mappingHeadingParamElement, curPlacemark->mappingHeadingParam, mappingHeadingMode);
@@ -515,7 +515,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                     GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, ellipsoidHeight);
                     GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, height);
                     GET_NEC_WPML_ARG_KPN(doc, placemarkElement, *curPlacemark, polygon);
-                    xml::XMLElement *overlapElement = doc.NewElement("wpml::overlap");
+                    xml::XMLElement *overlapElement = doc.NewElement("wpml:overlap");
                     placemarkElement->InsertEndChild(overlapElement);
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapH);
                     GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapW);
@@ -562,7 +562,7 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
     }
 }
 
-std::optional<wcs::WPMLDocument> LIB_API parseWPML(const std::string& wpmlPath)
+std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
 {
     wcs::WPMLDocument res;
     xml::XMLDocument doc;
@@ -613,7 +613,193 @@ std::optional<wcs::WPMLDocument> LIB_API parseWPML(const std::string& wpmlPath)
         SET_OPT_WPML_ARG_I(res.missionConfig.autoRerouteInfo, pAutoRerouteInfo, transitionalAutoRerouteMode);
     }
     // Step 3: Setup A Folder for Waypoint Template
-    // TODO: Implement
+    std::vector<wcs::WPMLFolder> folders{};
+    xml::XMLElement *pFolder = pDocument->FirstChildElement("Folder");
+    while (pFolder)
+    {
+        wcs::WPMLFolder tmpFolder;
+        SET_OPT_WPML_ARG_I(tmpFolder, pFolder, templateId);
+        SET_OPT_WPML_ARG_I(tmpFolder, pFolder, waylineId);
+        SET_OPT_WPML_ARG_D(tmpFolder, pFolder, autoFlightSpeed);
+        SET_OPT_WPML_ARG_E(tmpFolder, pFolder, executeHeightMode, ExecuteHeightMode);
+        // Step 4: Setup Waypoint Placemark
+        std::vector<wcs::WPMLPlacemark> waypointPlacemarks{};
+        xml::XMLElement *pPlacemark = pFolder->FirstChildElement("Placemark");
+        while (pPlacemark)
+        {
+            wcs::WPMLPlacemark tmpPlacemark;
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, isRisky);
+            SET_OPT_WPML_ARG_KPT(tmpPlacemark, pPlacemark, point);
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, index);
+            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, executeHeight);
+            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, waypointSpeed);
+            xml::XMLElement *pWaypointHeadingParam = pPlacemark->FirstChildElement("wpml:waypointHeadingParam");
+            if (pWaypointHeadingParam != nullptr)
+            {
+                SET_OPT_WPML_ARG_E(
+                    tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointHeadingMode, WaypointHeadingMode);
+                SET_OPT_WPML_ARG_D(tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointHeadingAngle);
+                SET_OPT_WPML_ARG_P(tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointPoiPoint);
+                SET_OPT_WPML_ARG_E(tmpPlacemark.waypointHeadingParam,
+                                   pWaypointHeadingParam,
+                                   waypointHeadingPathMode,
+                                   WaypointHeadingPathMode);
+            }
+            xml::XMLElement *pWaypointTurnParam = pPlacemark->FirstChildElement("wpml:waypointTurnParam");
+            if (pWaypointTurnParam != nullptr)
+            {
+                SET_OPT_WPML_ARG_E(
+                    tmpPlacemark.waypointTurnParam, pWaypointTurnParam, waypointTurnMode, WaypointTurnMode);
+                SET_OPT_WPML_ARG_D(tmpPlacemark.waypointTurnParam, pWaypointTurnParam, waypointTurnDampingDist);
+            }
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useStraightLine);
+            xml::XMLElement *pActionGroup = pPlacemark->FirstChildElement("wpml:actionGroup");
+            if (pActionGroup != nullptr)
+            {
+                wcs::ActionGroup tmpActionGroup;
+                SET_OPT_WPML_ARG_I(tmpActionGroup, pActionGroup, actionGroupId);
+                SET_OPT_WPML_ARG_I(tmpActionGroup, pActionGroup, actionGroupStartIndex);
+                SET_OPT_WPML_ARG_I(tmpActionGroup, pActionGroup, actionGroupEndIndex);
+                SET_OPT_WPML_ARG_E(tmpActionGroup, pActionGroup, actionGroupMode, ActionGroupMode);
+                xml::XMLElement *pActionTrigger = pActionGroup->FirstChildElement("wpml:actionTrigger");
+                if (pActionTrigger != nullptr)
+                {
+                    SET_OPT_WPML_ARG_E(
+                        tmpActionGroup.actionTrigger, pActionTrigger, actionTriggerType, ActionTriggerType);
+                    SET_OPT_WPML_ARG_D(tmpActionGroup.actionTrigger, pActionTrigger, actionTriggerParam);
+                }
+                xml::XMLElement *pAction = pActionGroup->FirstChildElement("wpml:action");
+                if (pAction != nullptr)
+                {
+                    wcs::Action tmpAction;
+                    SET_OPT_WPML_ARG_I(tmpAction, pAction, actionId);
+                    SET_OPT_WPML_ARG_E(tmpAction, pAction, actionActuatorFunc, ActionActuatorFunc);
+                    switch (tmpAction.actionActuatorFunc)
+                    {
+                        case wce::ActionActuatorFunc::takePhoto :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::TakePhotoParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::TakePhotoParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::startRecord :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::StartRecordParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::StartRecordParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::stopRecord :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::StopRecordParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::StopRecordParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::focus :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::FocusParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::FocusParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::zoom :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::ZoomParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::ZoomParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::customDirName :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::CustomDirNameParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::CustomDirNameParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::gimbalRotate :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::GimbalRotateParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::GimbalRotateParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::rotateYaw :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::RotateYawParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::RotateYawParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::hover :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::HoverParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::HoverParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::gimbalEvenlyRotate :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::GimbalEvenlyRotateParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::GimbalEvenlyRotateParam>(
+                                tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::accurateShoot :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::AccurateShootParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::AccurateShootParam>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::orientedShoot :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::OrientedShootParams>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::OrientedShootParams>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::panoShot :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::PanoShotParams>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::PanoShotParams>(tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::recordPointCloud :
+                        {
+                            tmpAction.actionActuatorFuncParam = std::make_shared<wcs::RecordPointCloudParams>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::RecordPointCloudParams>(
+                                tmpAction.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        default :
+                            break;
+                    }
+                    tmpActionGroup.action = tmpAction;
+                }
+                tmpPlacemark.startActionGroup = tmpActionGroup;
+            }
+            waypointPlacemarks.emplace_back(tmpPlacemark);
+            pPlacemark = pPlacemark->NextSiblingElement("Placemark");
+        }
+        tmpFolder.placemark = waypointPlacemarks;
+        folders.emplace_back(tmpFolder);
+        pFolder = pFolder->NextSiblingElement("Folder");
+    }
+    res.folder = folders;
     return res;
 }
 
@@ -634,7 +820,7 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
         xml::XMLElement *documentElement = doc.NewElement("Document");
         kmlElement->InsertEndChild(documentElement);
         // Step 4: Create missionConfig Element
-        xml::XMLElement *missionElement = doc.NewElement("wpml::missionConfig");
+        xml::XMLElement *missionElement = doc.NewElement("wpml:missionConfig");
         documentElement->InsertEndChild(missionElement);
         GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.flyToWaylineMode);
         GET_NEC_WPML_ARG_E(doc, missionElement, data, missionConfig.finishAction);
@@ -643,21 +829,186 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
         GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.takeOffSecurityHeight);
         GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalTransitionalSpeed);
         GET_NEC_WPML_ARG_N(doc, missionElement, data, missionConfig.globalRTHHeight);
-        xml::XMLElement *droneInfoElement = doc.NewElement("wpml::droneInfo");
+        xml::XMLElement *droneInfoElement = doc.NewElement("wpml:droneInfo");
         missionElement->InsertEndChild(droneInfoElement);
         GET_NEC_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneEnumValue);
         GET_OPT_WPML_ARG_N(doc, droneInfoElement, data, missionConfig.droneInfo.droneSubEnumValue);
-        xml::XMLElement *payloadInfoElement = doc.NewElement("wpml::payloadInfo");
+        xml::XMLElement *payloadInfoElement = doc.NewElement("wpml:payloadInfo");
         missionElement->InsertEndChild(payloadInfoElement);
         GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadEnumValue);
         GET_NEC_WPML_ARG_N(doc, payloadInfoElement, data, missionConfig.payloadInfo.payloadPositionIndex);
-        xml::XMLElement *autoRerouteInfoElement = doc.NewElement("wpml::autoRerouteInfo");
+        xml::XMLElement *autoRerouteInfoElement = doc.NewElement("wpml:autoRerouteInfo");
         missionElement->InsertEndChild(autoRerouteInfoElement);
         GET_NEC_WPML_ARG_N(doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.missionAutoRerouteMode);
         GET_NEC_WPML_ARG_N(
             doc, autoRerouteInfoElement, data, missionConfig.autoRerouteInfo.transitionalAutoRerouteMode);
         // Step 5: Create Folder Element
-        // TODO: Implement
+        for (const auto& fd : data.folder)
+        {
+            xml::XMLElement *folderElement = doc.NewElement("Folder");
+            documentElement->InsertEndChild(folderElement);
+            GET_NEC_WPML_ARG_N(doc, folderElement, fd, templateId);
+            GET_NEC_WPML_ARG_N(doc, folderElement, fd, waylineId);
+            GET_NEC_WPML_ARG_N(doc, folderElement, fd, autoFlightSpeed);
+            GET_NEC_WPML_ARG_E(doc, folderElement, fd, executeHeightMode);
+            // Step 5: Create Placemark Element
+            for (const auto& wpm : fd.placemark)
+            {
+                xml::XMLElement *placemarkElement = doc.NewElement("Placemark");
+                folderElement->InsertEndChild(placemarkElement);
+                GET_OPT_WPML_ARG_N(doc, placemarkElement, wpm, isRisky);
+                GET_NEC_WPML_ARG_KPT(doc, placemarkElement, wpm, point);
+                GET_NEC_WPML_ARG_N(doc, placemarkElement, wpm, index);
+                GET_NEC_WPML_ARG_N(doc, placemarkElement, wpm, executeHeight);
+                GET_NEC_WPML_ARG_N(doc, placemarkElement, wpm, waypointSpeed);
+                GET_NEC_WPML_ARG_N(doc, placemarkElement, wpm, useStraightLine);
+                xml::XMLElement *waypointHeadingParamElement = doc.NewElement("wpml:waypointHeadingParam");
+                placemarkElement->InsertEndChild(waypointHeadingParamElement);
+                GET_NEC_WPML_ARG_E(doc, placemarkElement, wpm, waypointHeadingParam.waypointHeadingMode);
+                GET_OPT_WPML_ARG_N(doc, placemarkElement, wpm, waypointHeadingParam.waypointHeadingAngle);
+                GET_OPT_WPML_ARG_P(doc, placemarkElement, wpm, waypointHeadingParam.waypointPoiPoint);
+                GET_NEC_WPML_ARG_E(doc, placemarkElement, wpm, waypointHeadingParam.waypointHeadingPathMode);
+                xml::XMLElement *waypointTurnParamElement = doc.NewElement("wpml:waypointTurnParam");
+                placemarkElement->InsertEndChild(waypointTurnParamElement);
+                GET_NEC_WPML_ARG_E(doc, waypointTurnParamElement, wpm, waypointTurnParam.waypointTurnMode);
+                GET_OPT_WPML_ARG_N(doc, waypointTurnParamElement, wpm, waypointTurnParam.waypointTurnDampingDist);
+                if (wpm.startActionGroup.has_value())
+                {
+                    auto tmpAG = wpm.startActionGroup.value();
+                    xml::XMLElement *actionGroupElement = doc.NewElement("wpml:actionGroup");
+                    placemarkElement->InsertEndChild(actionGroupElement);
+                    GET_NEC_WPML_ARG_N(doc, actionGroupElement, tmpAG, actionGroupId);
+                    GET_NEC_WPML_ARG_N(doc, actionGroupElement, tmpAG, actionGroupStartIndex);
+                    GET_NEC_WPML_ARG_N(doc, actionGroupElement, tmpAG, actionGroupEndIndex);
+                    GET_NEC_WPML_ARG_E(doc, actionGroupElement, tmpAG, actionGroupMode);
+                    xml::XMLElement *actionTriggerElement = doc.NewElement("wpml:actionTrigger");
+                    actionGroupElement->InsertEndChild(actionTriggerElement);
+                    GET_NEC_WPML_ARG_E(doc, actionTriggerElement, tmpAG, actionTrigger.actionTriggerType);
+                    GET_OPT_WPML_ARG_N(doc, actionTriggerElement, tmpAG, actionTrigger.actionTriggerParam);
+                    xml::XMLElement *actionElement = doc.NewElement("wpml:action");
+                    actionGroupElement->InsertEndChild(actionElement);
+                    GET_NEC_WPML_ARG_N(doc, actionElement, tmpAG, action.actionId);
+                    GET_NEC_WPML_ARG_E(doc, actionElement, tmpAG, action.actionActuatorFunc);
+                    switch (tmpAG.action.actionActuatorFunc)
+                    {
+                        case wce::ActionActuatorFunc::takePhoto :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::TakePhotoParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::TakePhotoParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::startRecord :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::StartRecordParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::StartRecordParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::stopRecord :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::StopRecordParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::StopRecordParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::focus :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::FocusParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::FocusParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::zoom :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::ZoomParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::ZoomParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::customDirName :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::CustomDirNameParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::CustomDirNameParam>(
+                                tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::gimbalRotate :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::GimbalRotateParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::GimbalRotateParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::rotateYaw :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::RotateYawParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::RotateYawParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::hover :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::HoverParam>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::HoverParam>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::gimbalEvenlyRotate :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::GimbalEvenlyRotateParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::GimbalEvenlyRotateParam>(
+                                tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::accurateShoot :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::AccurateShootParam>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::AccurateShootParam>(
+                                tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::orientedShoot :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::OrientedShootParams>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::OrientedShootParams>(
+                                tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::panoShot :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::PanoShotParams>();
+                            auto curAFP =
+                                std::dynamic_pointer_cast<wcs::PanoShotParams>(tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        case wce::ActionActuatorFunc::recordPointCloud :
+                        {
+                            tmpAG.action.actionActuatorFuncParam = std::make_shared<wcs::RecordPointCloudParams>();
+                            auto curAFP = std::dynamic_pointer_cast<wcs::RecordPointCloudParams>(
+                                tmpAG.action.actionActuatorFuncParam);
+                            // TODO: Implement
+                            break;
+                        }
+                        default :
+                            break;
+                    }
+                }
+            }
+        }
         // Save file
         doc.SaveFile(wpmlPath.c_str());
         return true;
