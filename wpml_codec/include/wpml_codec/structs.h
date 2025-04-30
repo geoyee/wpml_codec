@@ -89,9 +89,9 @@ struct LIB_API PayloadParam
 struct LIB_API WaypointHeadingParam
 {
     wce::WaypointHeadingMode waypointHeadingMode;         ///< 飞行器偏航角模式
+    wce::WaypointHeadingPathMode waypointHeadingPathMode; ///< 飞行器偏航角转动方向
     std::optional<double> waypointHeadingAngle;           ///< 飞行器偏航角度
     std::optional<Point> waypointPoiPoint;                ///< 兴趣点
-    wce::WaypointHeadingPathMode waypointHeadingPathMode; ///< 飞行器偏航角转动方向
 };
 
 struct LIB_API GlobalWaypointHeadingParam : public WaypointHeadingParam
@@ -124,9 +124,9 @@ struct LIB_API ActionActuatorFuncParam
 struct LIB_API TakePhotoParam : public ActionActuatorFuncParam
 {
     int payloadPositionIndex;                       ///< 负载挂载位置
+    int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
     std::string fileSuffix;                         ///< 拍摄照片文件后缀
     std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
-    int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
 };
 
 using StartRecordParam = TakePhotoParam;
@@ -166,12 +166,12 @@ struct LIB_API GimbalRotateParam : public ActionActuatorFuncParam
     wce::GimbalHeadingYawBase gimbalHeadingYawBase; ///< 云台偏航角转动坐标系
     wce::GimbalRotateMode gimbalRotateMode;         ///< 云台转动模式
     int gimbalPitchRotateEnable;                    ///< 是否使能云台Pitch转动
-    double gimbalPitchRotateAngle;                  ///< 云台Pitch转动角度
     int gimbalRollRotateEnable;                     ///< 是否使能云台Roll转动
-    double gimbalRollRotateAngle;                   ///< 云台Roll转动角度
     int gimbalYawRotateEnable;                      ///< 是否使能云台Yaw转动
-    double gimbalYawRotateAngle;                    ///< 云台Yaw转动角度
     int gimbalRotateTimeEnable;                     ///< 是否使能云台转动时间
+    double gimbalPitchRotateAngle;                  ///< 云台Pitch转动角度
+    double gimbalRollRotateAngle;                   ///< 云台Roll转动角度
+    double gimbalYawRotateAngle;                    ///< 云台Yaw转动角度
     double gimbalRotateTime;                        ///< 云台完成转动用时
 };
 
@@ -206,20 +206,20 @@ struct LIB_API AccurateShootParam : public ActionActuatorFuncParam
     int payloadPositionIndex;                       ///< 负载挂载位置
     std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
     int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
-    double targetAngle;                             ///< 目标框角度
     int imageWidth;                                 ///< 照片宽度
     int imageHeight;                                ///< 照片高度
     int AFPos;                                      ///< AF电机位置
     int gimbalPort;                                 ///< 云台端口号
     int accurateCameraType;                         ///< 相机类型
+    double targetAngle;                             ///< 目标框角度
     std::string accurateFilePath;                   ///< 照片文件路径
     std::string accurateFileMD5;                    ///< 照片文件MD5
-    int accurateFileSize;                           ///< 照片文件大小
     std::string accurateFileSuffix;                 ///< 照片文件后缀
+    int accurateFileSize;                           ///< 照片文件大小
     int accurateCameraApertue;                      ///< 光圈大小
     int accurateCameraLuminance;                    ///< 环境亮度
-    double accurateCameraShutterTime;               ///< 快门时间
     int accurateCameraISO;                          ///< ISO
+    double accurateCameraShutterTime;               ///< 快门时间
 };
 
 struct LIB_API OrientedShootParams : public ActionActuatorFuncParam
@@ -232,33 +232,33 @@ struct LIB_API OrientedShootParams : public ActionActuatorFuncParam
     int focusRegionHeight;                          ///< 目标选中框高
     double focalLength;                             ///< 变焦焦距
     double aircraftHeading;                         ///< 飞行器目标偏航角
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
     int accurateFrameValid;                         ///< 是否框选精准复拍目标
     int payloadPositionIndex;                       ///< 负载挂载位置
-    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
     int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
-    double targetAngle;                             ///< 目标框角度
-    std::string actionUUID;                         ///< 动作唯一标识
     int imageWidth;                                 ///< 照片宽度
     int imageHeight;                                ///< 照片高度
     int AFPos;                                      ///< AF电机位置
     int gimbalPort;                                 ///< 云台端口号
     int orientedCameraType;                         ///< 相机类型
-    std::string orientedFilePath;                   ///< 照片文件路径
-    std::string orientedFileMD5;                    ///< 照片文件MD5
     int orientedFileSize;                           ///< 照片文件大小
-    std::string orientedFileSuffix;                 ///< 照片文件后缀
     int orientedCameraApertue;                      ///< 光圈大小
     int orientedCameraLuminance;                    ///< 环境亮度
-    double orientedCameraShutterTime;               ///< 快门时间
     int orientedCameraISO;                          ///< ISO
+    std::string actionUUID;                         ///< 动作唯一标识
+    std::string orientedFilePath;                   ///< 照片文件路径
+    std::string orientedFileMD5;                    ///< 照片文件MD5
+    std::string orientedFileSuffix;                 ///< 照片文件后缀
+    double targetAngle;                             ///< 目标框角度
+    double orientedCameraShutterTime;               ///< 快门时间
     wce::OrientedPhotoMode orientedPhotoMode;       ///< 拍照模式
 };
 
 struct LIB_API PanoShotParams : public ActionActuatorFuncParam
 {
     int payloadPositionIndex;                       ///< 负载挂载位置
-    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
     int useGlobalPayloadLensIndex;                  ///< 是否使用全局存储类型
+    std::vector<wce::ImageFormat> payloadLensIndex; ///< 拍摄照片存储类型
     wce::PanoShotSubMode panoShotSubMode;           ///< 全景拍照模式
 };
 
@@ -271,10 +271,10 @@ struct LIB_API RecordPointCloudParams : public ActionActuatorFuncParam
 struct LIB_API MegaphoneParams : public ActionActuatorFuncParam
 {
     int payloadPositionIndex;              ///< 负载挂载位置
-    std::string actionUUID;                ///< 动作唯一标识
     int megaphoneOperateType;              ///< 喊话动作开关
     int megaphoneOperateVolume;            ///< 喊话动作音量
     int megaphoneOperateLoop;              ///< 是否单曲循环播放
+    std::string actionUUID;                ///< 动作唯一标识
     std::string megaphoneOperateFilePath;  ///< 喊话音频文件在kmz中对应的路径
     std::string megaphoneFileName;         ///< 喊话音频文件对应的名称
     std::string megaphoneFileOriginalName; ///< 喊话音频文件播放时显示的名字
@@ -316,13 +316,13 @@ struct LIB_API KMLMissionConfig
     wce::FlyToWaylineMode flyToWaylineMode;                      ///< 飞向首航点模式
     wce::FinishAction finishAction;                              ///< 航线结束动作
     wce::ExitOnRCLost exitOnRCLost;                              ///< 失控是否继续执行航线
-    std::optional<wce::ExecuteRCLostAction> executeRCLostAction; ///< 失控动作类型
+    DroneInfo droneInfo;                                         ///< 飞行器机型信息
     double takeOffSecurityHeight;                                ///< 安全起飞高度
     double globalTransitionalSpeed;                              ///< 全局航线过渡速度
     double globalRTHHeight;                                      ///< 全局返航高度
     std::optional<Point> takeOffRefPoint;                        ///< 参考起飞点
     std::optional<double> takeOffRefPointAGLHeight;              ///< 参考起飞点海拔高度
-    DroneInfo droneInfo;                                         ///< 飞行器机型信息
+    std::optional<wce::ExecuteRCLostAction> executeRCLostAction; ///< 失控动作类型
     PayloadInfo payloadInfo;                                     ///< 负载机型信息
     AutoRerouteInfo autoRerouteInfo;                             ///< 航线绕行
 };
@@ -384,9 +384,9 @@ struct LIB_API MappingAerialKMLPlacemark : public KMLPlacemark
 struct LIB_API ObliquePhotographyKMLPlacemark : public KMLPlacemark
 {
     std::optional<int> caliFlightEnable; ///< 是否开启标定飞行
-    int inclinedGimbalPitch;             ///< 云台俯仰角度（倾斜）
     double inclinedFlightSpeed;          ///< 航线飞行速度（倾斜）
     wce::ShootType shootType;            ///< 拍照模式（定时或定距）
+    int inclinedGimbalPitch;             ///< 云台俯仰角度（倾斜）
     int direction;                       ///< 航线方向
     int margin;                          ///< 测区外扩距离
     Overlap overlap;                     ///< 重叠率参数
@@ -398,18 +398,18 @@ struct LIB_API ObliquePhotographyKMLPlacemark : public KMLPlacemark
 struct LIB_API WaypointSegmentFlightKMLPlacemark : public KMLPlacemark
 {
     int caliFlightEnable;         ///< 是否开启标定飞行
-    wce::ShootType shootType;     ///< 拍照模式（定时或定距）
     int direction;                ///< 航线方向
     int margin;                   ///< 测区外扩距离
     int singleLineEnable;         ///< 是否开启单航线飞行
-    double cuttingDistance;       ///< 每个子航带航线长度
     int boundaryOptimEnable;      ///< 是否开启边缘优化
     int leftExtend;               ///< 航带左侧外扩距离
     int rightExtend;              ///< 航带右侧外扩距离
     int includeCenterEnable;      ///< 是否包含中心线
+    int stripUseTemplateAltitude; ///< 是否开启变高航带
+    wce::ShootType shootType;     ///< 拍照模式（定时或定距）
+    double cuttingDistance;       ///< 每个子航带航线长度
     double ellipsoidHeight;       ///< 全局航线高度（椭球高）
     double height;                ///< 全局航线高度
-    int stripUseTemplateAltitude; ///< 是否开启变高航带
     KLineString lineString;       ///< 航点信息
 };
 
@@ -419,16 +419,16 @@ struct LIB_API WaypointInfoKMLPlacemark : public KMLPlacemark
     KPoint point;                              ///< 航点经纬度
     int index;                                 ///< 航点序号
     int useGlobalHeight;                       ///< 是否使用全局高度
+    int useGlobalSpeed;                        ///< 是否使用全局飞行速度
+    int useGlobalHeadingParam;                 ///< 是否使用全局偏航角模式参数
+    int useGlobalTurnParam;                    ///< 是否使用全局航点类型（全局航点转弯模式）
+    int useStraightLine;                       ///< 该航段是否贴合直线
     double ellipsoidHeight;                    ///< 航点高度（椭球高）
     double height;                             ///< 航点高度
-    int useGlobalSpeed;                        ///< 是否使用全局飞行速度
     double waypointSpeed;                      ///< 航点飞行速度
-    int useGlobalHeadingParam;                 ///< 是否使用全局偏航角模式参数
-    WaypointHeadingParam waypointHeadingParam; ///< 偏航角模式参数
-    int useGlobalTurnParam;                    ///< 是否使用全局航点类型（全局航点转弯模式）
-    WaypointTurnParam waypointTurnParam;       ///< 航点类型（航点转弯模式）
-    int useStraightLine;                       ///< 该航段是否贴合直线
     double gimbalPitchAngle;                   ///< 航点云台俯仰角
+    WaypointHeadingParam waypointHeadingParam; ///< 偏航角模式参数
+    WaypointTurnParam waypointTurnParam;       ///< 航点类型（航点转弯模式）
 };
 
 struct LIB_API KMLFolder
@@ -471,11 +471,11 @@ struct LIB_API WPMLMissionConfig
     wce::FlyToWaylineMode flyToWaylineMode;                      ///< 飞向首航点模式
     wce::FinishAction finishAction;                              ///< 航线结束动作
     wce::ExitOnRCLost exitOnRCLost;                              ///< 失控是否继续执行航线
+    DroneInfo droneInfo;                                         ///< 飞行器机型信息
     std::optional<wce::ExecuteRCLostAction> executeRCLostAction; ///< 失控动作类型
     double takeOffSecurityHeight;                                ///< 安全起飞高度
     double globalTransitionalSpeed;                              ///< 全局航线过渡速度
     double globalRTHHeight;                                      ///< 全局返航高度
-    DroneInfo droneInfo;                                         ///< 飞行器机型信息
     PayloadInfo payloadInfo;                                     ///< 负载机型信息
     AutoRerouteInfo autoRerouteInfo;                             ///< 航线绕行
 };
@@ -485,11 +485,11 @@ struct LIB_API WPMLPlacemark
     std::optional<int> isRisky;                  ///< 是否危险点
     KPoint point;                                ///< 航点经纬度
     int index;                                   ///< 航点序号
+    int useStraightLine;                         ///< 该航段是否贴合直线
     double executeHeight;                        ///< 航点执行高度
     double waypointSpeed;                        ///< 航点飞行速度
     WaypointHeadingParam waypointHeadingParam;   ///< 偏航角模式参数
     WaypointTurnParam waypointTurnParam;         ///< 航点类型（航点转弯模式）
-    int useStraightLine;                         ///< 该航段是否贴合直线
     std::optional<ActionGroup> startActionGroup; ///< 航线初始动作
 };
 
@@ -500,7 +500,6 @@ struct LIB_API WPMLFolder
     double autoFlightSpeed;                   ///< 全局航线飞行速度
     wce::ExecuteHeightMode executeHeightMode; ///< 执行高度模式
     std::vector<WPMLPlacemark> placemark;     ///< 航点信息
-    // ActionGroup startActionGroup;          ///< 航线初始动作
 };
 
 struct LIB_API WPMLDocument
