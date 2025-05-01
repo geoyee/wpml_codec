@@ -352,6 +352,10 @@ std::string merge(const std::vector<std::string>& strVec, const std::string& sep
 std::string replace(const std::string& str, const std::string& oldSuffix, const std::string& newSuffix)
 {
     std::vector<std::string> saved = split(str, oldSuffix);
+    if (saved.size() == 0)
+    {
+        return str;
+    }
     std::string res = saved[0];
     size_t savedLen = saved.size();
     for (size_t i = 1; i < savedLen; ++i)
@@ -476,7 +480,10 @@ std::string toString(std::vector<double> numbers, size_t decimal, bool clipZero)
     {
         res += toString(number, decimal, clipZero) + ",";
     }
-    res.pop_back(); // Remove the last symbol
+    if (endWith(res, ","))
+    {
+        res.pop_back(); // Remove the last symbol
+    }
     return res;
 }
 

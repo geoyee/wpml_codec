@@ -304,7 +304,7 @@ struct LIB_API ActionGroup
     int actionGroupEndIndex;              ///< 动作组结束生效的航点
     wce::ActionGroupMode actionGroupMode; ///< 动作执行模式
     ActionTrigger actionTrigger;          ///< 动作组触发器
-    Action action;                        ///< 动作列表
+    std::vector<Action> action;           ///< 动作列表
 };
 
 /**********************************************************************/

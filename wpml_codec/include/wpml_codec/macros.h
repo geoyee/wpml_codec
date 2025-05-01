@@ -14,7 +14,7 @@
             auto boolVal = wcu::toBool(pEle->GetText());                                                               \
             if (boolVal.has_value())                                                                                   \
             {                                                                                                          \
-                (doc).name = boolVal.value();                                                                          \
+                (doc).name = std::move(boolVal.value());                                                               \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -28,7 +28,7 @@
             auto doubleVal = wcu::toDouble(pEle->GetText());                                                           \
             if (doubleVal.has_value())                                                                                 \
             {                                                                                                          \
-                (doc).name = doubleVal.value();                                                                        \
+                (doc).name = std::move(doubleVal.value());                                                             \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -42,7 +42,7 @@
             auto enumVal = magic_enum::enum_cast<wce::enumType>(pEle->GetText());                                      \
             if (enumVal.has_value())                                                                                   \
             {                                                                                                          \
-                (doc).name = enumVal.value();                                                                          \
+                (doc).name = std::move(enumVal.value());                                                               \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -64,10 +64,10 @@
                     auto enumVal = magic_enum::enum_cast<wce::enumType>(enumStr);                                      \
                     if (enumVal.has_value())                                                                           \
                     {                                                                                                  \
-                        enumVec[i++] = enumVal.value();                                                                \
+                        enumVec[i++] = std::move(enumVal.value());                                                     \
                     }                                                                                                  \
                 }                                                                                                      \
-                (doc).name = enumVec;                                                                                  \
+                (doc).name = std::move(enumVec);                                                                       \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -81,7 +81,7 @@
             auto intVal = wcu::toInt(pEle->GetText());                                                                 \
             if (intVal.has_value())                                                                                    \
             {                                                                                                          \
-                (doc).name = intVal.value();                                                                           \
+                (doc).name = std::move(intVal.value());                                                                \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -95,7 +95,7 @@
             auto longVal = wcu::toLongLong(pEle->GetText());                                                           \
             if (longVal.has_value())                                                                                   \
             {                                                                                                          \
-                (doc).name = longVal.value();                                                                          \
+                (doc).name = std::move(longVal.value());                                                               \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -115,11 +115,11 @@
                 wcs::KPoint p{point[0], point[1]};                                                                     \
                 if (point.size() > 2)                                                                                  \
                 {                                                                                                      \
-                    p.alt = point[2];                                                                                  \
+                    p.alt = std::move(point[2]);                                                                       \
                 }                                                                                                      \
                 points.emplace_back(p);                                                                                \
             }                                                                                                          \
-            (doc).name.points = points;                                                                                \
+            (doc).name.points = std::move(points);                                                                     \
         }                                                                                                              \
     } while (0)
 
@@ -141,11 +141,11 @@
                     wcs::KPoint p{point[0], point[1]};                                                                 \
                     if (point.size() > 2)                                                                              \
                     {                                                                                                  \
-                        p.alt = point[2];                                                                              \
+                        p.alt = std::move(point[2]);                                                                   \
                     }                                                                                                  \
                     outer.points.emplace_back(p);                                                                      \
                 }                                                                                                      \
-                (doc).name.outerLine = outer;                                                                          \
+                (doc).name.outerLine = std::move(outer);                                                               \
             }                                                                                                          \
             auto pInner = pEle->FirstChildElement("innerBoundaryIs");                                                  \
             if (pInner != nullptr)                                                                                     \
@@ -159,11 +159,11 @@
                     wcs::KPoint p{point[0], point[1]};                                                                 \
                     if (point.size() > 2)                                                                              \
                     {                                                                                                  \
-                        p.alt = point[2];                                                                              \
+                        p.alt = std::move(point[2]);                                                                   \
                     }                                                                                                  \
                     inner.points.emplace_back(p);                                                                      \
                 }                                                                                                      \
-                (doc).name.innerLine = inner;                                                                          \
+                (doc).name.innerLine = std::move(inner);                                                               \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -179,9 +179,9 @@
             wcs::KPoint p{point[0], point[1]};                                                                         \
             if (point.size() > 2)                                                                                      \
             {                                                                                                          \
-                p.alt = point[2];                                                                                      \
+                p.alt = std::move(point[2]);                                                                           \
             }                                                                                                          \
-            (doc).name = p;                                                                                            \
+            (doc).name = std::move(p);                                                                                 \
         }                                                                                                              \
     } while (0)
 
@@ -195,9 +195,9 @@
             wcs::Point p{reals[0], reals[1]};                                                                          \
             if (reals.size() == 3)                                                                                     \
             {                                                                                                          \
-                p.alt = reals[2];                                                                                      \
+                p.alt = std::move(reals[2]);                                                                           \
             }                                                                                                          \
-            (doc).name = p;                                                                                            \
+            (doc).name = std::move(p);                                                                                 \
         }                                                                                                              \
     } while (0)
 
@@ -210,7 +210,7 @@
             auto strVal = pEle->GetText();                                                                             \
             if (strVal != nullptr)                                                                                     \
             {                                                                                                          \
-                (doc).name = strVal;                                                                                   \
+                (doc).name = std::move(strVal);                                                                        \
             }                                                                                                          \
         }                                                                                                              \
     } while (0)
@@ -246,7 +246,10 @@
             {                                                                                                          \
                 res += (std::string(magic_enum::enum_name(enumVal)) + ",");                                            \
             }                                                                                                          \
-            res.pop_back();                                                                                            \
+            if (res != "")                                                                                             \
+            {                                                                                                          \
+                res.pop_back();                                                                                        \
+            }                                                                                                          \
             tmpElement->SetText(res.c_str());                                                                          \
             ele->InsertEndChild(tmpElement);                                                                           \
         }                                                                                                              \
@@ -262,7 +265,10 @@
         {                                                                                                              \
             res += (std::string(magic_enum::enum_name(enumVal)) + ",");                                                \
         }                                                                                                              \
-        res.pop_back();                                                                                                \
+        if (res != "")                                                                                                 \
+        {                                                                                                              \
+            res.pop_back();                                                                                            \
+        }                                                                                                              \
         tmpElement->SetText(res.c_str());                                                                              \
         ele->InsertEndChild(tmpElement);                                                                               \
     } while (0)
