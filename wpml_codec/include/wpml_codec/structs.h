@@ -45,9 +45,12 @@ inline std::string kLineStringToStr(const KLineString& kLine)
     std::string str = "";
     for (const auto& kPoint : kLine.points)
     {
-        str += (kPointToStr(kPoint) + NEW_LINE);
+        str += (kPointToStr(kPoint) + " ");
     }
-    str.pop_back();
+    if (str != "")
+    {
+        str.pop_back();
+    }
     return str;
 }
 

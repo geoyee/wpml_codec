@@ -76,6 +76,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
   endif()
 endif()
 
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
 # 可选编译内容
 option(BUILD_SAMPLE "Build sample" ON)
 

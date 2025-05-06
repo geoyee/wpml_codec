@@ -107,7 +107,7 @@ bool packageKMZ(const std::string& inputDir, const std::string& kmzPath)
                     return false;
                 }
                 fseek(inFile, 0, SEEK_END);
-                long fileSize = ftell(inFile);
+                // long fileSize = ftell(inFile);
                 fseek(inFile, 0, SEEK_SET);
                 zip_fileinfo fileInfo = {};
                 if (zipOpenNewFileInZip(zipFile,
@@ -130,7 +130,7 @@ bool packageKMZ(const std::string& inputDir, const std::string& kmzPath)
                 bool error = false;
                 while (bytesRead = fread(buffer, 1, sizeof(buffer), inFile))
                 {
-                    if (zipWriteInFileInZip(zipFile, buffer, bytesRead) != ZIP_OK)
+                    if (zipWriteInFileInZip(zipFile, buffer, (unsigned int)bytesRead) != ZIP_OK)
                     {
                         error = true;
                         break;

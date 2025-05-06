@@ -1205,7 +1205,7 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
 
 std::optional<wcs::WPMZData> parseWPMZ(const std::string& kmzPath)
 {
-    std::string outputDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath) + wcu::getNowTimestamp();
+    std::string outputDir = wcu::getTempDir() + PATH_SEPARATOR + wcu::getFileName(kmzPath) + wcu::getNowTimestamp();
     wcu::removeFileOrDir(outputDir);
     if (!wcu::makeDir(outputDir))
     {
@@ -1251,17 +1251,21 @@ std::optional<wcs::WPMZData> parseWPMZ(const std::string& kmzPath)
 
 bool createWPMZ(const wcs::WPMZData& data, const std::string& kmzPath)
 {
-    std::string packageDir = wcu::getTempDir() + "/" + wcu::getFileName(kmzPath);
-    std::string outputDir = packageDir + "/wpmz";
+    std::string packageDir = wcu::getTempDir() + PATH_SEPARATOR + wcu::getFileName(kmzPath);
+    std::string outputDir = packageDir + PATH_SEPARATOR + "wpmz";
     wcu::removeFileOrDir(packageDir);
     if (!wcu::makeDir(outputDir))
     {
         return false;
     }
-    std::future<bool> succKml =
-                          std::async(std::launch::async, wcc::createKML, data.templateKML, outputDir + "/template.kml"),
-                      succWpml = std::async(
-                          std::launch::async, wcc::createWPML, data.waylinesWPML, outputDir + "/waylines.wpml"),
+    std::future<bool> succKml = std::async(std::launch::async,
+                                           wcc::createKML,
+                                           data.templateKML,
+                                           outputDir + PATH_SEPARATOR + "template.kml"),
+                      succWpml = std::async(std::launch::async,
+                                            wcc::createWPML,
+                                            data.waylinesWPML,
+                                            outputDir + PATH_SEPARATOR + "waylines.wpml"),
                       succRes = std::async(
                           std::launch::async,
                           [&data](const std::string& outputDir)
