@@ -92,24 +92,22 @@ update_cached_list(DEP_LIBS tinyxml2)
 set(ZLIB_BUILD_TESTING
     OFF
     CACHE BOOL "" FORCE)
-set(ZLIB_BUILD_STATIC
-    OFF
-    CACHE BOOL "" FORCE)
 set(ZLIB_BUILD_MINIZIP
     ON
     CACHE BOOL "" FORCE)
 set(MINIZIP_BUILD_TESTING
     OFF
     CACHE BOOL "" FORCE)
-set(MINIZIP_BUILD_STATIC
-    OFF
-    CACHE BOOL "" FORCE)
 add_subdirectory("${PROJECT_DEPENDS_DIR}/zlib")
 set_property(TARGET zlib PROPERTY FOLDER "ExtraTargets")
+set_property(TARGET zlibstatic PROPERTY FOLDER "ExtraTargets")
 set_property(TARGET libminizip PROPERTY FOLDER "ExtraTargets")
+set_property(TARGET libminizipstatic PROPERTY FOLDER "ExtraTargets")
 set_property(TARGET minizip PROPERTY FOLDER "ExtraTargets")
+set_property(TARGET minizipstatic PROPERTY FOLDER "ExtraTargets")
 set_property(TARGET miniunzip PROPERTY FOLDER "ExtraTargets")
-update_cached_list(DEP_LIBS zlib libminizip)
+set_property(TARGET miniunzipstatic PROPERTY FOLDER "ExtraTargets")
+update_cached_list(DEP_LIBS zlibstatic libminizipstatic)
 
 set(MAGIC_ENUM_OPT_BUILD_EXAMPLES
     OFF
