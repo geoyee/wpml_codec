@@ -319,19 +319,19 @@ bool endWith(const std::string& str, const std::string& suffix, bool ignoreCase)
 
 std::vector<std::string> split(const std::string& str, const std::string& separator)
 {
-    std::vector<std::string> res{};
-    size_t strLen = str.size();
-    size_t sLen = separator.size();
+    std::vector<std::string> res;
+    if (separator.empty())
+    {
+        res.push_back(str);
+        return res;
+    }
     size_t lastPos = 0;
-    size_t pos = str.find(separator, 0);
+    size_t pos = str.find(separator, lastPos);
     while (pos != std::string::npos)
     {
         res.emplace_back(str.substr(lastPos, pos - lastPos));
-        lastPos = pos + sLen;
-        if (lastPos < strLen)
-        {
-            pos = str.find(separator, lastPos);
-        }
+        lastPos = pos + separator.size();
+        pos = str.find(separator, lastPos);
     }
     res.emplace_back(str.substr(lastPos));
     return res;
@@ -351,18 +351,31 @@ std::string merge(const std::vector<std::string>& strVec, const std::string& sep
 
 std::string replace(const std::string& str, const std::string& oldSuffix, const std::string& newSuffix)
 {
-    std::vector<std::string> saved = split(str, oldSuffix);
-    if (saved.size() == 0)
+    if (oldSuffix.empty())
     {
         return str;
     }
-    std::string res = saved[0];
-    size_t savedLen = saved.size();
-    for (size_t i = 1; i < savedLen; ++i)
+    std::string result;
+    size_t oldLen = oldSuffix.size();
+    size_t newLen = newSuffix.size();
+    size_t count = 0;
+    size_t pos = 0;
+    while ((pos = str.find(oldSuffix, pos)) != std::string::npos)
     {
-        res += (newSuffix + saved[i]);
+        ++count;
+        pos += oldLen;
     }
-    return res;
+    result.reserve(str.size() + count * (newLen - oldLen));
+    pos = 0;
+    size_t lastPos = 0;
+    while ((pos = str.find(oldSuffix, lastPos)) != std::string::npos)
+    {
+        result.append(str, lastPos, pos - lastPos);
+        result.append(newSuffix);
+        lastPos = pos + oldLen;
+    }
+    result.append(str, lastPos);
+    return result;
 }
 
 std::optional<bool> toBool(const std::string& str)
