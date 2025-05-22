@@ -112,7 +112,7 @@
             for (const auto& poiStr : poisStr)                                                                         \
             {                                                                                                          \
                 auto point = wcu::toDoubles(poiStr);                                                                   \
-                wcs::KPoint p{point[0], point[1]};                                                                     \
+                wcs::KPoint p{point[0], point[1], std::nullopt};                                                       \
                 if (point.size() > 2)                                                                                  \
                 {                                                                                                      \
                     p.alt = std::move(point[2]);                                                                       \
@@ -138,7 +138,7 @@
                 for (const auto& poiStr : poisStr)                                                                     \
                 {                                                                                                      \
                     auto point = wcu::toDoubles(poiStr);                                                               \
-                    wcs::KPoint p{point[0], point[1]};                                                                 \
+                    wcs::KPoint p{point[0], point[1], std::nullopt};                                                   \
                     if (point.size() > 2)                                                                              \
                     {                                                                                                  \
                         p.alt = std::move(point[2]);                                                                   \
@@ -156,7 +156,7 @@
                 for (const auto& poiStr : poisStr)                                                                     \
                 {                                                                                                      \
                     auto point = wcu::toDoubles(poiStr);                                                               \
-                    wcs::KPoint p{point[0], point[1]};                                                                 \
+                    wcs::KPoint p{point[0], point[1], std::nullopt};                                                   \
                     if (point.size() > 2)                                                                              \
                     {                                                                                                  \
                         p.alt = std::move(point[2]);                                                                   \
@@ -176,7 +176,7 @@
         {                                                                                                              \
             auto pointStr = wcu::trim(pEle->FirstChildElement("coordinates")->GetText());                              \
             auto point = wcu::toDoubles(pointStr);                                                                     \
-            wcs::KPoint p{point[0], point[1]};                                                                         \
+            wcs::KPoint p{point[0], point[1], std::nullopt};                                                           \
             if (point.size() > 2)                                                                                      \
             {                                                                                                          \
                 p.alt = std::move(point[2]);                                                                           \

@@ -668,6 +668,6 @@ std::string removeEscape(const std::string& str)
 std::string getNowTimestamp()
 {
     auto ms = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch());
-    return toString(ms.count());
+    return toString(static_cast<long long>(ms.count()));
 }
 } // namespace wpml_codec::utils
