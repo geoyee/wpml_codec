@@ -6,8 +6,8 @@ int main()
 {
     WPML_CODEC_VERSION();
 
-    std::string kmzPath = "./data/二维面状航线.kmz";
-    std::string saveKmzPath = "./data/二维面状航线导出.kmz";
+    std::string kmzPath = "./data/mapping3d.kmz";
+    std::string saveKmzPath = "./data/mapping3d-export.kmz";
 
     auto wpmzData = wcc::parseWPMZ(kmzPath);
     if (!wpmzData.has_value())

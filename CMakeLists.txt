@@ -108,6 +108,9 @@ set(ZLIB_BUILD_MINIZIP
 set(MINIZIP_BUILD_TESTING
     OFF
     CACHE BOOL "" FORCE)
+set(MINIZIP_ENABLE_BZIP2
+    OFF
+    CACHE BOOL "" FORCE)
 add_subdirectory("${PROJECT_DEPENDS_DIR}/zlib")
 set_property(TARGET zlib PROPERTY FOLDER "ExtraTargets")
 set_property(TARGET zlibstatic PROPERTY FOLDER "ExtraTargets")
