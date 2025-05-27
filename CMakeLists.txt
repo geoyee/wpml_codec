@@ -20,10 +20,23 @@ endif()
 # 项目
 project(wpml_codec_project LANGUAGES C CXX)
 
+# 可选编译内容
+option(BUILD_SAMPLE "Build sample" ON)
+
 # 防止在源码目录下进行内部构建
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   message(
     FATAL_ERROR "Please create a build directory and run CMake from there")
+endif()
+
+# 判断是否为子项目
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  message(STATUS "This is a top project")
+  set(PROJECT_FOLDER_DIR "ProjectTargets")
+else()
+  message(STATUS "This is a sub project")
+  set(BUILD_SAMPLE OFF)
+  set(PROJECT_FOLDER_DIR "ExtraTargets")
 endif()
 
 # 包含工具
@@ -78,9 +91,6 @@ endif()
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
-# 可选编译内容
-option(BUILD_SAMPLE "Build sample" ON)
-
 # 三方库依赖
 set(tinyxml2_BUILD_TESTING
     OFF
@@ -120,8 +130,10 @@ update_cached_list(DEP_LIBS magic_enum)
 
 if(WIN32)
   update_cached_list(SYS_LIBS WS2_32 Iphlpapi shlwapi)
-else(NOT ANDROID OR IOS)
+elseif(NOT ANDROID OR IOS)
   update_cached_list(SYS_LIBS pthread)
+else()
+  update_cached_list(SYS_LIBS stdc++)
 endif()
 
 # 添加子目录

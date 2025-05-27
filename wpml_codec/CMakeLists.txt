@@ -63,7 +63,7 @@ project(wpml_codec)
 add_library(${PROJECT_NAME} SHARED ${CODE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${DEP_LIBS} ${SYS_LIBS})
-set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "ProjectTargets")
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${PROJECT_FOLDER_DIR})
 
 set(PROJ_LIB_NAME
     ${PROJECT_NAME}
