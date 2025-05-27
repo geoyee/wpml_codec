@@ -1,4 +1,7 @@
 # wpml_codec
+
+[![CMake on multiple platforms](https://github.com/geoyee/wpml_codec/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/geoyee/wpml_codec/actions/workflows/cmake-multi-platform.yml)
+
 大疆 WPML 航线文件编解码器
 
 ![input](./resource/img/input.png)
