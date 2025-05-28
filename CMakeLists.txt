@@ -120,33 +120,20 @@ set(MAGIC_ENUM_OPT_BUILD_TESTS
 add_subdirectory("${PROJECT_DEPENDS_DIR}/magic_enum")
 update_cached_list(DEP_LIBS magic_enum)
 
+add_subdirectory("${PROJECT_DEPENDS_DIR}/filesystem")
+update_cached_list(DEP_LIBS ghc_filesystem)
+
 # 系统库支持
 if(WIN32)
   update_cached_list(SYS_LIBS WS2_32 Iphlpapi shlwapi)
-elseif(ANDROID)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti -std=c++17")
-  set(ANDROID_STL "c++_shared")
-  update_cached_list(SYS_LIBS stdc++)
 else()
   find_package(Threads REQUIRED)
   update_cached_list(SYS_LIBS Threads::Threads)
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
-      update_cached_list(SYS_LIBS stdc++fs)
-    elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0 AND 
-           CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11.0.0)
-      add_compile_options(
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fcoroutines$<SEMICOLON>-D__cplusplus=202002L>
-      )
-      if(IS_DIRECTORY /usr/include/c++/10)
-        include_directories($<$<COMPILE_LANG_AND_ID:CXX,GNU>:/usr/include/c++/10>)
-      endif()
-    endif()
-  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
-      update_cached_list(SYS_LIBS c++fs)
-    endif()
-  endif()
+endif()
+if(ANDROID)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti")
+  set(ANDROID_STL "c++_shared")
+  update_cached_list(SYS_LIBS c++shared)
 endif()
 
 # 添加子目录

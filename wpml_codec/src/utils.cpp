@@ -1,28 +1,16 @@
 #include <wpml_codec/utils.h>
+#include <ghc/filesystem.hpp>
 #include <unzip.h>
 #include <zip.h>
 #include <algorithm>
 #include <cctype>
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
 namespace chrono = std::chrono;
-
-#ifndef __has_include
-static_assert(false, "__has_include not supported");
-#else
-#if __cplusplus >= 201703L && __has_include(<filesystem>)
-#include <filesystem>
-namespace fs = std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-#elif __has_include(<boost/filesystem.hpp>)
-#include <boost/filesystem.hpp>
-namespace fs = boost::filesystem;
-#endif
-#endif // __has_include
+namespace fs = ghc::filesystem;
 
 namespace wpml_codec::utils
 {
