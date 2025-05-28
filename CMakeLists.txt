@@ -131,12 +131,29 @@ set(MAGIC_ENUM_OPT_BUILD_TESTS
 add_subdirectory("${PROJECT_DEPENDS_DIR}/magic_enum")
 update_cached_list(DEP_LIBS magic_enum)
 
+# 系统库支持
 if(WIN32)
   update_cached_list(SYS_LIBS WS2_32 Iphlpapi shlwapi)
-elseif(NOT ANDROID OR IOS)
-  update_cached_list(SYS_LIBS pthread)
 else()
-  update_cached_list(SYS_LIBS stdc++)
+  find_package(Threads REQUIRED)
+  update_cached_list(SYS_LIBS Threads::Threads)
+  if(CMAKE_VERSION VERSION_LESS 3.14)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND 
+       CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+      update_cached_list(SYS_LIBS stdc++fs)
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      if(APPLE)
+        update_cached_list(SYS_LIBS c++fs)
+      else()
+        update_cached_list(SYS_LIBS stdc++fs)
+      endif()
+    endif()
+  else()
+    update_cached_list(SYS_LIBS std::filesystem)
+  endif()
+  if(ANDROID OR IOS)
+    update_cached_list(SYS_LIBS stdc++)
+  endif()
 endif()
 
 # 添加子目录
