@@ -23,6 +23,7 @@ namespace fs = std::experimental::filesystem;
 namespace fs = boost::filesystem;
 #endif
 #endif // __has_include
+
 namespace wpml_codec::utils
 {
 /**********************************************************************/
