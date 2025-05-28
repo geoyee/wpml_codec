@@ -130,11 +130,6 @@ else()
   find_package(Threads REQUIRED)
   update_cached_list(SYS_LIBS Threads::Threads)
 endif()
-if(ANDROID)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti")
-  set(ANDROID_STL "c++_shared")
-  update_cached_list(SYS_LIBS c++shared)
-endif()
 
 # 添加子目录
 add_subdirectory(wpml_codec)
