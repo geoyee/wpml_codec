@@ -8,7 +8,7 @@
 
 ## 构建
 
-已在 MSVC 和 GCC 上构建测试通过，采用 C++ 17 标准，可通过如下方式获取代码并构建
+可通过如下方式获取代码并构建
 
 ```shell
 git clone https://github.com/geoyee/wpml_codec.git
