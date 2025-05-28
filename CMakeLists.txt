@@ -137,17 +137,12 @@ if(WIN32)
 else()
   find_package(Threads REQUIRED)
   update_cached_list(SYS_LIBS Threads::Threads)
-  if(CMAKE_VERSION VERSION_LESS 3.14)
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND 
-       CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
-      update_cached_list(SYS_LIBS stdc++fs)
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND 
-           CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
-      update_cached_list(SYS_LIBS c++fs)
-    endif()
-  else()
-    find_package(Filesystem REQUIRED)
-    update_cached_list(SYS_LIBS std::filesystem)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND 
+     CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
+    update_cached_list(SYS_LIBS stdc++fs)
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND 
+         CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    update_cached_list(SYS_LIBS c++fs)
   endif()
   if(ANDROID OR IOS)
     update_cached_list(SYS_LIBS stdc++)
