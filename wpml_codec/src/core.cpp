@@ -295,6 +295,18 @@ std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
                 SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, leftExtend);
                 SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, rightExtend);
                 SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, includeCenterEnable);
+                xml::XMLElement *pOverlap = pPlacemark->FirstChildElement("wpml:overlap");
+                if (pOverlap != nullptr)
+                {
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoLidarOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoLidarOverlapW);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoCameraOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, orthoCameraOverlapW);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedLidarOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedLidarOverlapW);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedCameraOverlapH);
+                    SET_OPT_WPML_ARG_I(curPlacemark->overlap, pOverlap, inclinedCameraOverlapW);
+                }
                 SET_OPT_WPML_ARG_D(*curPlacemark, pPlacemark, ellipsoidHeight);
                 SET_OPT_WPML_ARG_D(*curPlacemark, pPlacemark, height);
                 SET_OPT_WPML_ARG_I(*curPlacemark, pPlacemark, stripUseTemplateAltitude);
@@ -547,6 +559,16 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                     GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, height);
                     GET_NEC_WPML_ARG_N(doc, placemarkElement, *curPlacemark, stripUseTemplateAltitude);
                     GET_NEC_WPML_ARG_KLS(doc, placemarkElement, *curPlacemark, lineString);
+                    xml::XMLElement *overlapElement = doc.NewElement("wpml:overlap");
+                    placemarkElement->InsertEndChild(overlapElement);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoLidarOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoCameraOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, orthoCameraOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedLidarOverlapW);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapH);
+                    GET_OPT_WPML_ARG_N(doc, overlapElement, curPlacemark->overlap, inclinedCameraOverlapW);
                     break;
                 }
                 default :

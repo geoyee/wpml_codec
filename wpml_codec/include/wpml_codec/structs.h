@@ -410,6 +410,7 @@ struct LIB_API WaypointSegmentFlightKMLPlacemark : public KMLPlacemark
     int includeCenterEnable;      ///< 是否包含中心线
     int stripUseTemplateAltitude; ///< 是否开启变高航带
     wce::ShootType shootType;     ///< 拍照模式（定时或定距）
+    Overlap overlap;              ///< 重叠率参数
     double cuttingDistance;       ///< 每个子航带航线长度
     double ellipsoidHeight;       ///< 全局航线高度（椭球高）
     double height;                ///< 全局航线高度
