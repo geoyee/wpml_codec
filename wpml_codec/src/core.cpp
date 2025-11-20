@@ -139,12 +139,16 @@ std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
             SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, ellipsoidHeight);
             SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, height);
             SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useGlobalSpeed);
-            SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, waypointSpeed);
+            if (tmpPlacemark.useGlobalSpeed == 0)
+            {
+                SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, waypointSpeed);
+            }
+            SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useGlobalHeadingParam);
             SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useGlobalTurnParam);
             SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useStraightLine);
             SET_OPT_WPML_ARG_D(tmpPlacemark, pPlacemark, gimbalPitchAngle);
             xml::XMLElement *pWaypointHeadingParam = pPlacemark->FirstChildElement("wpml:waypointHeadingParam");
-            if (pWaypointHeadingParam != nullptr)
+            if (tmpPlacemark.useGlobalHeadingParam == 0 && pWaypointHeadingParam != nullptr)
             {
                 SET_OPT_WPML_ARG_E(
                     tmpPlacemark.waypointHeadingParam, pWaypointHeadingParam, waypointHeadingMode, WaypointHeadingMode);
@@ -156,7 +160,7 @@ std::optional<wcs::KMLDocument> parseKML(const std::string& kmlPath)
                                    WaypointHeadingPathMode);
             }
             xml::XMLElement *pWaypointTurnParam = pPlacemark->FirstChildElement("wpml:waypointTurnParam");
-            if (pWaypointTurnParam != nullptr)
+            if (tmpPlacemark.useGlobalTurnParam == 0 && pWaypointTurnParam != nullptr)
             {
                 SET_OPT_WPML_ARG_E(
                     tmpPlacemark.waypointTurnParam, pWaypointTurnParam, waypointTurnMode, WaypointTurnMode);
@@ -424,25 +428,35 @@ bool createKML(const wcs::KMLDocument& data, const std::string& kmlPath)
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, ellipsoidHeight);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, height);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, useGlobalSpeed);
-                GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, waypointSpeed);
+                if (pointPlace.useGlobalSpeed == 0)
+                {
+                    GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, waypointSpeed);
+                }
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, useGlobalHeadingParam);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, useGlobalTurnParam);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, useStraightLine);
                 GET_NEC_WPML_ARG_N(doc, placemarkElement, pointPlace, gimbalPitchAngle);
-                xml::XMLElement *waypointHeadingParamElement = doc.NewElement("wpml:waypointHeadingParam");
-                placemarkElement->InsertEndChild(waypointHeadingParamElement);
-                GET_NEC_WPML_ARG_E(
-                    doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingMode);
-                GET_OPT_WPML_ARG_N(
-                    doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingAngle);
-                GET_OPT_WPML_ARG_P(doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointPoiPoint);
-                GET_NEC_WPML_ARG_E(
-                    doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingPathMode);
-                xml::XMLElement *waypointTurnParamElement = doc.NewElement("wpml:waypointTurnParam");
-                placemarkElement->InsertEndChild(waypointTurnParamElement);
-                GET_NEC_WPML_ARG_E(doc, waypointTurnParamElement, pointPlace.waypointTurnParam, waypointTurnMode);
-                GET_OPT_WPML_ARG_N(
-                    doc, waypointTurnParamElement, pointPlace.waypointTurnParam, waypointTurnDampingDist);
+                if (pointPlace.useGlobalHeadingParam == 0)
+                {
+                    xml::XMLElement *waypointHeadingParamElement = doc.NewElement("wpml:waypointHeadingParam");
+                    placemarkElement->InsertEndChild(waypointHeadingParamElement);
+                    GET_NEC_WPML_ARG_E(
+                        doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingMode);
+                    GET_OPT_WPML_ARG_N(
+                        doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingAngle);
+                    GET_OPT_WPML_ARG_P(
+                        doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointPoiPoint);
+                    GET_NEC_WPML_ARG_E(
+                        doc, waypointHeadingParamElement, pointPlace.waypointHeadingParam, waypointHeadingPathMode);
+                }
+                if (pointPlace.useGlobalTurnParam == 0)
+                {
+                    xml::XMLElement *waypointTurnParamElement = doc.NewElement("wpml:waypointTurnParam");
+                    placemarkElement->InsertEndChild(waypointTurnParamElement);
+                    GET_NEC_WPML_ARG_E(doc, waypointTurnParamElement, pointPlace.waypointTurnParam, waypointTurnMode);
+                    GET_OPT_WPML_ARG_N(
+                        doc, waypointTurnParamElement, pointPlace.waypointTurnParam, waypointTurnDampingDist);
+                }
             }
         }
         else
