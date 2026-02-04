@@ -486,15 +486,15 @@ struct LIB_API WPMLMissionConfig
 
 struct LIB_API WPMLPlacemark
 {
-    std::optional<int> isRisky;                  ///< 是否危险点
-    KPoint point;                                ///< 航点经纬度
-    int index;                                   ///< 航点序号
-    int useStraightLine;                         ///< 该航段是否贴合直线
-    double executeHeight;                        ///< 航点执行高度
-    double waypointSpeed;                        ///< 航点飞行速度
-    WaypointHeadingParam waypointHeadingParam;   ///< 偏航角模式参数
-    WaypointTurnParam waypointTurnParam;         ///< 航点类型（航点转弯模式）
-    std::optional<ActionGroup> startActionGroup; ///< 航线初始动作
+    std::optional<int> isRisky;                ///< 是否危险点
+    KPoint point;                              ///< 航点经纬度
+    int index;                                 ///< 航点序号
+    int useStraightLine;                       ///< 该航段是否贴合直线
+    double executeHeight;                      ///< 航点执行高度
+    double waypointSpeed;                      ///< 航点飞行速度
+    WaypointHeadingParam waypointHeadingParam; ///< 偏航角模式参数
+    WaypointTurnParam waypointTurnParam;       ///< 航点类型（航点转弯模式）
+    std::vector<ActionGroup> startActionGroup; ///< 航线初始动作
 };
 
 struct LIB_API WPMLFolder

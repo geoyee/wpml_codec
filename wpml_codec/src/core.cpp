@@ -691,8 +691,9 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                 SET_OPT_WPML_ARG_D(tmpPlacemark.waypointTurnParam, pWaypointTurnParam, waypointTurnDampingDist);
             }
             SET_OPT_WPML_ARG_I(tmpPlacemark, pPlacemark, useStraightLine);
+            std::vector<wcs::ActionGroup> actionGroups{};
             xml::XMLElement *pActionGroup = pPlacemark->FirstChildElement("wpml:actionGroup");
-            if (pActionGroup != nullptr)
+            while (pActionGroup)
             {
                 wcs::ActionGroup tmpActionGroup;
                 SET_OPT_WPML_ARG_I(tmpActionGroup, pActionGroup, actionGroupId);
@@ -921,8 +922,10 @@ std::optional<wcs::WPMLDocument> parseWPML(const std::string& wpmlPath)
                     pAction = pAction->NextSiblingElement("wpml:action");
                 }
                 tmpActionGroup.action = std::move(actions);
-                tmpPlacemark.startActionGroup = std::move(tmpActionGroup);
+                actionGroups.emplace_back(std::move(tmpActionGroup));
+                pActionGroup = pActionGroup->NextSiblingElement("wpml:actionGroup");
             }
+            tmpPlacemark.startActionGroup = std::move(actionGroups);
             waypointPlacemarks.emplace_back(tmpPlacemark);
             pPlacemark = pPlacemark->NextSiblingElement("Placemark");
         }
@@ -1003,9 +1006,8 @@ bool createWPML(const wcs::WPMLDocument& data, const std::string& wpmlPath)
                 placemarkElement->InsertEndChild(waypointTurnParamElement);
                 GET_NEC_WPML_ARG_E(doc, waypointTurnParamElement, wpm, waypointTurnParam.waypointTurnMode);
                 GET_OPT_WPML_ARG_N(doc, waypointTurnParamElement, wpm, waypointTurnParam.waypointTurnDampingDist);
-                if (wpm.startActionGroup.has_value())
+                for (const auto& tmpAG : wpm.startActionGroup)
                 {
-                    auto tmpAG = wpm.startActionGroup.value();
                     xml::XMLElement *actionGroupElement = doc.NewElement("wpml:actionGroup");
                     placemarkElement->InsertEndChild(actionGroupElement);
                     GET_NEC_WPML_ARG_N(doc, actionGroupElement, tmpAG, actionGroupId);

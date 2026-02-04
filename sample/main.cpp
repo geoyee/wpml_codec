@@ -10,7 +10,7 @@ int main()
 
     for (const auto& fileName : fileNames)
     {
-        std::string kmzPath = "./data/" + fileName + ".kmz";
+        std::string kmzPath = "../data/" + fileName + ".kmz";
         std::string saveKmzPath = wcu::replace(kmzPath, ".kmz", "-update.kmz");
 
         auto wpmzData = wcc::parseWPMZ(kmzPath);
